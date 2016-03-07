@@ -1,1 +1,1 @@
-lelelel
+lelelel//czemu nie dziala
