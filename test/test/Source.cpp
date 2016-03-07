@@ -1,5 +1,5 @@
 int main()
 {
-	//no ³adne rzeczy Grzegorzu
+	int x;
 	return 0;
 }
