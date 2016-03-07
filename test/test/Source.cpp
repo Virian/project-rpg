@@ -1,1 +1,5 @@
-lelelel//czemu nie dziala
+int main()
+{
+	//Zmienilem twoj kod Filipie
+	return 0;
+}
