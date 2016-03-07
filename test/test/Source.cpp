@@ -1,5 +1,5 @@
 int main()
 {
-	//Zmienilem twoj kod Filipie
+	//no ³adne rzeczy Grzegorzu
 	return 0;
 }
