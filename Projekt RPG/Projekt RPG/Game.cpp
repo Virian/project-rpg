@@ -46,6 +46,7 @@ void Game::menu()
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed) state = END;
+			else if ((text[0].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = GAME;
 			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = END;
 		}
 
@@ -65,8 +66,7 @@ void Game::menu()
 void Game::newGame()
 {
 	Engine engine(window);
-	/*Problem - czy tu zmienic state na GAME?*/
-	engine.startEngine();
+
 	state = MENU;
 }
 

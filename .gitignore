@@ -171,6 +171,7 @@ ClientBin/
 *.dbproj.schemaview
 *.pfx
 *.publishsettings
+*.VC.opendb
 node_modules/
 orleans.codegen.cs
 

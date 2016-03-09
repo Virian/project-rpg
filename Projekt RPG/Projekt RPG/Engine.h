@@ -1,14 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Player.h"
 
 using namespace sf;
 
 class Engine
 {
 private:
-	RenderWindow *window;
+	Player player;
 public:
 	Engine(RenderWindow&);
 	~Engine();
-	void startEngine();
+	void startEngine(RenderWindow&);
 };

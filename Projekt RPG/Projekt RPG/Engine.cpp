@@ -2,7 +2,7 @@
 
 Engine::Engine(RenderWindow &_window)
 {
-	window = &_window;
+	startEngine(_window);
 }
 
 Engine::~Engine()
@@ -10,7 +10,36 @@ Engine::~Engine()
 
 }
 
-void Engine::startEngine()
+void Engine::startEngine(RenderWindow &window)
 {
+	bool menu = false;
 
+	while (!menu)
+	{
+		Event event;
+		sf::Vector2f mouse(Mouse::getPosition(window));
+
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::KeyReleased && event.key.code == Keyboard::Escape)
+				menu = true;
+
+			if (event.type == Event::KeyPressed && event.key.code == Keyboard::W)
+			{
+				player.walk();
+			}
+
+			else if (event.type == Event::KeyReleased)
+			{
+				if (event.key.code == Keyboard::W)
+					player.stop();
+			}
+		}
+
+		player.update(mouse);
+
+		window.clear();
+		window.draw(player);
+		window.display();
+	}
 }
