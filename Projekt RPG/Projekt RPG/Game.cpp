@@ -5,7 +5,7 @@
 Game::Game()
 {
 	state = END;
-	if (!font.loadFromFile("SharpRetro.ttf")) //Reminder - do zmiany sciezka, mozna tez zmienic czcionke
+	if (!font.loadFromFile("SharpRetro.ttf")) /*Reminder - do zmiany sciezka, mozna tez zmienic czcionke*/
 	{
 		MessageBox(NULL, "Font not found!", "ERROR", NULL);
 		return;
@@ -22,15 +22,15 @@ Game::~Game()
 void Game::menu()
 {
 	Text title("Galaxy Guardian", font, 150);
-	const short numberOfOptions = 3; //ilosc opcji do klikniecia w menu
+	const short numberOfOptions = 3; /*ilosc opcji do klikniecia w menu*/
 	string options[] = {"New game", "Load game", "Quit"};
 	Text text[numberOfOptions];
-	//do dodania na pewno jakies tlo
-	//mozna tez zamienic napisy na obrazki
+	/*Reminder - do dodania na pewno jakies tlo
+	mozna tez zamienic napisy na obrazki */
 	title.setStyle(Text::Bold);
 	title.setPosition(1280 / 2 - title.getGlobalBounds().width / 2, 40);
 
-	for (short i = 0; i < numberOfOptions; i++) //ustawienie poszczegolnych tekstow
+	for (short i = 0; i < numberOfOptions; i++) /*ustawienie poszczegolnych tekstow*/
 	{
 		text[i].setFont(font);
 		text[i].setCharacterSize(70);
@@ -40,7 +40,7 @@ void Game::menu()
 
 	while (state == MENU)
 	{
-		Vector2f mouse(Mouse::getPosition(window)); //window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu
+		Vector2f mouse(Mouse::getPosition(window)); /*window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu*/
 		Event event;
 
 		while (window.pollEvent(event))
@@ -49,7 +49,7 @@ void Game::menu()
 			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = END;
 		}
 
-		for (short i = 0; i < numberOfOptions; i++) //podswietlanie aktywnego tekstu
+		for (short i = 0; i < numberOfOptions; i++) /*podswietlanie aktywnego tekstu*/
 		{
 			if (text[i].getGlobalBounds().contains(mouse)) text[i].setColor(Color::Green);
 			else text[i].setColor(Color::White);
@@ -72,7 +72,7 @@ void Game::start()
 			menu();
 			break;
 		case GameState::GAME:
-			//odpalenie gry
+			/*odpalenie gry*/
 			break;
 		}
 	}
