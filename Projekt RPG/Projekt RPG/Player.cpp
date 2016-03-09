@@ -36,7 +36,7 @@ void Player::update(Vector2f mouse)
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
 		if (status == STOP) return;
-		if (frame < 3) /*liczba klatek animacji - 1*/
+		if (frame < 7) /*liczba klatek animacji - 1*/
 			frame++;
 		else
 			frame = 0; /*animacja sie zapetla*/
@@ -55,6 +55,8 @@ void Player::stop()
 {
 	status = STOP;
 	frame = 0;
+	sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
+	anim_clock.restart();
 }
 
 void Player::draw(RenderTarget &target, RenderStates states) const
