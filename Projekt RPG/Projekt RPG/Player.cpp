@@ -5,14 +5,14 @@
 
 Player::Player()
 {
-	if (!texture.loadFromFile("ship.png"))
+	if (!texture.loadFromFile("placeholder.png"))
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return;
 	}
 	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(0, 0, 32, 32));
-	sprite.setOrigin(16, 16);
+	sprite.setTextureRect(IntRect(0, 640, 64, 64));
+	sprite.setOrigin(32, 32);
 	sprite.setPosition(1280 / 2, 720 / 2);
 
 	speed = 4.5f;
@@ -36,11 +36,11 @@ void Player::update(Vector2f mouse)
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
 		if (status == STOP) return;
-		if (frame < 0) /*liczba klatek animacji - 1*/
+		if (frame < 3) /*liczba klatek animacji - 1*/
 			frame++;
 		else
 			frame = 0; /*animacja sie zapetla*/
-		sprite.setTextureRect(IntRect(frame * 32, 0, 32, 32));
+		sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
 		sprite.move(getSpeed());
 		anim_clock.restart();
 	}	
