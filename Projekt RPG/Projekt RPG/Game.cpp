@@ -62,6 +62,14 @@ void Game::menu()
 	}
 }
 
+void Game::newGame()
+{
+	Engine engine(window);
+	/*Problem - czy tu zmienic state na GAME?*/
+	engine.startEngine();
+	state = MENU;
+}
+
 void Game::start()
 {
 	while (state != END)
@@ -72,7 +80,7 @@ void Game::start()
 			menu();
 			break;
 		case GameState::GAME:
-			/*odpalenie gry*/
+			newGame();
 			break;
 		}
 	}
