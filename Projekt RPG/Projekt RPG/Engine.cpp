@@ -21,10 +21,10 @@ void Engine::startEngine(RenderWindow &window)
 
 		while (window.pollEvent(event))
 		{
-			if (event.type == Event::KeyReleased && event.key.code == Keyboard::Escape)
+			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 				menu = true;
 
-			if (event.type == Event::KeyPressed && event.key.code == Keyboard::W)
+			/*if (event.type == Event::KeyPressed && event.key.code == Keyboard::W)
 			{
 				player.walk();
 			}
@@ -33,6 +33,14 @@ void Engine::startEngine(RenderWindow &window)
 			{
 				if (event.key.code == Keyboard::W)
 					player.stop();
+			}*/
+			if ((event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
+			{
+				player.walk();
+			}
+			else if (event.type == Event::MouseButtonReleased)
+			{
+				if (event.mouseButton.button == Mouse::Right) player.stop();
 			}
 		}
 

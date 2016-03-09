@@ -5,15 +5,8 @@ using namespace sf;
 
 class Player : public Drawable, Transformable
 {
-public:
-	Player();
-	~Player();
-	void update(Vector2f);
-	void walk();
-	void stop();
-	//Vector2f getPosition();
 protected:
-	enum Status {STOP, WALK};
+	enum Status { STOP, WALK };
 	Sprite sprite;
 	Texture texture;
 	Status status;
@@ -21,6 +14,16 @@ protected:
 	unsigned frame;
 	Clock anim_clock;
 	virtual void draw(RenderTarget&, RenderStates) const;
+public:
+	Player();
+	~Player();
+	void update(Vector2f);
+	void walk();
+	void stop();
+	Status getStatus();
+	FloatRect getBoundingBox();
+	Vector2f getSpeed();
+	Vector2f getPosition();
 };
 
 /*class Juggernaut : public Player

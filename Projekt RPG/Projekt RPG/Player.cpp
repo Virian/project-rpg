@@ -15,7 +15,7 @@ Player::Player()
 	sprite.setOrigin(16, 16);
 	sprite.setPosition(1280 / 2, 720 / 2);
 
-	speed = 1.5;
+	speed = 4.5f;
 	frame = 0;
 	anim_clock.restart();
 }
@@ -33,7 +33,7 @@ void Player::update(Vector2f mouse)
 	rot += 90;
 	sprite.setRotation(rot);
 	
-	if (anim_clock.getElapsedTime() > seconds(0.09f))
+	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
 		if (status == STOP) return;
 		if (frame < 0) /*liczba klatek animacji*/
@@ -41,6 +41,7 @@ void Player::update(Vector2f mouse)
 		else
 			frame = 0; /*animacja sie zapetla*/
 		sprite.setTextureRect(IntRect(frame * 32, 0, 32, 32));
+		sprite.move(getSpeed());
 		anim_clock.restart();
 	}	
 }
@@ -48,10 +49,6 @@ void Player::update(Vector2f mouse)
 void Player::walk()
 {
 	status = WALK;
-	float rotation = sprite.getRotation();
-	float vx = sin((rotation * M_PI) / 180.0f);
-	float vy = -cos((rotation * M_PI) / 180.0f);
-	/*zapewne tu sie jakos doda move*/
 }
 
 void Player::stop()
@@ -66,7 +63,27 @@ void Player::draw(RenderTarget &target, RenderStates states) const
 	target.draw(sprite);
 }
 
-/*Vector2f Player::getPosition()
+Player::Status Player::getStatus()
 {
+	return status;
+}
 
-}*/
+FloatRect Player::getBoundingBox()
+{
+	FloatRect box(sprite.getGlobalBounds());
+	return box;
+}
+
+Vector2f Player::getSpeed()
+{
+	float rotation = sprite.getRotation();
+	float vx = sin((rotation * M_PI) / 180.0f);
+	float vy = -cos((rotation * M_PI) / 180.0f);
+
+	return Vector2f(vx * speed, vy * speed);
+}
+
+Vector2f Player::getPosition()
+{
+	return sprite.getPosition();
+}
