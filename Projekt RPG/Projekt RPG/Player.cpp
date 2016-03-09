@@ -36,7 +36,7 @@ void Player::update(Vector2f mouse)
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
 		if (status == STOP) return;
-		if (frame < 0) /*liczba klatek animacji*/
+		if (frame < 0) /*liczba klatek animacji - 1*/
 			frame++;
 		else
 			frame = 0; /*animacja sie zapetla*/
@@ -74,7 +74,7 @@ FloatRect Player::getBoundingBox()
 	return box;
 }
 
-Vector2f Player::getSpeed()
+Vector2f Player::getSpeed() /*Reminder - nazwac inaczej, bo metoda nie zwraca predkosci tylko miejsce gdzie narysowac sprite'a w nastepnej klatce*/
 {
 	float rotation = sprite.getRotation();
 	float vx = sin((rotation * M_PI) / 180.0f);
