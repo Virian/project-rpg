@@ -5,7 +5,7 @@ using namespace sf;
 
 class Player : public Drawable, Transformable
 {
-protected:
+protected: /*dodac co najmniej str, dex, int*/
 	enum Status { STOP, WALK };
 	Sprite sprite;
 	Texture texture;
