@@ -30,14 +30,14 @@ void Engine::updateMap()
 	else if (rightBorder - 1 >= level.getWidth() - 1)
 	{
 		// MAGIC!
-		float difference = view.getCenter().x + view.getSize().x / 2 - (level.getWidth() - 1)*64;
+		float difference = view.getCenter().x + view.getSize().x / 2 - (level.getWidth() - 1) * 64;
 
-		difference = -difference -64;
+		difference = -difference - 64;
 		min.x += difference;
 
 		leftBorder = (min.x) / 64;
 
-		view.setCenter((leftBorder + (tileCountWidth) / 2)*64 + 64, view.getCenter().y);
+		view.setCenter((leftBorder + (tileCountWidth) / 2) * 64 + 64, view.getCenter().y);
 	}
 	else if (leftBorder == 0)
 		view.move(-64 / 2, 0);
@@ -67,27 +67,27 @@ void Engine::updateMap()
 	}
 	else if (bottomBorder - 1 >= level.getHeight() - 1)
 	{
-		float difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1)*64;
+		float difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1) * 64;
 
 		difference = -difference - 64;
 		min.y += difference;
 
 		upBorder = (min.y) / 64;
 
-		view.setCenter(view.getCenter().x, (upBorder + (tileCountHeight) / 2)*64 + 64);
+		view.setCenter(view.getCenter().x, (upBorder + (tileCountHeight) / 2) * 64 + 128);
 
-		//if (bottomBorder - 1 == level.getHeight() - 1)			// !!!
-		//	view.move(0, -64 / 2);
+		if (bottomBorder - 1 == level.getHeight() - 1)			// !!!
+			view.move(0, -64 / 2);
 	}
 	else if (upBorder == 0)
 		view.move(0, -64 / 2);
 
-
+	/*PROBLEM - z jakiegoœ powodu skrajne dolne i skrajne prawe maja problemy z wyswietlaniem*/
 	// ustawienie kafli na scenie
 	for (int y = 0, h = (int)upBorder; y < tileCountHeight; y++) {			// h - horizontal
 		for (int x = 0, v = (int)leftBorder; x < tileCountWidth; x++)		// v - vertical
 		{
-			tileSprites[y][x].setPosition(v*64, h*64);
+			tileSprites[y][x].setPosition(v * 64, h * 64);
 			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v].type]);
 			v++;
 		}
@@ -148,7 +148,9 @@ void Engine::draw(RenderWindow &window)
 void Engine::startEngine(RenderWindow &window)
 {
 	bool menu = false;
-
+	updateMap();
+	window.setView(view);
+	draw(window);
 	while (!menu)
 	{
 		Event event;
