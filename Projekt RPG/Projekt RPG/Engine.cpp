@@ -3,19 +3,17 @@
 
 void Engine::updateMap()
 {
-	//view.setCenter(64 + 64 / 2, 64 + 64 / 2);
-
 	// wyliczamy pozycjê minimalnych granic kamery
 	Vector2f min = Vector2f(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
 
 	// ustawienie kamery w poziomie
-	int leftBorder = min.x / 64;
-	int rightBorder = leftBorder + tileCountWidth - 2;
+	float leftBorder = min.x / 64;
+	float rightBorder = leftBorder + tileCountWidth - 2;
 
 	// je¿eli jest za daleko na lewo
 	if (min.x < 0)
 	{
-		int difference = abs(min.x);		// ró¿nica pomiêdzy 0, a lew¹ krawêdzi¹
+		float difference = abs(min.x);		// ró¿nica pomiêdzy 0, a lew¹ krawêdzi¹
 		min.x += difference;
 		view.move(difference, 0);
 
@@ -24,7 +22,7 @@ void Engine::updateMap()
 	else if (leftBorder > 0 && rightBorder - 1 < level.getWidth() - 1)
 	{
 		min.x -= 64;
-		view.move(-64, 0);
+		//view.move(-64, 0);
 
 		leftBorder = min.x / 64;
 	}
@@ -32,9 +30,9 @@ void Engine::updateMap()
 	else if (rightBorder - 1 >= level.getWidth() - 1)
 	{
 		// MAGIC!
-		int difference = view.getCenter().x + view.getSize().x / 2 - (level.getWidth() - 1)*64;
+		float difference = view.getCenter().x + view.getSize().x / 2 - (level.getWidth() - 1)*64;
 
-		difference = -difference - 64;
+		difference = -difference -64;
 		min.x += difference;
 
 		leftBorder = (min.x) / 64;
@@ -47,13 +45,13 @@ void Engine::updateMap()
 
 
 	// ustawienie kamery w pionie
-	int upBorder = min.y / 64;
-	int bottomBorder = upBorder + tileCountHeight - 2;
+	float upBorder = min.y / 64;
+	float bottomBorder = upBorder + tileCountHeight - 2;
 
 	// analogicznie: je¿eli jest za bardzo wysuniêta do góry
 	if (min.y < 0)
 	{
-		int difference = abs(min.y);
+		float difference = abs(min.y);
 		min.y += difference;
 		view.move(0, difference);
 
@@ -63,13 +61,13 @@ void Engine::updateMap()
 	else if (upBorder > 0 && bottomBorder - 1 < level.getHeight() - 1)
 	{
 		min.y -= 64;
-		view.move(0, -64);
+		//view.move(0, -64);
 
 		upBorder = min.y / 64;
 	}
 	else if (bottomBorder - 1 >= level.getHeight() - 1)
 	{
-		int difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1)*64;
+		float difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1)*64;
 
 		difference = -difference - 64;
 		min.y += difference;
@@ -78,20 +76,19 @@ void Engine::updateMap()
 
 		view.setCenter(view.getCenter().x, (upBorder + (tileCountHeight) / 2)*64 + 64);
 
-		if (bottomBorder - 1 == level.getHeight() - 1)			// !!!
-			view.move(0, -64 / 2);
+		//if (bottomBorder - 1 == level.getHeight() - 1)			// !!!
+		//	view.move(0, -64 / 2);
 	}
 	else if (upBorder == 0)
 		view.move(0, -64 / 2);
 
 
 	// ustawienie kafli na scenie
-	for (int y = 0, h = upBorder; y < tileCountHeight; y++) {			// h - horizontal
-		for (int x = 0, v = leftBorder; x < tileCountWidth; x++)		// v - vertical
+	for (int y = 0, h = (int)upBorder; y < tileCountHeight; y++) {			// h - horizontal
+		for (int x = 0, v = (int)leftBorder; x < tileCountWidth; x++)		// v - vertical
 		{
 			tileSprites[y][x].setPosition(v*64, h*64);
 			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v].type]);
-
 			v++;
 		}
 		h++;
@@ -117,8 +114,8 @@ Engine::Engine(RenderWindow &_window)
 	{
 		tileTextures[i].loadFromFile("placeholder.png", IntRect(i * 64, 512, 64, 64));
 	}
-	tileCountHeight = _window.getSize().y / 64 + 2;
-	tileCountWidth = _window.getSize().x / 64 + 2;
+	tileCountHeight = (_window.getSize().y / 64) + 2;
+	tileCountWidth = (_window.getSize().x / 64) + 2;
 	Sprite standard(tileTextures[0]);
 	tileSprites.resize(tileCountHeight);
 	for (unsigned short y = 0; y < tileCountHeight; y++)
@@ -161,8 +158,11 @@ void Engine::startEngine(RenderWindow &window)
 		while (window.pollEvent(event))
 		{
 			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+			{
+				view.setCenter(1280 / 2, 720 / 2);
+				window.setView(view);
 				menu = true;
-
+			}
 			/*if (event.type == Event::KeyPressed && event.key.code == Keyboard::W)
 			{
 				player.walk();
