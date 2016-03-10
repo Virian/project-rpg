@@ -11,7 +11,7 @@ Game::Game()
 		return;
 	}
 	state = MENU;
-	window.create(VideoMode(1280, 720), "Galaxy Guardian Pre-Alpha 1.02", Style::Close);
+	window.create(VideoMode(1280, 720), "Galaxy Guardian Pre-Alpha 1.02", Style::Close); /*Reminder - mozna uzyc Style::Titlebar, bez X bezpieczniej dla uzytkownika (i nie trzeba sie martwic wtedy o ostrzezenia)*/
 }
 
 Game::~Game()
@@ -45,8 +45,11 @@ void Game::menu()
 
 		while (window.pollEvent(event))
 		{
+			/*klikniecie X*/
 			if (event.type == Event::Closed) state = END;
+			/*klikniecie new game*/
 			else if ((text[0].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = GAME;
+			/*klikniecie quit*/
 			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = END;
 		}
 

@@ -5,7 +5,7 @@
 
 Player::Player()
 {
-	if (!texture.loadFromFile("placeholder.png"))
+	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return;
