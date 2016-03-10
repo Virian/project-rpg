@@ -6,8 +6,8 @@ using namespace std;
 
 class Level
 {
-private:
-	enum TileType {TYPE1, TYPE2, TYPE3, TYPE4}; /*Reminder - do zmiany na jakies normalne nazwy*/
+public:
+	enum TileType { TYPE1, TYPE2, TYPE3, TYPE4, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
 	struct Tile
 	{
 		TileType type;
@@ -15,6 +15,8 @@ private:
 		bool isWall;
 		bool isInteraction;
 	};
+private:
+	
 	vector<vector<Tile>> map;
 	unsigned short height;
 	unsigned short width;
@@ -23,7 +25,11 @@ private:
 
 	Tile getTile(short);
 public:
+	
 	Level();
 	~Level();
 	bool load(string); /*bool - false jesli sie nie udalo wczytac*/
+	unsigned short getHeight();
+	unsigned short getWidth();
+	vector<vector<Tile>> getMap();
 };

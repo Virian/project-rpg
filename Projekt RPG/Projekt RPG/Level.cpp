@@ -86,3 +86,18 @@ bool Level::load(string filePath)
 	file.close();
 	return true;
 }
+
+unsigned short Level::getHeight()
+{
+	return height;
+}
+
+unsigned short Level::getWidth()
+{
+	return width;
+}
+
+vector<vector<Level::Tile>> Level::getMap()
+{
+	return map;
+}
