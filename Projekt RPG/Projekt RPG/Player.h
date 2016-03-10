@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <string>
 
 using namespace sf;
 
@@ -24,6 +25,13 @@ protected: /*dodac co najmniej str, dex, int*/
 	unsigned frame;
 	Clock anim_clock;
 	virtual void draw(RenderTarget&, RenderStates) const;
+	//Statystyki
+	std::string name;
+	short par_hp;
+	unsigned short par_str;
+	unsigned short par_agi;
+	unsigned short par_int;
+	//co z setName ??
 };
 
 /*class Juggernaut : public Player

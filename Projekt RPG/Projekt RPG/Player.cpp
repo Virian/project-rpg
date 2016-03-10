@@ -18,6 +18,8 @@ Player::Player()
 	speed = 5.5f;
 	frame = 0;
 	anim_clock.restart();
+	name = "noname";
+	par_hp = par_str = par_agi = par_int = 10;
 }
 
 Player::~Player()
