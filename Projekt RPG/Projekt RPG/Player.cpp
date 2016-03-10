@@ -8,7 +8,7 @@ Player::Player()
 	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
-		return;
+		return; /*powinien w ogole jakos te gre wywalic, co najmniej do menu*/
 	}
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64));

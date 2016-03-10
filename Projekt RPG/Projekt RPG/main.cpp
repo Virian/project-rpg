@@ -1,5 +1,7 @@
 #include "Game.h"
 
+/*Reminder - usunac using namespace z plikow .h*/
+
 int main()
 {
 	/*sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
