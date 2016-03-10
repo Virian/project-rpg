@@ -15,7 +15,7 @@ Player::Player()
 	sprite.setOrigin(32, 32);
 	sprite.setPosition(1280 / 2, 720 / 2);
 
-	speed = 4.5f;
+	speed = 5.5f;
 	frame = 0;
 	anim_clock.restart();
 }
