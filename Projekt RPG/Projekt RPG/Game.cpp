@@ -11,7 +11,7 @@ Game::Game()
 		return;
 	}
 	state = MENU;
-	window.create(VideoMode(1280, 720), "Galaxy Guardian Pre-Alpha 1.02", Style::Close); /*Reminder - mozna uzyc Style::Titlebar, bez X bezpieczniej dla uzytkownika (i nie trzeba sie martwic wtedy o ostrzezenia)*/
+	window.create(VideoMode(1280, 720), "Galaxy Guardian Pre-Alpha 1.03", Style::Close); /*Reminder - mozna uzyc Style::Titlebar, bez X bezpieczniej dla uzytkownika (i nie trzeba sie martwic wtedy o ostrzezenia)*/
 }
 
 Game::~Game()

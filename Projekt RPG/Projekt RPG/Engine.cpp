@@ -3,7 +3,7 @@
 
 void Engine::updateMap()
 {
-	view.setCenter(64 + 64 / 2, 64 + 64 / 2);
+	//view.setCenter(64 + 64 / 2, 64 + 64 / 2);
 
 	// wyliczamy pozycjê minimalnych granic kamery
 	Vector2f min = Vector2f(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
@@ -156,6 +156,7 @@ void Engine::startEngine(RenderWindow &window)
 	{
 		Event event;
 		sf::Vector2f mouse(Mouse::getPosition(window));
+		sf::Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
 
 		while (window.pollEvent(event))
 		{
@@ -182,14 +183,13 @@ void Engine::startEngine(RenderWindow &window)
 			}
 		}
 
-		player.update(mouse);
+		player.update(worldPos);
 		if (player.getStatus() == Player::Status::WALK)
 		{
-			view.move(player.getPosition());
+			view.setCenter(player.getPosition());
+			updateMap();
 			window.setView(view);
-			
-		}
-		updateMap();
+		}		
 		draw(window);
 	}
 }
