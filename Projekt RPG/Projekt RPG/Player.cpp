@@ -91,3 +91,8 @@ Vector2f Player::getPosition()
 {
 	return sprite.getPosition();
 }
+
+void Player::setPosition(unsigned short x, unsigned short y)
+{
+	sprite.setPosition(x * 64 + 32, y * 64 + 32);
+}

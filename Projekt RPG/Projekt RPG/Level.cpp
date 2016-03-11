@@ -97,6 +97,16 @@ unsigned short Level::getWidth()
 	return width;
 }
 
+unsigned short Level::getSpawnCoordX()
+{
+	return spawnCoordX;
+}
+
+unsigned short Level::getSpawnCoordY()
+{
+	return spawnCoordY;
+}
+
 vector<vector<Level::Tile>> Level::getMap()
 {
 	return map;

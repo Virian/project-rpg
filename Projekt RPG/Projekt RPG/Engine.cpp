@@ -102,6 +102,8 @@ void Engine::setMap(RenderWindow &window, string filePath)
 		MessageBox(NULL, "Level file not found!", "ERROR", NULL);
 		return;
 	}
+	player.setPosition(level.getSpawnCoordX(), level.getSpawnCoordY());
+	view.setCenter(player.getPosition());
 	updateMap();
 	window.setView(view);
 }

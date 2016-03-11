@@ -17,6 +17,7 @@ public:
 	FloatRect getBoundingBox();
 	Vector2f getSpeed();
 	Vector2f getPosition();
+	void setPosition(unsigned short, unsigned short);
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
 	Texture texture;

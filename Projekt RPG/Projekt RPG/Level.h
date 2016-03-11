@@ -24,12 +24,13 @@ private:
 	unsigned short spawnCoordY;
 
 	Tile getTile(short);
-public:
-	
+public:	
 	Level();
 	~Level();
 	bool load(string); /*bool - false jesli sie nie udalo wczytac*/
 	unsigned short getHeight();
 	unsigned short getWidth();
+	unsigned short getSpawnCoordX();
+	unsigned short getSpawnCoordY();
 	vector<vector<Tile>> getMap();
 };
