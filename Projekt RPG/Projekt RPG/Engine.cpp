@@ -8,7 +8,7 @@ void Engine::updateMap()
 
 	// ustawienie kamery w poziomie
 	float leftBorder = min.x / 64;
-	float rightBorder = leftBorder + tileCountWidth - 2;
+	float rightBorder = leftBorder + tileCountWidth - 3;
 
 	// je¿eli jest za daleko na lewo
 	if (min.x < 0)
@@ -46,7 +46,7 @@ void Engine::updateMap()
 
 	// ustawienie kamery w pionie
 	float upBorder = min.y / 64;
-	float bottomBorder = upBorder + tileCountHeight - 2;
+	float bottomBorder = upBorder + tileCountHeight - 3;
 
 	// analogicznie: je¿eli jest za bardzo wysuniêta do góry
 	if (min.y < 0)
@@ -62,23 +62,24 @@ void Engine::updateMap()
 	{
 		min.y -= 64;
 		//view.move(0, -64);
-
+		
 		upBorder = min.y / 64;
 	}
 	else if (bottomBorder - 1 >= level.getHeight() - 1)
 	{
-		float difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1) * 64;
+		/*float difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1) * 64;
 
 		difference = -difference - 64;
 		min.y += difference;
+		//min.y -= 64;
 
 		upBorder = (min.y) / 64;
 
-		view.setCenter(view.getCenter().x, (upBorder + (tileCountHeight) / 2) * 64 + 64);
-		/*float difference = level.getHeight() * 64 - bottomBorder * 64;
+		view.setCenter(view.getCenter().x, (upBorder + (tileCountHeight) / 2) * 64 + 64);*/
+		float difference = level.getHeight() * 64 - bottomBorder * 64;
 		min.y += difference;
 		view.move(0, difference);
-		upBorder = min.y / 64;*/
+		upBorder = min.y / 64;
 
 		//if (bottomBorder - 1 == level.getHeight() - 1)			// !!!
 		//	view.move(0, -64 / 2);
@@ -86,11 +87,12 @@ void Engine::updateMap()
 	else if (upBorder == 0)
 		view.move(0, -64 / 2);
 
-	/*PROBLEM - z jakiegoœ powodu skrajne dolne i skrajne prawe maja problemy z wyswietlaniem*/
+	/*PROBLEM - z jakiegoœ powodu dolna krawedz ma czarny pasek*/
 	// ustawienie kafli na scenie
-	for (int y = 0, h = (int)upBorder; y < tileCountHeight; y++)
+	//for (int y = 0, h = (int)upBorder; y < tileCountHeight; y++)
+	for (int y = 0, h = (int)upBorder; y < tileCountHeight && h < level.getHeight(); y++)
 	{																		// h - horizontal
-		for (int x = 0, v = (int)leftBorder; x < tileCountWidth; x++)		// v - vertical
+		for (int x = 0, v = (int)leftBorder; x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
 		{
 			tileSprites[y][x].setPosition(v * 64, h * 64);
 			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v].type]);
@@ -121,8 +123,8 @@ Engine::Engine(RenderWindow &_window)
 	{
 		tileTextures[i].loadFromFile("placeholder.png", IntRect(i * 64, 512, 64, 64));
 	}
-	tileCountHeight = (_window.getSize().y / 64) + 2;
-	tileCountWidth = (_window.getSize().x / 64) + 2;
+	tileCountHeight = (_window.getSize().y / 64) + 3;
+	tileCountWidth = (_window.getSize().x / 64) + 3;
 	Sprite standard(tileTextures[0]);
 	tileSprites.resize(tileCountHeight);
 	for (unsigned short y = 0; y < tileCountHeight; y++)
