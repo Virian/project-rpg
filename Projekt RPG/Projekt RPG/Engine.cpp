@@ -58,14 +58,14 @@ void Engine::updateMap()
 		upBorder = min.y / 64;
 
 	}
-	else if (upBorder > 0 && bottomBorder - 1 < level.getHeight() - 1)
+	else if (upBorder > 0 && bottomBorder - 1 + 1.0 / 4.0 < level.getHeight() - 1)
 	{
 		min.y -= 64;
 		//view.move(0, -64);
 		
 		upBorder = min.y / 64;
 	}
-	else if (bottomBorder - 1 >= level.getHeight() - 1)
+	else if (bottomBorder - 1 + 1.0 / 4.0 >= level.getHeight() - 1)
 	{
 		/*float difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1) * 64;
 
@@ -78,7 +78,8 @@ void Engine::updateMap()
 		view.setCenter(view.getCenter().x, (upBorder + (tileCountHeight) / 2) * 64 + 64);*/
 		float difference = level.getHeight() * 64 - bottomBorder * 64;
 		min.y += difference;
-		view.move(0, difference);
+		view.move(0, difference - 64/4);
+		min.y -= 64;
 		upBorder = min.y / 64;
 
 		//if (bottomBorder - 1 == level.getHeight() - 1)			// !!!
@@ -90,9 +91,9 @@ void Engine::updateMap()
 	/*PROBLEM - z jakiegoœ powodu dolna krawedz ma czarny pasek*/
 	// ustawienie kafli na scenie
 	//for (int y = 0, h = (int)upBorder; y < tileCountHeight; y++)
-	for (int y = 0, h = (int)upBorder; y < tileCountHeight && h < level.getHeight(); y++)
-	{																		// h - horizontal
-		for (int x = 0, v = (int)leftBorder; x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
+	for (int y = 0, h = static_cast<int>(upBorder); y < tileCountHeight && h < level.getHeight(); y++)
+	{																											// h - horizontal
+		for (int x = 0, v = static_cast<int>(leftBorder); x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
 		{
 			tileSprites[y][x].setPosition(v * 64, h * 64);
 			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v].type]);
