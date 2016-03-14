@@ -9,7 +9,7 @@ class Player : public Drawable, Transformable
 {
 public:
 	Player();
-	~Player();
+	virtual ~Player();
 	void update(Vector2f, Level*);
 	void walk();
 	void stop();
@@ -36,17 +36,20 @@ protected: /*dodac co najmniej str, dex, int*/
 	//co z setName ??
 };
 
-/*class Juggernaut : public Player
+class Juggernaut : public Player
 {
-
+public:	
+	Juggernaut();
 };
 
 class Soldier : public Player
 {
-
+public:	
+	Soldier();
 };
 
 class Sentinel : public Player
 {
-
-};*/
+public:	
+	Sentinel();
+};

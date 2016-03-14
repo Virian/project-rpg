@@ -1,4 +1,6 @@
 #include "Game.h"
+#include <ctime>
+#include <cstdlib>
 
 /*Reminder - usunac using namespace z plikow .h*/
 
@@ -22,6 +24,7 @@ int main()
 		window.display();
 	}*/
 	Game game;
+	srand(time(NULL));
 	game.start();
 	return 0;
 }

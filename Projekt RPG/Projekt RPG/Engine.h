@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Level.h"
+#include "Npc.h"
 
 using namespace sf;
 

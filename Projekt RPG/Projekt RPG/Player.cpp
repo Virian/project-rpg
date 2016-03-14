@@ -140,3 +140,18 @@ void Player::setPosition(unsigned short x, unsigned short y)
 {
 	sprite.setPosition(x * 64 + 32, y * 64 + 32);
 }
+
+Juggernaut::Juggernaut()
+{
+
+}
+
+Soldier::Soldier()
+{
+
+}
+
+Sentinel::Sentinel()
+{
+
+}
