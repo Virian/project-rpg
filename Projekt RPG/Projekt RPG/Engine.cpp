@@ -133,7 +133,7 @@ Engine::Engine(RenderWindow &_window)
 		tileSprites[y].resize(tileCountWidth, standard);
 	}
 	player = new Player(); /*Reminder - np. tu mozna zmieniac na Soldiera, Juggernauta, Sentinela*/
-	enemy = new Enemy();
+	/*enemy = new Enemy();*/ /*Enemy comment*/
 	setMap(_window, "test.level"); /*Reminder - do zmiany sciezka*/
 	startEngine(_window);	
 }
@@ -141,7 +141,7 @@ Engine::Engine(RenderWindow &_window)
 Engine::~Engine()
 {
 	delete player;
-	delete enemy;
+	/*delete enemy;*/ /*Enemy comment*/
 }
 
 void Engine::draw(RenderWindow &window)
@@ -155,16 +155,16 @@ void Engine::draw(RenderWindow &window)
 		}
 	}
 	window.draw(*player);
-	window.draw(*enemy);
+	/*window.draw(*enemy);*/ /*Enemy comment*/
 	window.display();
 }
 
 void Engine::startEngine(RenderWindow &window)
 {
 	bool menu = false;
-	float rot;
+	/*float rot;
 	int walkTime;
-	int idleTime = rand() % 5000 + 10000;
+	int idleTime = rand() % 5000 + 10000;*/ /*Enemy comment*/
 	updateMap();
 	window.setView(view);
 	draw(window);
@@ -203,13 +203,13 @@ void Engine::startEngine(RenderWindow &window)
 		}
 
 		player->update(worldPos, &level);
-		if (enemy->getStatus() == Enemy::Status::STOP)
+		/*if (enemy->getStatus() == Enemy::Status::STOP)
 		{
 			rot = rand() % 360;
 			walkTime = rand() % 500 + 1000;
 		}
 		else idleTime = rand() % 5000 + 7000;
-		enemy->update(&level, rot, idleTime, walkTime);
+		enemy->update(&level, rot, idleTime, walkTime);*/ /*Enemy comment*/
 		if (player->getStatus() == Player::Status::WALK)
 		{
 			view.setCenter(player->getPosition());

@@ -10,7 +10,7 @@ class Engine
 {
 private:
 	Player* player;
-	Enemy* enemy;
+	/*Enemy* enemy;*/ /*Enemy comment*/
 	View view;
 	Level level;
 	Texture tileTextures[Level::COUNT]; /*tablica na tekstury kafli*/
