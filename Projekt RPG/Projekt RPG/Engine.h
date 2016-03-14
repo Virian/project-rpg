@@ -8,7 +8,7 @@ using namespace sf;
 class Engine
 {
 private:
-	Player player;
+	Player* player;
 	View view;
 	Level level;
 	Texture tileTextures[Level::COUNT]; /*tablica na tekstury kafli*/

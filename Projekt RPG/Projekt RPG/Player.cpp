@@ -46,42 +46,43 @@ void Player::update(Vector2f mouse, Level *level)
 				frame = 0; /*animacja sie zapetla*/
 			sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
 			sprite.move(getSpeed());
-			if (sprite.getGlobalBounds().left < 0)
+			/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
+			if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
 			{
 				sprite.move(-getSpeed());
 				stop();
 			}
-			if (sprite.getGlobalBounds().top < 0)
+			if (sprite.getGlobalBounds().top + 15 < 0) /*gorna krawedz poziomu*/
 			{
 				sprite.move(-getSpeed());
 				stop();
 			}
-			if (sprite.getGlobalBounds().left+sprite.getGlobalBounds().width > level->getWidth() * 64)
+			if (sprite.getGlobalBounds().left+sprite.getGlobalBounds().width - 15 > level->getWidth() * 64) /*prawa krawedz poziomu*/
 			{
 				sprite.move(-getSpeed());
 				stop();
 			}
-			if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height > level->getHeight() * 64)
+			if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15 > level->getHeight() * 64) /*dolna krawedz poziomu*/
 			{
 				sprite.move(-getSpeed());
 				stop();
 			}
-			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(sprite.getGlobalBounds().left / 64)].isWall)
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall) /*kolizja z kaflem po lewej*/
 			{
 				sprite.move(-getSpeed());
 				stop();
 			}
-			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width) / 64)].isWall)
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall) /*kolizja z kaflem po prawej*/
 			{
 				sprite.move(-getSpeed());
 				stop();
 			}
-			if (level->getMap()[static_cast<int>(sprite.getGlobalBounds().top / 64)][static_cast<int>(getPosition().x / 64)].isWall)
+			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15)/ 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z gory*/
 			{
 				sprite.move(-getSpeed());
 				stop();
 			}
-			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height)/ 64)][static_cast<int>(getPosition().x / 64)].isWall)
+			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15)/ 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z dolu*/
 			{
 				sprite.move(-getSpeed());
 				stop();

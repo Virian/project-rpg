@@ -110,8 +110,8 @@ void Engine::setMap(RenderWindow &window, string filePath)
 		MessageBox(NULL, "Level file not found!", "ERROR", NULL);
 		return;
 	}
-	player.setPosition(level.getSpawnCoordX(), level.getSpawnCoordY());
-	view.setCenter(player.getPosition());
+	player->setPosition(level.getSpawnCoordX(), level.getSpawnCoordY());
+	view.setCenter(player->getPosition());
 	updateMap();
 	window.setView(view);
 }
@@ -132,13 +132,14 @@ Engine::Engine(RenderWindow &_window)
 	{
 		tileSprites[y].resize(tileCountWidth, standard);
 	}
+	player = new Player();
 	setMap(_window, "test.level"); /*Reminder - do zmiany sciezka*/
-	startEngine(_window);
+	startEngine(_window);	
 }
 
 Engine::~Engine()
 {
-
+	delete player;
 }
 
 void Engine::draw(RenderWindow &window)
@@ -151,7 +152,7 @@ void Engine::draw(RenderWindow &window)
 			window.draw(tileSprites[y][x]);
 		}
 	}
-	window.draw(player);
+	window.draw(*player);
 	window.display();
 }
 
@@ -187,18 +188,18 @@ void Engine::startEngine(RenderWindow &window)
 			}*/
 			if ((event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
 			{
-				player.walk();
+				player->walk();
 			}
 			else if (event.type == Event::MouseButtonReleased)
 			{
-				if (event.mouseButton.button == Mouse::Right) player.stop();
+				if (event.mouseButton.button == Mouse::Right) player->stop();
 			}
 		}
 
-		player.update(worldPos, &level);
-		if (player.getStatus() == Player::Status::WALK)
+		player->update(worldPos, &level);
+		if (player->getStatus() == Player::Status::WALK)
 		{
-			view.setCenter(player.getPosition());
+			view.setCenter(player->getPosition());
 			updateMap();
 			window.setView(view);
 		}		
