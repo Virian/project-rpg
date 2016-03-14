@@ -21,19 +21,19 @@ Level::Tile Level::getTile(short tileCode)
 	tile.type = TileType(tileCode);
 	switch (TileType(tileCode))
 	{
-	case TYPE1:
+	case FLOOR1:
 		tile.isWall = false;
 		tile.isInteraction = false;
 		break;
-	case TYPE2:
-		tile.isWall = false;
-		tile.isInteraction = false;
-		break;
-	case TYPE3:
+	case WALL1:
 		tile.isWall = true;
 		tile.isInteraction = false;
 		break;
-	case TYPE4:
+	case FLOOR2:
+		tile.isWall = false;
+		tile.isInteraction = false;
+		break;
+	case CHEST1:
 		tile.isWall = true;
 		tile.isInteraction = true;
 		break;

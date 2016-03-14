@@ -195,7 +195,7 @@ void Engine::startEngine(RenderWindow &window)
 			}
 		}
 
-		player.update(worldPos);
+		player.update(worldPos, &level);
 		if (player.getStatus() == Player::Status::WALK)
 		{
 			view.setCenter(player.getPosition());

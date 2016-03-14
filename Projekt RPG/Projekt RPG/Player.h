@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Level.h"
 
 using namespace sf;
 
@@ -9,7 +10,7 @@ class Player : public Drawable, Transformable
 public:
 	Player();
 	~Player();
-	void update(Vector2f);
+	void update(Vector2f, Level*);
 	void walk();
 	void stop();
 	enum Status { STOP, WALK };

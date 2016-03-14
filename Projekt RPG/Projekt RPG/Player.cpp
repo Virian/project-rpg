@@ -27,7 +27,7 @@ Player::~Player()
 
 }
 
-void Player::update(Vector2f mouse)
+void Player::update(Vector2f mouse, Level *level) 
 {
 	Vector2f norm = mouse - sprite.getPosition();
 	float rot = atan2(norm.y, norm.x); /*gdy przod playera jest na gorze tekstury, gdyby byl na dole to zamienic x z y*/
@@ -37,14 +37,57 @@ void Player::update(Vector2f mouse)
 	
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
-		if (status == STOP) return;
-		if (frame < 7) /*liczba klatek animacji - 1*/
-			frame++;
-		else
-			frame = 0; /*animacja sie zapetla*/
-		sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
-		sprite.move(getSpeed());
-		anim_clock.restart();
+		//if (getPosition().x + getSpeed().x < 0) stop();
+		{
+			if (status == STOP) return;
+			if (frame < 7) /*liczba klatek animacji - 1*/
+				frame++;
+			else
+				frame = 0; /*animacja sie zapetla*/
+			sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
+			sprite.move(getSpeed());
+			if (sprite.getGlobalBounds().left < 0)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			if (sprite.getGlobalBounds().top < 0)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			if (sprite.getGlobalBounds().left+sprite.getGlobalBounds().width > level->getWidth() * 64)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height > level->getHeight() * 64)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(sprite.getGlobalBounds().left / 64)].isWall)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width) / 64)].isWall)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			if (level->getMap()[static_cast<int>(sprite.getGlobalBounds().top / 64)][static_cast<int>(getPosition().x / 64)].isWall)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height)/ 64)][static_cast<int>(getPosition().x / 64)].isWall)
+			{
+				sprite.move(-getSpeed());
+				stop();
+			}
+			anim_clock.restart();
+		}
 	}	
 }
 

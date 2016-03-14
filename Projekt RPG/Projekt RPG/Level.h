@@ -7,7 +7,7 @@ using namespace std;
 class Level
 {
 public:
-	enum TileType { TYPE1, TYPE2, TYPE3, TYPE4, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
+	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
 	struct Tile
 	{
 		TileType type;
