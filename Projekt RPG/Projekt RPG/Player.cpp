@@ -37,59 +37,56 @@ void Player::update(Vector2f mouse, Level *level)
 	
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
-		//if (getPosition().x + getSpeed().x < 0) stop();
+		if (status == STOP) return;
+		if (frame < 7) /*liczba klatek animacji - 1*/
+			frame++;
+		else
+			frame = 0; /*animacja sie zapetla*/
+		sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
+		sprite.move(getMove());
+		/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
+		if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
 		{
-			if (status == STOP) return;
-			if (frame < 7) /*liczba klatek animacji - 1*/
-				frame++;
-			else
-				frame = 0; /*animacja sie zapetla*/
-			sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
-			sprite.move(getSpeed());
-			/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
-			if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			if (sprite.getGlobalBounds().top + 15 < 0) /*gorna krawedz poziomu*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			if (sprite.getGlobalBounds().left+sprite.getGlobalBounds().width - 15 > level->getWidth() * 64) /*prawa krawedz poziomu*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15 > level->getHeight() * 64) /*dolna krawedz poziomu*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall) /*kolizja z kaflem po lewej*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall) /*kolizja z kaflem po prawej*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15)/ 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z gory*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15)/ 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z dolu*/
-			{
-				sprite.move(-getSpeed());
-				stop();
-			}
-			anim_clock.restart();
+			sprite.move(-getMove());
+			stop();
 		}
-	}	
+		if (sprite.getGlobalBounds().top + 15 < 0) /*gorna krawedz poziomu*/
+		{
+			sprite.move(-getMove());
+			stop();
+		}
+		if (sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15 > level->getWidth() * 64) /*prawa krawedz poziomu*/
+		{
+			sprite.move(-getMove());
+			stop();
+		}
+		if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15 > level->getHeight() * 64) /*dolna krawedz poziomu*/
+		{
+			sprite.move(-getMove());
+			stop();
+		}
+		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall) /*kolizja z kaflem po lewej*/
+		{
+			sprite.move(-getMove());
+			stop();
+		}
+		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall) /*kolizja z kaflem po prawej*/
+		{
+			sprite.move(-getMove());
+			stop();
+		}
+		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z gory*/
+		{
+			sprite.move(-getMove());
+			stop();
+		}
+		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z dolu*/
+		{
+			sprite.move(-getMove());
+			stop();
+		}
+		anim_clock.restart();
+	}
 }
 
 void Player::walk()
@@ -122,7 +119,7 @@ FloatRect Player::getBoundingBox()
 	return box;
 }
 
-Vector2f Player::getSpeed() /*Reminder - nazwac inaczej, bo metoda nie zwraca predkosci tylko miejsce gdzie narysowac sprite'a w nastepnej klatce*/
+Vector2f Player::getMove()
 {
 	float rotation = sprite.getRotation();
 	float vx = sin((rotation * M_PI) / 180.0f);

@@ -16,7 +16,7 @@ public:
 	enum Status { STOP, WALK };
 	Status getStatus();
 	FloatRect getBoundingBox();
-	Vector2f getSpeed();
+	Vector2f getMove();
 	Vector2f getPosition();
 	void setPosition(unsigned short, unsigned short);
 protected: /*dodac co najmniej str, dex, int*/

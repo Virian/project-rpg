@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Level.h"
 
 using namespace sf;
 
@@ -28,11 +29,16 @@ public:
 	Enemy(); /*trzeba bedzie dodac np parametr speed, str, int itp.*/
 	enum Status { STOP, WALK };
 	Status getStatus();
-	void update();
+	void update(Level*, float, int, int);
+	Vector2f getMove();
+	void walk();
+	void stop();
 private:
 	float speed;
 	unsigned frame;
 	Clock anim_clock;
+	Clock idleTime;
+	Clock walkTime;
 	Status status;
 	/*statystyki*/
 	short par_hp;
