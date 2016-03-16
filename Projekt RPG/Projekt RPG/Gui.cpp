@@ -4,9 +4,9 @@ Gui::Gui()
 {
 	hpBar.setSize(Vector2f(250,50));
 	experienceBar.setSize(Vector2f(250, 50));
-	skill1.setSize(Vector2f(100, 100));
-	skill2.setSize(Vector2f(100, 100));
-	skill3.setSize(Vector2f(100, 100));
+	skill1.setSize(Vector2f(64, 64));
+	skill2.setSize(Vector2f(64, 64));
+	skill3.setSize(Vector2f(64, 64));
 
 	hpBar.setFillColor(Color::Green);
 	experienceBar.setFillColor(Color::Green);
@@ -22,11 +22,11 @@ Gui::~Gui()
 
 void Gui::drawScreen(RenderWindow &window)
 {
-	hpBar.setPosition(window.mapPixelToCoords(Vector2i(50, 650)));
-	experienceBar.setPosition(window.mapPixelToCoords(Vector2i(980, 650)));
-	skill1.setPosition(window.mapPixelToCoords(Vector2i(395, 600)));
-	skill2.setPosition(window.mapPixelToCoords(Vector2i(590, 600)));
-	skill3.setPosition(window.mapPixelToCoords(Vector2i(785, 600)));
+	hpBar.setPosition(window.mapPixelToCoords(Vector2i(170, 650)));
+	experienceBar.setPosition(window.mapPixelToCoords(Vector2i(860, 650)));
+	skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
+	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
+	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
 
 	window.draw(hpBar);
 	window.draw(experienceBar);
