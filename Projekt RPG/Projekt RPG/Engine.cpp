@@ -156,6 +156,7 @@ void Engine::draw(RenderWindow &window)
 	}
 	window.draw(*player);
 	/*window.draw(*enemy);*/ /*Enemy comment*/
+	gui.drawScreen(window);
 	window.display();
 }
 

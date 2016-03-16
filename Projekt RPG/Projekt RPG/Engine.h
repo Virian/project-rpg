@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Level.h"
 #include "Npc.h"
+#include "Gui.h"
 
 using namespace sf;
 
@@ -11,6 +12,7 @@ class Engine
 private:
 	Player* player;
 	/*Enemy* enemy;*/ /*Enemy comment*/
+	Gui gui;
 	View view;
 	Level level;
 	Texture tileTextures[Level::COUNT]; /*tablica na tekstury kafli*/
