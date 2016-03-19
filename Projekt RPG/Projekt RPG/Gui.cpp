@@ -1,14 +1,28 @@
 #include "Gui.h"
+#include <Windows.h>
 
 Gui::Gui()
 {
-	hpBar.setSize(Vector2f(250,50));
+	if (!font.loadFromFile("game_over.ttf")) /*Reminder - do zmiany sciezka, mozna tez zmienic czcionke*/
+	{
+		MessageBox(NULL, "Font not found!", "ERROR", NULL);
+		return;
+	}
+	currHp.setFont(font);
+	currHp.setCharacterSize(90);
+	maximHp.setFont(font);
+	maximHp.setCharacterSize(45);
+	//hpBar.setSize(Vector2f(250,50));
+	texture.loadFromFile("placeholder.png");
+	hpGauge.setTexture(texture);
+	hpGauge.setTextureRect(IntRect(0, 896, 64, 64));
+	hpGauge.setScale(2.5, 2.5);
 	experienceBar.setSize(Vector2f(250, 50));
 	skill1.setSize(Vector2f(64, 64));
 	skill2.setSize(Vector2f(64, 64));
 	skill3.setSize(Vector2f(64, 64));
 
-	hpBar.setFillColor(Color::Green);
+	//hpBar.setFillColor(Color::Green);
 	experienceBar.setFillColor(Color::Green);
 	skill1.setFillColor(Color::Green);
 	skill2.setFillColor(Color::Green);
@@ -20,19 +34,35 @@ Gui::~Gui()
 
 }
 
-void Gui::drawScreen(RenderWindow &window)
+void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp)
 {
-	hpBar.setPosition(window.mapPixelToCoords(Vector2i(170, 650)));
+	float hpPercent = (static_cast<float>(currentHp) / static_cast<float>(maxHp)) * 100.0f;
+	if ((hpPercent <= 100) && (hpPercent > 500.0f/6.0f)) hpGauge.setTextureRect(IntRect(0, 896, 64, 64));
+	else if ((hpPercent <= 500.0f / 6.0f) && (hpPercent > 400.0f / 6.0f)) hpGauge.setTextureRect(IntRect(64, 896, 64, 64));
+	else if ((hpPercent <= 400.0f / 6.0f) && (hpPercent > 50)) hpGauge.setTextureRect(IntRect(128, 896, 64, 64));
+	else if ((hpPercent <= 50) && (hpPercent > 200.0f / 6.0f)) hpGauge.setTextureRect(IntRect(192, 896, 64, 64));
+	else if ((hpPercent <= 200.0f / 6.0f) && (hpPercent > 100.0f / 6.0f)) hpGauge.setTextureRect(IntRect(256, 896, 64, 64));
+	else if ((hpPercent <= 100.0f / 6.0f) && (hpPercent > 0)) hpGauge.setTextureRect(IntRect(320, 896, 64, 64));
+	//hpBar.setPosition(window.mapPixelToCoords(Vector2i(170, 650)));
+	hpGauge.setPosition(window.mapPixelToCoords(Vector2i(20, 540)));
 	experienceBar.setPosition(window.mapPixelToCoords(Vector2i(860, 650)));
 	skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
 	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
 	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
 
-	window.draw(hpBar);
+	currHp.setString(std::to_string(currentHp));
+	maximHp.setString(std::to_string(maxHp));
+	currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 540))); /*Reminder - fajnie by bylo dodac zeby pozycja zalezala od ilosci cyfr*/
+	maximHp.setPosition(window.mapPixelToCoords(Vector2i(85, 600)));
+
+	//window.draw(hpBar);
+	window.draw(hpGauge);
 	window.draw(experienceBar);
 	window.draw(skill1);
 	window.draw(skill2);
 	window.draw(skill3);
+	window.draw(currHp);
+	window.draw(maximHp);
 }
 
 void Gui::drawPauseMenu(RenderWindow &window)
@@ -48,7 +78,7 @@ void Gui::drawEquipment(RenderWindow &window)
 void Gui::draw(RenderTarget &target, RenderStates states) const
 {
 	states.transform *= getTransform();
-	target.draw(hpBar);
+	//target.draw(hpBar);
 	target.draw(experienceBar);
 	target.draw(skill1);
 	target.draw(skill2);

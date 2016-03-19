@@ -53,10 +53,10 @@ Level::Tile Level::getTile(short tileCode)
 		tile.isWall = true;
 		tile.isInteraction = true;
 		break;
-	case TYPE9:
+	/*case TYPE9:
 		tile.isWall = true;
 		tile.isInteraction = true;
-		break;
+		break;*/
 	default:
 		tile.isWall = false;
 		tile.isInteraction = false;

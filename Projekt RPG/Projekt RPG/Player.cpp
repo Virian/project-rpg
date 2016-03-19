@@ -8,18 +8,20 @@ Player::Player()
 	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
-		return; /*powinien w ogole jakos te gre wywalic, co najmniej do menu*/
+		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/
 	}
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
-	sprite.setPosition(1280 / 2, 720 / 2);
+	sprite.setPosition(1280 / 2, 720 / 2); /*Reminder - to chyba nie jest w ogole potrzebne*/
 
 	speed = 5.5f;
 	frame = 0;
 	anim_clock.restart();
 	name = "noname";
-	par_hp = par_str = par_agi = par_int = 10;
+	par_max_hp = par_hp = 100;
+	//par_hp = 17;
+	par_str = par_agi = par_int = 10; /*Reminder - pewnie tez do zmiany*/
 }
 
 Player::~Player()
@@ -136,6 +138,16 @@ Vector2f Player::getPosition()
 void Player::setPosition(unsigned short x, unsigned short y)
 {
 	sprite.setPosition(x * 64 + 32, y * 64 + 32);
+}
+
+short Player::getHp()
+{
+	return par_hp;
+}
+
+short Player::getMaxHp()
+{
+	return par_max_hp;
 }
 
 Juggernaut::Juggernaut()

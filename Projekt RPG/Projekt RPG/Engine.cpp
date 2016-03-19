@@ -88,7 +88,6 @@ void Engine::updateMap()
 	else if (upBorder == 0)
 		view.move(0, -64 / 2);
 
-	/*PROBLEM - z jakiegoœ powodu dolna krawedz ma czarny pasek*/
 	// ustawienie kafli na scenie
 	//for (int y = 0, h = (int)upBorder; y < tileCountHeight; y++)
 	for (int y = 0, h = static_cast<int>(upBorder); y < tileCountHeight && h < level.getHeight(); y++)
@@ -156,7 +155,7 @@ void Engine::draw(RenderWindow &window)
 	}
 	window.draw(*player);
 	/*window.draw(*enemy);*/ /*Enemy comment*/
-	gui.drawScreen(window);
+	gui.drawScreen(window, player->getHp(), player->getMaxHp());
 	window.display();
 }
 
