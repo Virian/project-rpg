@@ -19,7 +19,7 @@ private:
 	vector<vector<Sprite>> tileSprites; /*kontener sprite'ow kafli*/
 	unsigned short tileCountHeight; /*ilosc wyswietlanych kafli w pionie*/
 	unsigned short tileCountWidth; /*ilosc wyswietlanych kafli w poziomie*/
-	void draw(RenderWindow&);
+	void draw(RenderWindow&, bool);
 	void setMap(RenderWindow&, string);
 	void updateMap();
 public:

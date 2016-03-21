@@ -11,6 +11,12 @@ public:
 	void drawScreen(RenderWindow&, short, short);
 	void drawPauseMenu(RenderWindow&);
 	void drawEquipment(RenderWindow&);
+	RectangleShape getResumeButton();
+	RectangleShape getLoadButton();
+	RectangleShape getQuitButton();
+	void setResumeHighlight(short);
+	void setLoadHighlight(short);
+	void setQuitHighlight(short);
 private:
 	//RectangleShape hpBar;
 	Sprite hpGauge;
@@ -19,6 +25,10 @@ private:
 	RectangleShape skill1;
 	RectangleShape skill2;
 	RectangleShape skill3;
+	RectangleShape pauseMenu;
+	RectangleShape resumeButton;
+	RectangleShape loadButton;
+	RectangleShape quitButton;
 	Font font;
 	Text currHp, maximHp;
 	virtual void draw(RenderTarget&, RenderStates) const;

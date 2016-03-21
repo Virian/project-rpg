@@ -143,7 +143,7 @@ Engine::~Engine()
 	/*delete enemy;*/ /*Enemy comment*/
 }
 
-void Engine::draw(RenderWindow &window)
+void Engine::draw(RenderWindow &window, bool pause)
 {
 	window.clear();
 	for (unsigned short y = 0; y < tileCountHeight; y++)
@@ -156,66 +156,89 @@ void Engine::draw(RenderWindow &window)
 	window.draw(*player);
 	/*window.draw(*enemy);*/ /*Enemy comment*/
 	gui.drawScreen(window, player->getHp(), player->getMaxHp());
+	if (pause)
+	{
+		gui.drawPauseMenu(window);
+	}
 	window.display();
 }
 
 void Engine::startEngine(RenderWindow &window)
 {
-	bool menu = false;
+	bool quit = false;
+	bool pause = false;
 	/*float rot;
 	int walkTime;
 	int idleTime = rand() % 5000 + 10000;*/ /*Enemy comment*/
 	updateMap();
 	window.setView(view);
-	draw(window);
-	while (!menu)
+	draw(window, pause);
+	while (!quit)
 	{
 		Event event;
 		sf::Vector2f mouse(Mouse::getPosition(window));
 		sf::Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
 
-		while (window.pollEvent(event))
+		if (!pause)
 		{
-			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+			while (window.pollEvent(event))
 			{
-				view.setCenter(1280 / 2, 720 / 2);
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+				{
+					pause = true;
+				}
+				if ((event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
+				{
+					player->walk();
+				}
+				else if (event.type == Event::MouseButtonReleased)
+				{
+					if (event.mouseButton.button == Mouse::Right) player->stop();
+				}
+			}
+
+			player->update(worldPos, &level);
+			/*if (enemy->getStatus() == Enemy::Status::STOP)
+			{
+				rot = rand() % 360;
+				walkTime = rand() % 500 + 1000;
+			}
+			else idleTime = rand() % 5000 + 7000;
+			enemy->update(&level, rot, idleTime, walkTime);*/ /*Enemy comment*/
+			if (player->getStatus() == Player::Status::WALK)
+			{
+				view.setCenter(player->getPosition());
+				updateMap();
 				window.setView(view);
-				menu = true;
-			}
-			/*if (event.type == Event::KeyPressed && event.key.code == Keyboard::W)
-			{
-				player.walk();
-			}
-
-			else if (event.type == Event::KeyReleased)
-			{
-				if (event.key.code == Keyboard::W)
-					player.stop();
-			}*/
-			if ((event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
-			{
-				player->walk();
-			}
-			else if (event.type == Event::MouseButtonReleased)
-			{
-				if (event.mouseButton.button == Mouse::Right) player->stop();
 			}
 		}
-
-		player->update(worldPos, &level);
-		/*if (enemy->getStatus() == Enemy::Status::STOP)
+		if (pause)
 		{
-			rot = rand() % 360;
-			walkTime = rand() % 500 + 1000;
-		}
-		else idleTime = rand() % 5000 + 7000;
-		enemy->update(&level, rot, idleTime, walkTime);*/ /*Enemy comment*/
-		if (player->getStatus() == Player::Status::WALK)
-		{
-			view.setCenter(player->getPosition());
-			updateMap();
-			window.setView(view);
-		}		
-		draw(window);
+			while (window.pollEvent(event))
+			{
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+				{
+					pause = false;
+				}
+				if ((gui.getQuitButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					view.setCenter(1280 / 2, 720 / 2);
+					window.setView(view);
+					quit = true;
+					pause = false;
+				}
+				if ((gui.getResumeButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					pause = false;
+				}
+			}
+			if (gui.getResumeButton().getGlobalBounds().contains(worldPos)) gui.setResumeHighlight(1);
+			else gui.setResumeHighlight(0);
+			if (gui.getLoadButton().getGlobalBounds().contains(worldPos)) gui.setLoadHighlight(1);
+			else gui.setLoadHighlight(0);
+			if (gui.getQuitButton().getGlobalBounds().contains(worldPos)) gui.setQuitHighlight(1);
+			else gui.setQuitHighlight(0);
+		}	
+		draw(window, pause);
 	}
 }

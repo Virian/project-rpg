@@ -155,12 +155,27 @@ Juggernaut::Juggernaut()
 
 }
 
+Juggernaut::~Juggernaut()
+{
+
+}
+
 Soldier::Soldier()
 {
 
 }
 
+Soldier::~Soldier()
+{
+
+}
+
 Sentinel::Sentinel()
+{
+
+}
+
+Sentinel::~Sentinel()
 {
 
 }

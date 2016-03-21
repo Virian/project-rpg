@@ -43,16 +43,19 @@ class Juggernaut : public Player
 {
 public:	
 	Juggernaut();
+	~Juggernaut();
 };
 
 class Soldier : public Player
 {
 public:	
 	Soldier();
+	~Soldier();
 };
 
 class Sentinel : public Player
 {
 public:	
 	Sentinel();
+	~Sentinel();
 };

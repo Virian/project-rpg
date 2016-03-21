@@ -27,6 +27,21 @@ Gui::Gui()
 	skill1.setFillColor(Color::Green);
 	skill2.setFillColor(Color::Green);
 	skill3.setFillColor(Color::Green);	
+
+	pauseMenu.setSize(Vector2f(350, 450));
+	resumeButton.setSize(Vector2f(320, 100));
+	loadButton.setSize(Vector2f(320, 100));
+	quitButton.setSize(Vector2f(320, 100));
+	
+	pauseMenu.setFillColor(Color::Black);
+	pauseMenu.setOutlineThickness(-2);
+	pauseMenu.setOutlineColor(Color::White);
+	resumeButton.setFillColor(Color::Cyan);
+	resumeButton.setOutlineColor(Color::Red);
+	loadButton.setFillColor(Color::Magenta);
+	loadButton.setOutlineColor(Color::Red);
+	quitButton.setFillColor(Color::White);
+	quitButton.setOutlineColor(Color::Red);
 }
 
 Gui::~Gui()
@@ -67,7 +82,15 @@ void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp)
 
 void Gui::drawPauseMenu(RenderWindow &window)
 {
-
+	pauseMenu.setPosition(window.mapPixelToCoords(Vector2i(465, 135)));
+	resumeButton.setPosition(window.mapPixelToCoords(Vector2i(480, 172)));
+	loadButton.setPosition(window.mapPixelToCoords(Vector2i(480, 310)));
+	quitButton.setPosition(window.mapPixelToCoords(Vector2i(480, 447)));
+	
+	window.draw(pauseMenu);
+	window.draw(resumeButton);
+	window.draw(loadButton);
+	window.draw(quitButton);
 }
 
 void Gui::drawEquipment(RenderWindow &window)
@@ -83,4 +106,37 @@ void Gui::draw(RenderTarget &target, RenderStates states) const
 	target.draw(skill1);
 	target.draw(skill2);
 	target.draw(skill3);
+}
+
+RectangleShape Gui::getResumeButton()
+{
+	return resumeButton;
+}
+
+RectangleShape Gui::getLoadButton()
+{
+	return loadButton;
+}
+
+RectangleShape Gui::getQuitButton()
+{
+	return quitButton;
+}
+
+void Gui::setResumeHighlight(short swtch)
+{
+	if (swtch == 0) resumeButton.setOutlineThickness(0);
+	else resumeButton.setOutlineThickness(-4);
+}
+
+void Gui::setLoadHighlight(short swtch)
+{
+	if (swtch == 0) loadButton.setOutlineThickness(0);
+	else loadButton.setOutlineThickness(-4);
+}
+
+void Gui::setQuitHighlight(short swtch)
+{
+	if (swtch == 0) quitButton.setOutlineThickness(0);
+	else quitButton.setOutlineThickness(-4);
 }
