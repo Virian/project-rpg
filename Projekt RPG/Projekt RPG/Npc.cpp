@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <cstdlib>
 
-Npc::Npc()
+Npc::Npc(unsigned short spawnCoordX, unsigned short spawnCoordY) : spawnCoordX(spawnCoordX), spawnCoordY(spawnCoordY)
 {
 	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
 	{
@@ -13,7 +13,8 @@ Npc::Npc()
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64)); /*Reminder - do zmiany, obecnie jest to tekstura playera*/
 	sprite.setOrigin(32, 32);
-	sprite.setPosition(1280 / 2, 720 / 2);
+	//sprite.setPosition(1280 / 2, 720 / 2);
+	sprite.setPosition(64 * spawnCoordX + 32, 64 * spawnCoordY + 32);
 }
 
 Npc::~Npc()
@@ -38,12 +39,22 @@ Vector2f Npc::getPosition()
 	return sprite.getPosition();
 }
 
-Neutral::Neutral()
+void Npc::setPosition(unsigned short x, unsigned short y)
+{
+	sprite.setPosition(x * 64 + 32, y * 64 + 32);
+}
+
+Neutral::Neutral(unsigned short spawnCoordX, unsigned short spawnCoordY) : Npc(spawnCoordX, spawnCoordY)
 {
 
 }
 
-Enemy::Enemy()
+Neutral::~Neutral()
+{
+
+}
+
+Enemy::Enemy(unsigned short spawnCoordX, unsigned short spawnCoordY) : Npc(spawnCoordX, spawnCoordY)
 {
 	speed = 5.5f;
 	frame = 0;
@@ -52,6 +63,11 @@ Enemy::Enemy()
 	walkTime.restart();
 
 	par_hp = par_str = par_agi = par_int = 10;
+}
+
+Enemy::~Enemy()
+{
+
 }
 
 Enemy::Status Enemy::getStatus()

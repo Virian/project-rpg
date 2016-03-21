@@ -7,6 +7,11 @@ using namespace std;
 class Level
 {
 public:
+	struct SpawnCoord
+	{
+		unsigned short x;
+		unsigned short y;
+	};
 	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TYPE5, TYPE6, TYPE7, TYPE8, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
 	struct Tile
 	{
@@ -16,12 +21,11 @@ public:
 		bool isInteraction;
 	};
 private:
-	
+	vector<SpawnCoord> npcsCoords;
 	vector<vector<Tile>> map;
 	unsigned short height;
 	unsigned short width;
-	unsigned short spawnCoordX;
-	unsigned short spawnCoordY;
+	SpawnCoord playerSpawn;
 
 	Tile getTile(short);
 public:	
@@ -30,7 +34,7 @@ public:
 	bool load(string); /*bool - false jesli sie nie udalo wczytac*/
 	unsigned short getHeight();
 	unsigned short getWidth();
-	unsigned short getSpawnCoordX();
-	unsigned short getSpawnCoordY();
+	SpawnCoord getPlayerSpawnCoords();
+	vector<SpawnCoord> getNpcCoords();
 	vector<vector<Tile>> getMap();
 };

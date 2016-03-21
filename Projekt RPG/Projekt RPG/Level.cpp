@@ -5,8 +5,8 @@ Level::Level()
 {
 	height = 0;
 	width = 0;
-	spawnCoordX = 0;
-	spawnCoordY = 0;
+	playerSpawn.x = 0;
+	playerSpawn.y = 0;
 }
 
 Level::~Level()
@@ -98,8 +98,15 @@ bool Level::load(string filePath)
 		file >> x >> y;
 		if (name == "[SPAWN]")
 		{
-			spawnCoordX = x;
-			spawnCoordY = y;
+			playerSpawn.x = x;
+			playerSpawn.y = y;
+		}
+		else if (name == "[ENEMY]")
+		{
+			SpawnCoord tmp;
+			tmp.x = x;
+			tmp.y = y;
+			npcsCoords.push_back(tmp);
 		}
 		/* else if reszta specjalnych kafelkow*/
 	}
@@ -117,14 +124,14 @@ unsigned short Level::getWidth()
 	return width;
 }
 
-unsigned short Level::getSpawnCoordX()
+Level::SpawnCoord Level::getPlayerSpawnCoords()
 {
-	return spawnCoordX;
+	return playerSpawn;
 }
 
-unsigned short Level::getSpawnCoordY()
+vector<Level::SpawnCoord> Level::getNpcCoords()
 {
-	return spawnCoordY;
+	return npcsCoords;
 }
 
 vector<vector<Level::Tile>> Level::getMap()

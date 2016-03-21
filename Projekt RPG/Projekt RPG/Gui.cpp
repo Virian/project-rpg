@@ -67,6 +67,7 @@ void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp)
 
 	currHp.setString(std::to_string(currentHp));
 	maximHp.setString(std::to_string(maxHp));
+	
 	currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 540))); /*Reminder - fajnie by bylo dodac zeby pozycja zalezala od ilosci cyfr*/
 	maximHp.setPosition(window.mapPixelToCoords(Vector2i(85, 600)));
 
@@ -102,6 +103,7 @@ void Gui::draw(RenderTarget &target, RenderStates states) const
 {
 	states.transform *= getTransform();
 	//target.draw(hpBar);
+	target.draw(hpGauge);
 	target.draw(experienceBar);
 	target.draw(skill1);
 	target.draw(skill2);

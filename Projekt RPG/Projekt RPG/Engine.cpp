@@ -109,8 +109,18 @@ void Engine::setMap(RenderWindow &window, string filePath)
 		MessageBox(NULL, "Level file not found!", "ERROR", NULL);
 		return;
 	}
-	player->setPosition(level.getSpawnCoordX(), level.getSpawnCoordY());
+	for (size_t i = 0; i < npcs.size(); ++i)
+	{
+		delete npcs[i];
+	}
+	npcs.clear();
+	player->setPosition(level.getPlayerSpawnCoords().x, level.getPlayerSpawnCoords().y);
 	view.setCenter(player->getPosition());
+	for (size_t i = 0; i < level.getNpcCoords().size(); ++i)
+	{
+		Npc* tmp = new Enemy(level.getNpcCoords()[i].x, level.getNpcCoords()[i].y);
+		npcs.push_back(tmp);
+	}
 	updateMap();
 	window.setView(view);
 }
@@ -132,7 +142,6 @@ Engine::Engine(RenderWindow &_window)
 		tileSprites[y].resize(tileCountWidth, standard);
 	}
 	player = new Player(); /*Reminder - np. tu mozna zmieniac na Soldiera, Juggernauta, Sentinela*/
-	/*enemy = new Enemy();*/ /*Enemy comment*/
 	setMap(_window, "test.level"); /*Reminder - do zmiany sciezka*/
 	startEngine(_window);	
 }
@@ -140,7 +149,10 @@ Engine::Engine(RenderWindow &_window)
 Engine::~Engine()
 {
 	delete player;
-	/*delete enemy;*/ /*Enemy comment*/
+	for (size_t i = 0; i < npcs.size(); ++i)
+	{
+		delete npcs[i];
+	}
 }
 
 void Engine::draw(RenderWindow &window, bool pause)
@@ -154,7 +166,10 @@ void Engine::draw(RenderWindow &window, bool pause)
 		}
 	}
 	window.draw(*player);
-	/*window.draw(*enemy);*/ /*Enemy comment*/
+	for (size_t i = 0; i < npcs.size(); i++)
+	{
+		window.draw(*npcs[i]);
+	}
 	gui.drawScreen(window, player->getHp(), player->getMaxHp());
 	if (pause)
 	{
