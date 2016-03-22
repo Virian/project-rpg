@@ -34,7 +34,7 @@ public:
 	~Enemy();
 	enum Status { STOP, WALK };
 	Status getStatus();
-	void update(Level*, float, int, int);
+	void update(Level*);
 	Vector2f getMove();
 	void walk();
 	void stop();
@@ -44,6 +44,9 @@ private:
 	Clock anim_clock;
 	Clock idleTime;
 	Clock walkTime;
+	float rot;
+	int idleT;
+	int walkT;
 	Status status;
 	/*statystyki*/
 	short par_hp;

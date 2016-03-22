@@ -184,7 +184,7 @@ void Engine::startEngine(RenderWindow &window)
 	bool pause = false;
 	/*float rot;
 	int walkTime;
-	int idleTime = rand() % 5000 + 10000;*/ /*Enemy comment*/
+	int idleTime;// = rand() % 5000 + 10000;*/
 	updateMap();
 	window.setView(view);
 	draw(window, pause);
@@ -220,6 +220,15 @@ void Engine::startEngine(RenderWindow &window)
 			}
 			else idleTime = rand() % 5000 + 7000;
 			enemy->update(&level, rot, idleTime, walkTime);*/ /*Enemy comment*/
+			for (size_t i = 0; i < npcs.size(); ++i)
+			{
+				Enemy* enemy;
+				if (enemy = dynamic_cast<Enemy*>(npcs[i]))
+				{
+					enemy->update(&level);
+				}
+				
+			}
 			if (player->getStatus() == Player::Status::WALK)
 			{
 				view.setCenter(player->getPosition());

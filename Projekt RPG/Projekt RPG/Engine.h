@@ -11,7 +11,6 @@ class Engine
 {
 private:
 	Player* player;
-	/*Enemy* enemy;*/ /*Enemy comment*/
 	Gui gui;
 	View view;
 	Level level;

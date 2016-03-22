@@ -61,6 +61,10 @@ Enemy::Enemy(unsigned short spawnCoordX, unsigned short spawnCoordY) : Npc(spawn
 	anim_clock.restart();
 	idleTime.restart();
 	walkTime.restart();
+	status = STOP;
+	rot = rand() % 360;
+	walkT = rand() % 500 + 1000;
+	idleT = rand() % 5000 + 7000;
 
 	par_hp = par_str = par_agi = par_int = 10;
 }
@@ -75,13 +79,12 @@ Enemy::Status Enemy::getStatus()
 	return status;
 }
 
-void Enemy::update(Level* level, float rot, int idle, int walk)
-{
-	
-	if (idleTime.getElapsedTime() > milliseconds(idle))
+void Enemy::update(Level* level)
+{	
+	if (idleTime.getElapsedTime() > milliseconds(idleT))
 	{		
 		sprite.setRotation(rot);
-		if (walkTime.getElapsedTime() < milliseconds(idle) + milliseconds(walk))
+		if (walkTime.getElapsedTime() < milliseconds(idleT) + milliseconds(walkT))
 		{
 			status = WALK;
 			if (anim_clock.getElapsedTime() > seconds(0.04f))
@@ -90,6 +93,9 @@ void Enemy::update(Level* level, float rot, int idle, int walk)
 				{
 					idleTime.restart();
 					walkTime.restart();
+					rot = rand() % 360;
+					walkT = rand() % 500 + 1000;
+					idleT = rand() % 5000 + 7000;
 					return;
 				}
 				if (frame < 7) /*liczba klatek animacji - 1*/
@@ -147,6 +153,9 @@ void Enemy::update(Level* level, float rot, int idle, int walk)
 			idleTime.restart();
 			walkTime.restart();
 			stop();
+			rot = rand() % 360;
+			walkT = rand() % 500 + 1000;
+			idleT = rand() % 5000 + 7000;
 		}
 	}
 }
