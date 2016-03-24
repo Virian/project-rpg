@@ -10,8 +10,13 @@ Game::Game()
 		MessageBox(NULL, "Font not found!", "ERROR", NULL);
 		return;
 	}
+	if (!texture.loadFromFile("menu.png")) /*Reminder - do zmiany sciezka*/
+	{
+		MessageBox(NULL, "Menu background not found!", "ERROR", NULL);
+		return;
+	}
 	state = MENU;
-	window.create(VideoMode(1280, 720), "Galaxy Guardian Pre-Alpha 1.07", Style::Titlebar); /*Reminder - mozna uzyc Style::Titlebar, bez X bezpieczniej dla uzytkownika (i nie trzeba sie martwic wtedy o ostrzezenia)*/
+	window.create(VideoMode(1280, 720), "Galaxy Guardian Pre-Alpha 1.08", Style::Titlebar); /*Reminder - mozna uzyc Style::Titlebar, bez X bezpieczniej dla uzytkownika (i nie trzeba sie martwic wtedy o ostrzezenia)*/
 }
 
 Game::~Game()
@@ -27,6 +32,8 @@ void Game::menu()
 	Text text[numberOfOptions];
 	/*Reminder - do dodania na pewno jakies tlo
 	mozna tez zamienic napisy na obrazki */
+	background.setSize(Vector2f(1280, 720));
+	background.setTexture(&texture);
 	title.setStyle(Text::Bold);
 	title.setPosition(1280 / 2 - title.getGlobalBounds().width / 2, 40);
 
@@ -60,7 +67,13 @@ void Game::menu()
 		}
 
 		window.clear();
-		window.draw(title);
+		window.draw(background);
+		title.move(Vector2f(4, 4));
+		title.setColor(Color::Black);
+		window.draw(title);				/*cien rzucany przez tytul*/
+		title.move(Vector2f(-4, -4));
+		title.setColor(Color::White);
+		window.draw(title);				/*tytul*/
 		for (short i = 0; i < numberOfOptions; i++) window.draw(text[i]);
 		window.display();
 	}

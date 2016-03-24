@@ -10,6 +10,8 @@ class Game
 private:
 	RenderWindow window;
 	Font font;
+	RectangleShape background;
+	Texture texture;
 	void menu();
 	void newGame();
 protected:
