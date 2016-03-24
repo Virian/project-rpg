@@ -81,23 +81,17 @@ Enemy::Status Enemy::getStatus()
 
 void Enemy::update(Level* level)
 {	
+	bool collision = false;
+	
 	if (idleTime.getElapsedTime() > milliseconds(idleT))
 	{		
 		sprite.setRotation(rot);
 		if (walkTime.getElapsedTime() < milliseconds(idleT) + milliseconds(walkT))
 		{
 			status = WALK;
+			collision = false;
 			if (anim_clock.getElapsedTime() > seconds(0.04f))
 			{
-				if (status == STOP)
-				{
-					idleTime.restart();
-					walkTime.restart();
-					rot = rand() % 360;
-					walkT = rand() % 500 + 1000;
-					idleT = rand() % 5000 + 7000;
-					return;
-				}
 				if (frame < 7) /*liczba klatek animacji - 1*/
 					frame++;
 				else
@@ -108,54 +102,57 @@ void Enemy::update(Level* level)
 				if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				if (sprite.getGlobalBounds().top + 15 < 0) /*gorna krawedz poziomu*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				if (sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15 > level->getWidth() * 64) /*prawa krawedz poziomu*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15 > level->getHeight() * 64) /*dolna krawedz poziomu*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall) /*kolizja z kaflem po lewej*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall) /*kolizja z kaflem po prawej*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z gory*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z dolu*/
 				{
 					sprite.move(-getMove());
-					stop();
+					collision = true;
+					stop(collision);
 				}
 				anim_clock.restart();
 			}			
 		}
 		else
 		{
-			idleTime.restart();
-			walkTime.restart();
-			stop();
-			rot = rand() % 360;
-			walkT = rand() % 500 + 1000;
-			idleT = rand() % 5000 + 7000;
+			stop(collision);
 		}
 	}
 }
@@ -169,15 +166,21 @@ Vector2f Enemy::getMove()
 	return Vector2f(vx * speed, vy * speed);
 }
 
-void Enemy::walk()
-{
-	status = WALK;
-}
+//void Enemy::walk()
+//{
+//	status = WALK;
+//}
 
-void Enemy::stop()
+void Enemy::stop(bool collision)
 {
 	status = STOP;
 	frame = 0;
 	sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64)); /*Reminder - ustawic odpowiednia teksture*/
 	anim_clock.restart();
+	idleTime.restart();
+	walkTime.restart();
+	if (collision) rot = rot + 180; /*Reminder - mo¿na zmienic na widelki ale ryzyko zablokowania*/
+	else rot = rand() % 360;
+	walkT = rand() % 500 + 1000;
+	idleT = rand() % 5000 + 7000;
 }

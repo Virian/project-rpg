@@ -36,8 +36,8 @@ public:
 	Status getStatus();
 	void update(Level*);
 	Vector2f getMove();
-	void walk();
-	void stop();
+	//void walk();
+	void stop(bool);
 private:
 	float speed;
 	unsigned frame;
