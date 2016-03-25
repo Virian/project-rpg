@@ -60,12 +60,6 @@ void Game::menu()
 			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = END;
 		}
 
-		for (short i = 0; i < numberOfOptions; i++) /*podswietlanie aktywnego tekstu*/
-		{
-			if (text[i].getGlobalBounds().contains(mouse)) text[i].setColor(Color::Green);
-			else text[i].setColor(Color::White);
-		}
-
 		window.clear();
 		window.draw(background);
 		title.move(Vector2f(4, 4));
@@ -74,7 +68,16 @@ void Game::menu()
 		title.move(Vector2f(-4, -4));
 		title.setColor(Color::White);
 		window.draw(title);				/*tytul*/
-		for (short i = 0; i < numberOfOptions; i++) window.draw(text[i]);
+		for (short i = 0; i < numberOfOptions; i++)
+		{
+			text[i].move(Vector2f(3, 3));
+			text[i].setColor(Color::Black);
+			window.draw(text[i]);
+			text[i].move(Vector2f(-3, -3));
+			if (text[i].getGlobalBounds().contains(mouse)) text[i].setColor(Color::Green);
+			else text[i].setColor(Color::White);
+			window.draw(text[i]);
+		}
 		window.display();
 	}
 }
