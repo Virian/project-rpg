@@ -77,7 +77,17 @@ void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp)
 	window.draw(skill1);
 	window.draw(skill2);
 	window.draw(skill3);
+	currHp.move(Vector2f(2, 2));
+	currHp.setColor(Color::Black);
 	window.draw(currHp);
+	currHp.move(Vector2f(-2, -2));
+	currHp.setColor(Color::White);
+	window.draw(currHp);
+	maximHp.move(Vector2f(2, 2));
+	maximHp.setColor(Color::Black);
+	window.draw(maximHp);
+	maximHp.move(Vector2f(-2, -2));
+	maximHp.setColor(Color::White);
 	window.draw(maximHp);
 }
 
