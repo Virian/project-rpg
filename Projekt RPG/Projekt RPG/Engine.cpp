@@ -213,13 +213,6 @@ void Engine::startEngine(RenderWindow &window)
 			}
 
 			player->update(worldPos, &level);
-			/*if (enemy->getStatus() == Enemy::Status::STOP)
-			{
-				rot = rand() % 360;
-				walkTime = rand() % 500 + 1000;
-			}
-			else idleTime = rand() % 5000 + 7000;
-			enemy->update(&level, rot, idleTime, walkTime);*/ /*Enemy comment*/
 			for (size_t i = 0; i < npcs.size(); ++i)
 			{
 				Enemy* enemy;
