@@ -12,18 +12,15 @@ Gui::Gui()
 	currHp.setCharacterSize(90);
 	maximHp.setFont(font);
 	maximHp.setCharacterSize(45);
-	//hpBar.setSize(Vector2f(250,50));
 	texture.loadFromFile("placeholder.png");
 	hpGauge.setTexture(texture);
-	hpGauge.setTextureRect(IntRect(0, 896, 64, 64));
-	hpGauge.setScale(2.5, 2.5);
-	experienceBar.setSize(Vector2f(250, 50));
+	hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
+	expGauge.setTexture(texture);
+	expGauge.setTextureRect(IntRect(0, 896, 128, 128));
 	skill1.setSize(Vector2f(64, 64));
 	skill2.setSize(Vector2f(64, 64));
 	skill3.setSize(Vector2f(64, 64));
 
-	//hpBar.setFillColor(Color::Green);
-	experienceBar.setFillColor(Color::Green);
 	skill1.setFillColor(Color::Green);
 	skill2.setFillColor(Color::Green);
 	skill3.setFillColor(Color::Green);	
@@ -49,18 +46,17 @@ Gui::~Gui()
 
 }
 
-void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp)
+void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp, unsigned exp, unsigned short lvl)
 {
 	float hpPercent = (static_cast<float>(currentHp) / static_cast<float>(maxHp)) * 100.0f;
-	if ((hpPercent <= 100) && (hpPercent > 500.0f/6.0f)) hpGauge.setTextureRect(IntRect(0, 896, 64, 64));
-	else if ((hpPercent <= 500.0f / 6.0f) && (hpPercent > 400.0f / 6.0f)) hpGauge.setTextureRect(IntRect(64, 896, 64, 64));
-	else if ((hpPercent <= 400.0f / 6.0f) && (hpPercent > 50)) hpGauge.setTextureRect(IntRect(128, 896, 64, 64));
-	else if ((hpPercent <= 50) && (hpPercent > 200.0f / 6.0f)) hpGauge.setTextureRect(IntRect(192, 896, 64, 64));
-	else if ((hpPercent <= 200.0f / 6.0f) && (hpPercent > 100.0f / 6.0f)) hpGauge.setTextureRect(IntRect(256, 896, 64, 64));
-	else if ((hpPercent <= 100.0f / 6.0f) && (hpPercent > 0)) hpGauge.setTextureRect(IntRect(320, 896, 64, 64));
-	//hpBar.setPosition(window.mapPixelToCoords(Vector2i(170, 650)));
-	hpGauge.setPosition(window.mapPixelToCoords(Vector2i(20, 540)));
-	experienceBar.setPosition(window.mapPixelToCoords(Vector2i(860, 650)));
+	if ((hpPercent <= 100) && (hpPercent > 500.0f/6.0f)) hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
+	else if ((hpPercent <= 500.0f / 6.0f) && (hpPercent > 400.0f / 6.0f)) hpGauge.setTextureRect(IntRect(128, 1024, 128, 128));
+	else if ((hpPercent <= 400.0f / 6.0f) && (hpPercent > 50)) hpGauge.setTextureRect(IntRect(256, 1024, 128, 128));
+	else if ((hpPercent <= 50) && (hpPercent > 200.0f / 6.0f)) hpGauge.setTextureRect(IntRect(384, 1024, 128, 128));
+	else if ((hpPercent <= 200.0f / 6.0f) && (hpPercent > 100.0f / 6.0f)) hpGauge.setTextureRect(IntRect(512, 1024, 128, 128));
+	else if ((hpPercent <= 100.0f / 6.0f) && (hpPercent > 0)) hpGauge.setTextureRect(IntRect(640, 1024, 128, 128));
+	hpGauge.setPosition(window.mapPixelToCoords(Vector2i(36, 560)));
+	expGauge.setPosition(window.mapPixelToCoords(Vector2i(1116, 560)));
 	skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
 	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
 	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
@@ -71,9 +67,8 @@ void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp)
 	currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 540))); /*Reminder - fajnie by bylo dodac zeby pozycja zalezala od ilosci cyfr*/
 	maximHp.setPosition(window.mapPixelToCoords(Vector2i(85, 600)));
 
-	//window.draw(hpBar);
 	window.draw(hpGauge);
-	window.draw(experienceBar);
+	window.draw(expGauge);
 	window.draw(skill1);
 	window.draw(skill2);
 	window.draw(skill3);
@@ -112,9 +107,8 @@ void Gui::drawEquipment(RenderWindow &window)
 void Gui::draw(RenderTarget &target, RenderStates states) const
 {
 	states.transform *= getTransform();
-	//target.draw(hpBar);
 	target.draw(hpGauge);
-	target.draw(experienceBar);
+	target.draw(expGauge);
 	target.draw(skill1);
 	target.draw(skill2);
 	target.draw(skill3);

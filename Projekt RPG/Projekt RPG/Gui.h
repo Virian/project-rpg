@@ -8,7 +8,7 @@ class Gui : public Drawable, Transformable
 public:
 	Gui();
 	~Gui();
-	void drawScreen(RenderWindow&, short, short);
+	void drawScreen(RenderWindow&, short, short, unsigned, unsigned short);
 	void drawPauseMenu(RenderWindow&);
 	void drawEquipment(RenderWindow&);
 	RectangleShape getResumeButton();
@@ -18,10 +18,9 @@ public:
 	void setLoadHighlight(short);
 	void setQuitHighlight(short);
 private:
-	//RectangleShape hpBar;
 	Sprite hpGauge;
+	Sprite expGauge;
 	Texture texture;
-	RectangleShape experienceBar;
 	RectangleShape skill1;
 	RectangleShape skill2;
 	RectangleShape skill3;

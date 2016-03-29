@@ -13,7 +13,6 @@ Npc::Npc(unsigned short spawnCoordX, unsigned short spawnCoordY) : spawnCoordX(s
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64)); /*Reminder - do zmiany, obecnie jest to tekstura playera*/
 	sprite.setOrigin(32, 32);
-	//sprite.setPosition(1280 / 2, 720 / 2);
 	sprite.setPosition(64 * spawnCoordX + 32, 64 * spawnCoordY + 32);
 }
 
@@ -63,6 +62,7 @@ Enemy::Enemy(unsigned short spawnCoordX, unsigned short spawnCoordY) : Npc(spawn
 	walkTime.restart();
 	status = STOP;
 	rot = rand() % 360;
+	sprite.setRotation(rot);
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
 

@@ -13,15 +13,15 @@ Player::Player()
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
-	sprite.setPosition(1280 / 2, 720 / 2); /*Reminder - to chyba nie jest w ogole potrzebne*/
 
 	speed = 5.5f;
 	frame = 0;
 	anim_clock.restart();
 	name = "noname";
-	par_max_hp = par_hp = 100;
-	//par_hp = 17;
-	par_str = par_agi = par_int = 10; /*Reminder - pewnie tez do zmiany*/
+	parExp = 0;
+	parMaxHp = parHp = 100;
+	//par_hp = 10;
+	parStr = parAgi = parInt = 10; /*Reminder - pewnie tez do zmiany*/
 }
 
 Player::~Player()
@@ -142,12 +142,27 @@ void Player::setPosition(unsigned short x, unsigned short y)
 
 short Player::getHp()
 {
-	return par_hp;
+	return parHp;
 }
 
 short Player::getMaxHp()
 {
-	return par_max_hp;
+	return parMaxHp;
+}
+
+unsigned Player::getExp()
+{
+	return parExp;
+}
+
+unsigned Player::getExpForNextLevel()
+{
+	return parExpForNextLevel;
+}
+
+unsigned short Player::getLvl()
+{
+	return parLvl;
 }
 
 Juggernaut::Juggernaut()

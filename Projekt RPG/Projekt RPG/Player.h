@@ -21,6 +21,9 @@ public:
 	void setPosition(unsigned short, unsigned short);
 	short getHp();
 	short getMaxHp();
+	unsigned getExp();
+	unsigned getExpForNextLevel();
+	unsigned short getLvl();
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
 	Texture texture;
@@ -31,11 +34,14 @@ protected: /*dodac co najmniej str, dex, int*/
 	virtual void draw(RenderTarget&, RenderStates) const;
 	//Statystyki
 	std::string name;
-	short par_hp;
-	short par_max_hp;
-	unsigned short par_str;
-	unsigned short par_agi;
-	unsigned short par_int;
+	short parHp;
+	short parMaxHp;
+	unsigned parExp;
+	unsigned parExpForNextLevel;
+	unsigned short parLvl;
+	unsigned short parStr;
+	unsigned short parAgi;
+	unsigned short parInt;
 	//co z setName ??
 };
 

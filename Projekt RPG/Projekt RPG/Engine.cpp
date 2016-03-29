@@ -170,7 +170,7 @@ void Engine::draw(RenderWindow &window, bool pause)
 	{
 		window.draw(*npcs[i]);
 	}
-	gui.drawScreen(window, player->getHp(), player->getMaxHp());
+	gui.drawScreen(window, player->getHp(), player->getMaxHp(), player->getExp(), player->getLvl());
 	if (pause)
 	{
 		gui.drawPauseMenu(window);
