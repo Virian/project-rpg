@@ -123,25 +123,25 @@ void Enemy::update(Level* level)
 					collision = true;
 					stop(collision);
 				}
-				if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall) /*kolizja z kaflem po lewej*/
+				if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall()) /*kolizja z kaflem po lewej*/
 				{
 					sprite.move(-getMove());
 					collision = true;
 					stop(collision);
 				}
-				if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall) /*kolizja z kaflem po prawej*/
+				if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall()) /*kolizja z kaflem po prawej*/
 				{
 					sprite.move(-getMove());
 					collision = true;
 					stop(collision);
 				}
-				if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z gory*/
+				if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall()) /*kolizja z kaflem z gory*/
 				{
 					sprite.move(-getMove());
 					collision = true;
 					stop(collision);
 				}
-				if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z dolu*/
+				if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall()) /*kolizja z kaflem z dolu*/
 				{
 					sprite.move(-getMove());
 					collision = true;

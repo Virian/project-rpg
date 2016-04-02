@@ -1,6 +1,62 @@
 #include "Level.h"
 #include <fstream>
 
+Tile::Tile()
+{
+
+}
+
+Tile::~Tile()
+{
+
+}
+
+void Tile::setType(short tileCode)
+{
+	type = TileType(tileCode);
+}
+
+void Tile::setProperties(bool _wall, bool _interaction)
+{
+	wall = _wall;
+	interaction = _interaction;
+}
+
+bool Tile::isWall()
+{
+	return wall;
+}
+
+bool Tile::isInteraction()
+{
+	return interaction;
+}
+
+Tile::TileType Tile::getType()
+{
+	return type;
+}
+
+TrapFountain::TrapFountain()
+{
+
+}
+
+TrapFountain::~TrapFountain()
+{
+
+}
+
+short TrapFountain::getHpChange()
+{
+	if (delay.getElapsedTime().asSeconds() > 2)
+	{
+		if (character == TRAP) return -10;
+		else return 10;
+	}
+	else return 0;
+}
+
 Level::Level()
 {
 	height = 0;
@@ -14,52 +70,63 @@ Level::~Level()
 
 }
 
-Level::Tile Level::getTile(short tileCode)
+Tile Level::getTile(short tileCode)
 {
 	Tile tile;
 
-	tile.type = TileType(tileCode);
-	switch (TileType(tileCode))
+	//tile.type = TileType(tileCode);
+	tile.setType(tileCode);
+	switch (Tile::TileType(tileCode))
 	{
-	case FLOOR1:
-		tile.isWall = false;
-		tile.isInteraction = false;
+	case Tile::FLOOR1:
+		/*tile.isWall = false;
+		tile.isInteraction = false;*/
+		tile.setProperties(false, false);
 		break;
-	case WALL1:
-		tile.isWall = true;
-		tile.isInteraction = false;
+	case Tile::WALL1:
+		/*tile.isWall = true;
+		tile.isInteraction = false;*/
+		tile.setProperties(true, false);
 		break;
-	case FLOOR2:
-		tile.isWall = false;
-		tile.isInteraction = false;
+	case Tile::FLOOR2:
+		/*tile.isWall = false;
+		tile.isInteraction = false;*/
+		tile.setProperties(false, false);
 		break;
-	case CHEST1:
-		tile.isWall = true;
-		tile.isInteraction = true;
+	case Tile::CHEST1:
+		/*tile.isWall = true;
+		tile.isInteraction = true;*/
+		tile.setProperties(true, true);
 		break;
-	case TYPE5:
-		tile.isWall = true;
-		tile.isInteraction = true;
+	case Tile::TYPE5:
+		/*tile.isWall = true;
+		tile.isInteraction = true;*/
+		tile.setProperties(true, true);
 		break;
-	case TYPE6:
-		tile.isWall = true;
-		tile.isInteraction = true;
+	case Tile::TYPE6:
+		/*tile.isWall = true;
+		tile.isInteraction = true;*/
+		tile.setProperties(true, true);
 		break;
-	case TYPE7:
-		tile.isWall = true;
-		tile.isInteraction = true;
+	case Tile::TYPE7:
+		/*tile.isWall = true;
+		tile.isInteraction = true;*/
+		tile.setProperties(true, true);
 		break;
-	case TYPE8:
-		tile.isWall = true;
-		tile.isInteraction = true;
+	case Tile::TYPE8:
+		/*tile.isWall = true;
+		tile.isInteraction = true;*/
+		tile.setProperties(true, true);
 		break;
-	/*case TYPE9:
-		tile.isWall = true;
-		tile.isInteraction = true;
+	/*case Tile::TYPE9:
+		//tile.isWall = true;
+		//tile.isInteraction = true;
+		tile.setProperties(true, true);
 		break;*/
 	default:
-		tile.isWall = false;
-		tile.isInteraction = false;
+		/*tile.isWall = false;
+		tile.isInteraction = false;*/
+		tile.setProperties(false, false);
 		break;
 	}
 	return tile;
@@ -134,7 +201,7 @@ vector<Level::SpawnCoord> Level::getNpcCoords()
 	return npcsCoords;
 }
 
-vector<vector<Level::Tile>> Level::getMap()
+vector<vector<Tile>> Level::getMap()
 {
 	return map;
 }

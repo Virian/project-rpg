@@ -95,7 +95,7 @@ void Engine::updateMap()
 		for (int x = 0, v = static_cast<int>(leftBorder); x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
 		{
 			tileSprites[y][x].setPosition(v * 64, h * 64);
-			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v].type]);
+			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v].getType()]);
 			v++;
 		}
 		h++;
@@ -129,7 +129,7 @@ Engine::Engine(RenderWindow &_window)
 {
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
-	for (unsigned short i = 0; i < Level::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
+	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
 	{
 		tileTextures[i].loadFromFile("placeholder.png", IntRect(i * 64, 512, 64, 64));
 	}
@@ -170,7 +170,7 @@ void Engine::draw(RenderWindow &window, bool pause)
 	{
 		window.draw(*npcs[i]);
 	}
-	gui.drawScreen(window, player->getHp(), player->getMaxHp(), player->getExp(), player->getLvl());
+	gui.drawScreen(window, player->getHp(), player->getMaxHp(), player->getExp(), player->getExpForNextLevel());
 	if (pause)
 	{
 		gui.drawPauseMenu(window);

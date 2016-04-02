@@ -15,7 +15,7 @@ private:
 	View view;
 	Level level;
 	vector<Npc*> npcs;
-	Texture tileTextures[Level::COUNT]; /*tablica na tekstury kafli*/
+	Texture tileTextures[Tile::COUNT]; /*tablica na tekstury kafli*/
 	vector<vector<Sprite>> tileSprites; /*kontener sprite'ow kafli*/
 	unsigned short tileCountHeight; /*ilosc wyswietlanych kafli w pionie*/
 	unsigned short tileCountWidth; /*ilosc wyswietlanych kafli w poziomie*/

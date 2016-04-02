@@ -18,7 +18,8 @@ Player::Player()
 	frame = 0;
 	anim_clock.restart();
 	name = "noname";
-	parExp = 0;
+	parExp = 3;
+	parExpForNextLevel = 83;
 	parMaxHp = parHp = 100;
 	//par_hp = 10;
 	parStr = parAgi = parInt = 10; /*Reminder - pewnie tez do zmiany*/
@@ -67,22 +68,22 @@ void Player::update(Vector2f mouse, Level *level)
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall) /*kolizja z kaflem po lewej*/
+		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall()) /*kolizja z kaflem po lewej*/
 		{
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall) /*kolizja z kaflem po prawej*/
+		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall()) /*kolizja z kaflem po prawej*/
 		{
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z gory*/
+		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall()) /*kolizja z kaflem z gory*/
 		{
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall) /*kolizja z kaflem z dolu*/
+		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall()) /*kolizja z kaflem z dolu*/
 		{
 			sprite.move(-getMove());
 			stop();

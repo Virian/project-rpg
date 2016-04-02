@@ -8,7 +8,7 @@ class Gui : public Drawable, Transformable
 public:
 	Gui();
 	~Gui();
-	void drawScreen(RenderWindow&, short, short, unsigned, unsigned short);
+	void drawScreen(RenderWindow&, short, short, unsigned, unsigned);
 	void drawPauseMenu(RenderWindow&);
 	void drawEquipment(RenderWindow&);
 	RectangleShape getResumeButton();
@@ -30,5 +30,6 @@ private:
 	RectangleShape quitButton;
 	Font font;
 	Text currHp, maximHp;
+	Text experience;
 	virtual void draw(RenderTarget&, RenderStates) const;
 };
