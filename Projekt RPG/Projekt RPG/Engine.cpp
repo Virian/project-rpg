@@ -95,7 +95,7 @@ void Engine::updateMap()
 		for (int x = 0, v = static_cast<int>(leftBorder); x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
 		{
 			tileSprites[y][x].setPosition(v * 64, h * 64);
-			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v].getType()]);
+			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v]->getType()]);
 			v++;
 		}
 		h++;
@@ -104,6 +104,7 @@ void Engine::updateMap()
 
 void Engine::setMap(RenderWindow &window, string filePath)
 {
+	/*Reminder - przy zmianie mapy upewnic sie ze mapa zostaje wyczyszczona*/
 	if (!level.load(filePath))
 	{
 		MessageBox(NULL, "Level file not found!", "ERROR", NULL);

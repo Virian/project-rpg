@@ -1,62 +1,6 @@
 #include "Level.h"
 #include <fstream>
 
-Tile::Tile()
-{
-
-}
-
-Tile::~Tile()
-{
-
-}
-
-void Tile::setType(short tileCode)
-{
-	type = TileType(tileCode);
-}
-
-void Tile::setProperties(bool _wall, bool _interaction)
-{
-	wall = _wall;
-	interaction = _interaction;
-}
-
-bool Tile::isWall()
-{
-	return wall;
-}
-
-bool Tile::isInteraction()
-{
-	return interaction;
-}
-
-Tile::TileType Tile::getType()
-{
-	return type;
-}
-
-TrapFountain::TrapFountain()
-{
-
-}
-
-TrapFountain::~TrapFountain()
-{
-
-}
-
-short TrapFountain::getHpChange()
-{
-	if (delay.getElapsedTime().asSeconds() > 2)
-	{
-		if (character == TRAP) return -10;
-		else return 10;
-	}
-	else return 0;
-}
-
 Level::Level()
 {
 	height = 0;
@@ -67,66 +11,52 @@ Level::Level()
 
 Level::~Level()
 {
-
+	for (size_t i = 0; i < map.size(); ++i)
+	{
+		for (size_t j = 0; j < map[i].size(); ++j)
+		{
+			delete map[i][j];
+		}
+		map[i].clear();
+	}
+	map.clear();
 }
 
-Tile Level::getTile(short tileCode)
+Tile* Level::getTile(short tileCode)
 {
-	Tile tile;
+	Tile* tile;
 
-	//tile.type = TileType(tileCode);
-	tile.setType(tileCode);
 	switch (Tile::TileType(tileCode))
 	{
 	case Tile::FLOOR1:
-		/*tile.isWall = false;
-		tile.isInteraction = false;*/
-		tile.setProperties(false, false);
+		tile = new Tile(tileCode, false, false);
 		break;
 	case Tile::WALL1:
-		/*tile.isWall = true;
-		tile.isInteraction = false;*/
-		tile.setProperties(true, false);
+		tile = new Tile(tileCode, true, false);
 		break;
 	case Tile::FLOOR2:
-		/*tile.isWall = false;
-		tile.isInteraction = false;*/
-		tile.setProperties(false, false);
+		tile = new Tile(tileCode, false, false);
 		break;
 	case Tile::CHEST1:
-		/*tile.isWall = true;
-		tile.isInteraction = true;*/
-		tile.setProperties(true, true);
+		tile = new Tile(tileCode, true, true);
 		break;
-	case Tile::TYPE5:
-		/*tile.isWall = true;
-		tile.isInteraction = true;*/
-		tile.setProperties(true, true);
+	case Tile::TRAP1:
+		tile = new TrapFountain(tileCode, false, true, TrapFountain::TRAP);
 		break;
-	case Tile::TYPE6:
-		/*tile.isWall = true;
-		tile.isInteraction = true;*/
-		tile.setProperties(true, true);
+	case Tile::FOUNTAIN1:
+		tile = new TrapFountain(tileCode, false, true, TrapFountain::FOUNTAIN);
 		break;
 	case Tile::TYPE7:
-		/*tile.isWall = true;
-		tile.isInteraction = true;*/
-		tile.setProperties(true, true);
+		tile = new Tile(tileCode, true, true);
 		break;
 	case Tile::TYPE8:
-		/*tile.isWall = true;
-		tile.isInteraction = true;*/
-		tile.setProperties(true, true);
+		tile = new Tile(tileCode, true, true);
 		break;
 	/*case Tile::TYPE9:
-		//tile.isWall = true;
-		//tile.isInteraction = true;
-		tile.setProperties(true, true);
+		tile = new Tile(tileCode, true, true);
 		break;*/
 	default:
-		/*tile.isWall = false;
-		tile.isInteraction = false;*/
-		tile.setProperties(false, false);
+		tile = new Tile(tileCode, true, true);
 		break;
 	}
 	return tile;
@@ -201,7 +131,7 @@ vector<Level::SpawnCoord> Level::getNpcCoords()
 	return npcsCoords;
 }
 
-vector<vector<Tile>> Level::getMap()
+vector<vector<Tile*>> Level::getMap()
 {
 	return map;
 }

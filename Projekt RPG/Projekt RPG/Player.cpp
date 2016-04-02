@@ -32,11 +32,15 @@ Player::~Player()
 
 void Player::update(Vector2f mouse, Level *level) 
 {
+	TrapFountain* temp;
 	Vector2f norm = mouse - sprite.getPosition();
 	float rot = atan2(norm.y, norm.x); /*gdy przod playera jest na gorze tekstury, gdyby byl na dole to zamienic x z y*/
 	rot = rot * 180.f / M_PI;
 	rot += 90;
 	sprite.setRotation(rot);
+
+	if (temp = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp->getHpChange();
+	if (parHp > parMaxHp) parHp = parMaxHp;
 	
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
@@ -68,27 +72,27 @@ void Player::update(Vector2f mouse, Level *level)
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)].isWall()) /*kolizja z kaflem po lewej*/
+		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]->isWall()) /*kolizja z kaflem po lewej*/
 		{
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)].isWall()) /*kolizja z kaflem po prawej*/
+		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]->isWall()) /*kolizja z kaflem po prawej*/
 		{
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall()) /*kolizja z kaflem z gory*/
+		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z gory*/
 		{
 			sprite.move(-getMove());
 			stop();
 		}
-		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)].isWall()) /*kolizja z kaflem z dolu*/
+		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z dolu*/
 		{
 			sprite.move(-getMove());
 			stop();
 		}
-		anim_clock.restart();
+		anim_clock.restart();		
 	}
 }
 

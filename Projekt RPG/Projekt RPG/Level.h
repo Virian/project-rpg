@@ -1,39 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <SFML/System/Clock.hpp>
+#include "Tile.h"
 
 using namespace std;
-
-class Tile
-{
-public:
-	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TYPE5, TYPE6, TYPE7, TYPE8, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
-	Tile();
-	virtual ~Tile();
-	void setType(short);
-	void setProperties(bool, bool);
-	bool isWall();
-	bool isInteraction();
-	TileType getType();
-protected:
-	TileType type;
-	//string interaction //rodzaj interakcji //jeszcze nie wiadomo jak to w ogole wykorzystac
-	bool wall;
-	bool interaction;
-};
-
-class TrapFountain : public Tile
-{
-public:
-	enum Character { TRAP, FOUNTAIN };
-	Character character;
-	TrapFountain();
-	~TrapFountain();
-	short getHpChange();
-private:
-	sf::Clock delay;
-};
 
 class Level
 {
@@ -45,12 +15,12 @@ public:
 	};
 private:
 	vector<SpawnCoord> npcsCoords;
-	vector<vector<Tile>> map;
+	vector<vector<Tile*>> map;
 	unsigned short height;
 	unsigned short width;
 	SpawnCoord playerSpawn;
 
-	Tile getTile(short);
+	Tile* getTile(short);
 public:	
 	Level();
 	~Level();
@@ -59,5 +29,5 @@ public:
 	unsigned short getWidth();
 	SpawnCoord getPlayerSpawnCoords();
 	vector<SpawnCoord> getNpcCoords();
-	vector<vector<Tile>> getMap();
+	vector<vector<Tile*>> getMap();
 };
