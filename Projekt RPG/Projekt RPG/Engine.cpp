@@ -115,11 +115,11 @@ void Engine::setMap(RenderWindow &window, string filePath)
 		delete npcs[i];
 	}
 	npcs.clear();
-	player->setPosition(level.getPlayerSpawnCoords().x, level.getPlayerSpawnCoords().y);
+	player->setPosition(level.getPlayerSpawnCoords());
 	view.setCenter(player->getPosition());
 	for (size_t i = 0; i < level.getNpcCoords().size(); ++i)
 	{
-		Npc* tmp = new Enemy(level.getNpcCoords()[i].x, level.getNpcCoords()[i].y);
+		Npc* tmp = new Enemy(level.getNpcCoords()[i]);
 		npcs.push_back(tmp);
 	}
 	updateMap();

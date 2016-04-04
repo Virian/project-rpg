@@ -18,10 +18,10 @@ Player::Player()
 	frame = 0;
 	anim_clock.restart();
 	name = "noname";
-	parExp = 3;
+	parExp = 5;
 	parExpForNextLevel = 83;
 	parMaxHp = parHp = 100;
-	//par_hp = 10;
+	parHp = 81;
 	parStr = parAgi = parInt = 10; /*Reminder - pewnie tez do zmiany*/
 }
 
@@ -140,9 +140,9 @@ Vector2f Player::getPosition()
 	return sprite.getPosition();
 }
 
-void Player::setPosition(unsigned short x, unsigned short y)
+void Player::setPosition(Tile::Coord coord)
 {
-	sprite.setPosition(x * 64 + 32, y * 64 + 32);
+	sprite.setPosition(coord.x * 64 + 32, coord.y * 64 + 32);
 }
 
 short Player::getHp()

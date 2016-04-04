@@ -76,7 +76,9 @@ void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp, unsigne
 	maximHp.setString(std::to_string(maxHp));
 	experience.setString(std::to_string(static_cast<int>(expPercent)) + "%");
 	
-	currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 550))); /*Reminder - fajnie by bylo dodac zeby pozycja zalezala od ilosci cyfr*/
+	if (currentHp > 99) currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 550))); /*Reminder - fajnie by bylo dodac zeby pozycja zalezala od ilosci cyfr*/
+	else if (currentHp <= 99 && currentHp > 9) currHp.setPosition(window.mapPixelToCoords(Vector2i(78, 550)));
+	else currHp.setPosition(window.mapPixelToCoords(Vector2i(86, 550)));
 	maximHp.setPosition(window.mapPixelToCoords(Vector2i(85, 610)));
 	experience.setPosition(window.mapPixelToCoords(Vector2i(1142, 546)));
 

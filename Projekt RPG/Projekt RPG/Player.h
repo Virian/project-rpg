@@ -18,7 +18,7 @@ public:
 	FloatRect getBoundingBox();
 	Vector2f getMove();
 	Vector2f getPosition();
-	void setPosition(unsigned short, unsigned short);
+	void setPosition(Tile::Coord);
 	short getHp();
 	short getMaxHp();
 	unsigned getExp();
