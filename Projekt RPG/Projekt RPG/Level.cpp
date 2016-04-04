@@ -46,8 +46,8 @@ Tile* Level::getTile(short tileCode)
 	case Tile::FOUNTAIN1:
 		tile = new TrapFountain(tileCode, false, true, TrapFountain::FOUNTAIN);
 		break;
-	case Tile::TYPE7:
-		tile = new Tile(tileCode, true, true);
+	case Tile::TELEPORT1:
+		tile = new Tile(tileCode, false, true);
 		break;
 	case Tile::TYPE8:
 		tile = new Tile(tileCode, true, true);
@@ -100,7 +100,7 @@ bool Level::load(string filePath)
 		}
 		else if (name == "[ENEMY]")
 		{
-			SpawnCoord tmp;
+			Tile::Coord tmp;
 			tmp.x = x;
 			tmp.y = y;
 			npcsCoords.push_back(tmp);
@@ -121,12 +121,12 @@ unsigned short Level::getWidth()
 	return width;
 }
 
-Level::SpawnCoord Level::getPlayerSpawnCoords()
+Tile::Coord Level::getPlayerSpawnCoords()
 {
 	return playerSpawn;
 }
 
-vector<Level::SpawnCoord> Level::getNpcCoords()
+vector<Tile::Coord> Level::getNpcCoords()
 {
 	return npcsCoords;
 }

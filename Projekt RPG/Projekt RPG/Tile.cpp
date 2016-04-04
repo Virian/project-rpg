@@ -73,3 +73,29 @@ short TrapFountain::getHpChange()
 	}
 	else return 0;
 }
+
+Teleport::Teleport()
+{
+
+}
+
+Teleport::Teleport(short tileCode, bool _wall, bool _interaction) : Tile(tileCode, _wall, _interaction)
+{
+
+}
+
+Teleport::~Teleport()
+{
+
+}
+
+Tile::Coord Teleport::getDestination()
+{
+	return destination;
+}
+
+void Teleport::setDestination(Tile::Coord dest)
+{
+	destination.x = dest.x;
+	destination.y = dest.y;
+}

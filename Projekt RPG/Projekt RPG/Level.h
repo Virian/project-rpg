@@ -7,18 +7,12 @@ using namespace std;
 
 class Level
 {
-public:
-	struct SpawnCoord
-	{
-		unsigned short x;
-		unsigned short y;
-	};
 private:
-	vector<SpawnCoord> npcsCoords;
+	vector<Tile::Coord> npcsCoords;
 	vector<vector<Tile*>> map;
 	unsigned short height;
 	unsigned short width;
-	SpawnCoord playerSpawn;
+	Tile::Coord playerSpawn;
 
 	Tile* getTile(short);
 public:	
@@ -27,7 +21,7 @@ public:
 	bool load(string); /*bool - false jesli sie nie udalo wczytac*/
 	unsigned short getHeight();
 	unsigned short getWidth();
-	SpawnCoord getPlayerSpawnCoords();
-	vector<SpawnCoord> getNpcCoords();
+	Tile::Coord getPlayerSpawnCoords();
+	vector<Tile::Coord> getNpcCoords();
 	vector<vector<Tile*>> getMap();
 };

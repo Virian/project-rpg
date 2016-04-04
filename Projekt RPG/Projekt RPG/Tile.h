@@ -4,7 +4,12 @@
 class Tile
 {
 public:
-	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TRAP1, FOUNTAIN1, TYPE7, TYPE8, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
+	struct Coord
+	{
+		unsigned short x;
+		unsigned short y;
+	};
+	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TRAP1, FOUNTAIN1, TELEPORT1, TYPE8, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
 	Tile();
 	Tile(short, bool, bool);
 	virtual ~Tile();
@@ -31,4 +36,16 @@ public:
 	short getHpChange();
 private:
 	sf::Clock delay;
+};
+
+class Teleport : public Tile
+{
+public:
+	Teleport();
+	Teleport(short, bool, bool);
+	~Teleport();
+	Coord getDestination();
+	void setDestination(Coord);
+private:
+	Coord destination;
 };
