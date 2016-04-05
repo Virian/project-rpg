@@ -24,6 +24,7 @@ public:
 	unsigned getExp();
 	unsigned getExpForNextLevel();
 	unsigned short getLvl();
+	void levelUp();
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
 	Texture texture;

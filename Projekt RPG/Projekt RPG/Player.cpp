@@ -19,6 +19,7 @@ Player::Player()
 	anim_clock.restart();
 	name = "noname";
 	parExp = 5;
+	parLvl = 1;
 	parExpForNextLevel = 83;
 	parMaxHp = parHp = 100;
 	parHp = 81;
@@ -168,6 +169,19 @@ unsigned Player::getExpForNextLevel()
 unsigned short Player::getLvl()
 {
 	return parLvl;
+}
+
+void Player::levelUp()
+{
+	double sum = 0.0;
+
+	parExp -= parExpForNextLevel;
+	++parLvl;
+	for (double i = 1.0; i < parLvl + 1; ++i)
+	{
+		sum += floor(i + 300.0 * pow(2.0, i/7.0)); /*nie dziala, bo chyba pow cos zle zwraca*/
+	}
+	parExpForNextLevel = static_cast<int>(floor(sum/4.0));
 }
 
 Juggernaut::Juggernaut()

@@ -183,9 +183,7 @@ void Engine::startEngine(RenderWindow &window)
 {
 	bool quit = false;
 	bool pause = false;
-	/*float rot;
-	int walkTime;
-	int idleTime;// = rand() % 5000 + 10000;*/
+	
 	updateMap();
 	window.setView(view);
 	draw(window, pause);
@@ -229,6 +227,7 @@ void Engine::startEngine(RenderWindow &window)
 				updateMap();
 				window.setView(view);
 			}
+			if (player->getExp() >= player->getExpForNextLevel()) player->levelUp();
 		}
 		if (pause)
 		{
