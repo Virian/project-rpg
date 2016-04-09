@@ -11,8 +11,8 @@ class Equipment
 private:
 	Weapon activeWeapon;
 	Armor activeArmor;
-	vector<Item> backpack;
-
+	vector<Item*> backpack;
+	short potionCount;
 public:
 	Equipment();
 	~Equipment();

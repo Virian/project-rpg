@@ -10,6 +10,16 @@ Item::~Item()
 
 }
 
+std::string Item::getName()
+{
+	return name;
+}
+
+short Item::getId()
+{
+	return id;
+}
+
 Weapon::Weapon()
 {
 
