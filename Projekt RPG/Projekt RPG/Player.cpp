@@ -28,7 +28,7 @@ Player::Player()
 
 Player::~Player()
 {
-
+	equipment.clearBackpack();
 }
 
 void Player::update(Vector2f mouse, Level *level) 
@@ -146,6 +146,16 @@ void Player::setPosition(Tile::Coord coord)
 	sprite.setPosition(coord.x * 64 + 32, coord.y * 64 + 32);
 }
 
+std::string Player::getName()
+{
+	return name;
+}
+
+Equipment Player::getEquipment()
+{
+	return equipment;
+}
+
 short Player::getHp()
 {
 	return parHp;
@@ -169,6 +179,21 @@ unsigned Player::getExpForNextLevel()
 unsigned short Player::getLvl()
 {
 	return parLvl;
+}
+
+unsigned short Player::getStr()
+{
+	return parStr;
+}
+
+unsigned short Player::getAgi()
+{
+	return parAgi;
+}
+
+unsigned short Player::getInt()
+{
+	return parInt;
 }
 
 void Player::levelUp()

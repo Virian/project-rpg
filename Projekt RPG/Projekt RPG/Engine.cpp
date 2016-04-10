@@ -156,7 +156,7 @@ Engine::~Engine()
 	}
 }
 
-void Engine::draw(RenderWindow &window, bool pause)
+void Engine::draw(RenderWindow &window, bool pause, bool equipment)
 {
 	window.clear();
 	for (unsigned short y = 0; y < tileCountHeight; y++)
@@ -171,7 +171,11 @@ void Engine::draw(RenderWindow &window, bool pause)
 	{
 		window.draw(*npcs[i]);
 	}
-	gui.drawScreen(window, player->getHp(), player->getMaxHp(), player->getExp(), player->getExpForNextLevel());
+	gui.drawScreen(window, player);
+	if (equipment)
+	{
+		gui.drawEquipment(window, player);
+	}
 	if (pause)
 	{
 		gui.drawPauseMenu(window);
@@ -183,23 +187,28 @@ void Engine::startEngine(RenderWindow &window)
 {
 	bool quit = false;
 	bool pause = false;
+	bool equipment = false;
 	
 	updateMap();
 	window.setView(view);
-	draw(window, pause);
+	draw(window, pause, equipment);
 	while (!quit)
 	{
 		Event event;
 		sf::Vector2f mouse(Mouse::getPosition(window));
 		sf::Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
 
-		if (!pause)
+		if (!pause && !equipment)
 		{
 			while (window.pollEvent(event))
 			{
 				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 				{
 					pause = true;
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::I))
+				{
+					equipment = true;
 				}
 				if ((event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
 				{
@@ -255,7 +264,17 @@ void Engine::startEngine(RenderWindow &window)
 			else gui.setLoadHighlight(0);
 			if (gui.getQuitButton().getGlobalBounds().contains(worldPos)) gui.setQuitHighlight(1);
 			else gui.setQuitHighlight(0);
-		}	
-		draw(window, pause);
+		}
+		if (equipment)
+		{
+			while (window.pollEvent(event))
+			{
+				if ((event.type == Event::KeyReleased) && ((event.key.code == Keyboard::I) || (event.key.code == Keyboard::Escape)))
+				{
+					equipment = false;
+				}
+			}
+		}
+		draw(window, pause, equipment);
 	}
 }

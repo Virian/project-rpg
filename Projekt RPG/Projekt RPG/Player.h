@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "Level.h"
+#include "Equipment.h"
 
 using namespace sf;
 
@@ -19,11 +20,16 @@ public:
 	Vector2f getMove();
 	Vector2f getPosition();
 	void setPosition(Tile::Coord);
+	std::string getName();
+	Equipment getEquipment();
 	short getHp();
 	short getMaxHp();
 	unsigned getExp();
 	unsigned getExpForNextLevel();
 	unsigned short getLvl();
+	unsigned short getStr();
+	unsigned short getAgi();
+	unsigned short getInt();
 	void levelUp();
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
@@ -35,6 +41,7 @@ protected: /*dodac co najmniej str, dex, int*/
 	virtual void draw(RenderTarget&, RenderStates) const;
 	//Statystyki
 	std::string name;
+	Equipment equipment;
 	short parHp;
 	short parMaxHp;
 	unsigned parExp;

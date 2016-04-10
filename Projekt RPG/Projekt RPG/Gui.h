@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Player.h"
 
 using namespace sf;
 
@@ -8,9 +9,9 @@ class Gui : public Drawable, Transformable
 public:
 	Gui();
 	~Gui();
-	void drawScreen(RenderWindow&, short, short, unsigned, unsigned);
+	void drawScreen(RenderWindow&, Player*);
 	void drawPauseMenu(RenderWindow&);
-	void drawEquipment(RenderWindow&);
+	void drawEquipment(RenderWindow&, Player*);
 	RectangleShape getResumeButton();
 	RectangleShape getLoadButton();
 	RectangleShape getQuitButton();
@@ -18,18 +19,31 @@ public:
 	void setLoadHighlight(short);
 	void setQuitHighlight(short);
 private:
+	virtual void draw(RenderTarget&, RenderStates) const;
+	Texture texture;
+	Font font;
+	/*hud*/
 	Sprite hpGauge;
 	Sprite expGauge;
-	Texture texture;
+	Text currHp, maximHp;
+	Text experience;
 	RectangleShape skill1;
 	RectangleShape skill2;
 	RectangleShape skill3;
+	/*Reminder - chyba dodac potki*/
+	/*pauza*/
 	RectangleShape pauseMenu;
 	RectangleShape resumeButton;
 	RectangleShape loadButton;
 	RectangleShape quitButton;
-	Font font;
-	Text currHp, maximHp;
-	Text experience;
-	virtual void draw(RenderTarget&, RenderStates) const;
+	/*ekwipunek*/
+	RectangleShape backpackBackground;
+	RectangleShape activeEquipment;
+	RectangleShape characterInfo;
+	RectangleShape itemInfo;
+	Sprite backpackSlot;
+	Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
+	//Text playerName, playerClass, playerLvl, playerExp, playerExpForNextLevel, playerStr, playerInt, playerAgi;
+	Text playerStats[8];
+	Text stats;
 };

@@ -4,16 +4,18 @@
 
 using namespace sf;
 
-class Item
+class Item : public Drawable, public Transformable
 {
 protected:
 	Sprite sprite;
 	Texture texture;
 	std::string name;
 	short id;
+	virtual void draw(RenderTarget&, RenderStates) const;
 public:
 	Item();
 	virtual ~Item();
+	void setPosition(Vector2f);
 	std::string getName();
 	short getId();
 };

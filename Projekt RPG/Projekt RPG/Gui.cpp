@@ -41,6 +41,48 @@ Gui::Gui()
 	loadButton.setOutlineColor(Color::Red);
 	quitButton.setFillColor(Color::White);
 	quitButton.setOutlineColor(Color::Red);
+
+	backpackBackground.setSize(Vector2f(680, 296));
+	activeEquipment.setSize(Vector2f(300, 440));
+	characterInfo.setSize(Vector2f(680, 360));
+	itemInfo.setSize(Vector2f(300, 216));
+
+	backpackSlot.setTexture(texture);
+	backpackSlot.setTextureRect(IntRect(0, 768, 128, 128));
+
+	backpackBackground.setFillColor(Color::Black);
+	backpackBackground.setOutlineThickness(-2);
+	backpackBackground.setOutlineColor(Color::White);
+	activeEquipment.setFillColor(Color::Black);
+	activeEquipment.setOutlineThickness(-2);
+	activeEquipment.setOutlineColor(Color::White);
+	characterInfo.setFillColor(Color::Black);
+	characterInfo.setOutlineThickness(-2);
+	characterInfo.setOutlineColor(Color::White);
+	itemInfo.setFillColor(Color::Black);
+	itemInfo.setOutlineThickness(-2);
+	itemInfo.setOutlineColor(Color::White);
+
+	activeEquipmentHeader.setFont(font);
+	activeEquipmentHeader.setCharacterSize(80);
+	activeEquipmentHeader.setStyle(Text::Bold);
+	activeEquipmentHeader.setString("Active equipment");
+	characterInfoHeader.setFont(font);
+	characterInfoHeader.setCharacterSize(80);
+	characterInfoHeader.setStyle(Text::Bold);
+	characterInfoHeader.setString("Character information");
+	itemInfoHeader.setFont(font);
+	itemInfoHeader.setCharacterSize(80);
+	itemInfoHeader.setStyle(Text::Bold);
+	itemInfoHeader.setString("Item information");
+
+	for (short i = 0; i < 8; ++i)
+	{
+		playerStats[i].setFont(font);
+		playerStats[i].setCharacterSize(55);
+	}
+	stats.setFont(font);
+	stats.setCharacterSize(55);
 }
 
 Gui::~Gui()
@@ -48,8 +90,13 @@ Gui::~Gui()
 
 }
 
-void Gui::drawScreen(RenderWindow &window, short currentHp, short maxHp, unsigned exp, unsigned expForNextLevel)
+void Gui::drawScreen(RenderWindow &window, Player* player)
 {
+	short currentHp = player->getHp();
+	short maxHp = player->getMaxHp();
+	unsigned exp = player->getExp();
+	unsigned expForNextLevel = player->getExpForNextLevel();
+	
 	float hpPercent = (static_cast<float>(currentHp) / static_cast<float>(maxHp)) * 100.0f;
 	if ((hpPercent <= 100) && (hpPercent > 500.0f/6.0f)) hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
 	else if ((hpPercent <= 500.0f / 6.0f) && (hpPercent > 400.0f / 6.0f)) hpGauge.setTextureRect(IntRect(128, 1024, 128, 128));
@@ -120,9 +167,46 @@ void Gui::drawPauseMenu(RenderWindow &window)
 	window.draw(quitButton);
 }
 
-void Gui::drawEquipment(RenderWindow &window)
+void Gui::drawEquipment(RenderWindow &window, Player* player)
 {
+	vector<Item*> backpack;
+	
+	backpackBackground.setPosition(window.mapPixelToCoords(Vector2i(120, 398)));
+	activeEquipment.setPosition(window.mapPixelToCoords(Vector2i(860, 254)));
+	characterInfo.setPosition(window.mapPixelToCoords(Vector2i(120, 26)));
+	itemInfo.setPosition(window.mapPixelToCoords(Vector2i(860, 26)));
 
+	activeEquipmentHeader.setPosition(window.mapPixelToCoords(Vector2i(870, 214)));
+	characterInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(130, -14)));
+	itemInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(870, -14)));
+
+	stats.setString("Name: " + player->getName() + "\nClass: " + "\nLevel: " + to_string(player->getLvl()) + "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel()) + "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: " + to_string(player->getAgi()));
+	stats.setPosition(window.mapPixelToCoords(Vector2i(130, 40)));
+
+	window.draw(backpackBackground);
+	window.draw(activeEquipment);
+	window.draw(characterInfo);
+	window.draw(itemInfo);
+	window.draw(activeEquipmentHeader);
+	window.draw(characterInfoHeader);
+	window.draw(itemInfoHeader);
+	window.draw(stats);
+
+	for (short i = 0; i < 2; ++i)
+	{
+		for (short j = 0; j < 5; ++j)
+		{
+			backpackSlot.setPosition(window.mapPixelToCoords(Vector2i(140 + j * 128, 418 + i * 128)));
+			window.draw(backpackSlot);
+		}
+	}
+	backpack = player->getEquipment().getBackpack();
+	for (size_t i = 0, j = 0; i < backpack.size(); ++i)
+	{
+		if (i == 5) ++j;
+		backpack[i]->setPosition(window.mapPixelToCoords(Vector2i(140 + i * 128 - 5 * j * 128, 418 + j * 128)));
+		window.draw(*backpack[i]);
+	}
 }
 
 void Gui::draw(RenderTarget &target, RenderStates states) const

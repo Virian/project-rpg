@@ -16,4 +16,7 @@ private:
 public:
 	Equipment();
 	~Equipment();
+	vector<Item*> getBackpack();
+	void addItem(Item*);
+	void clearBackpack();
 };

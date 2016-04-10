@@ -2,12 +2,24 @@
 
 Item::Item()
 {
-
+	texture.loadFromFile("placeholder.png");
+	sprite.setTexture(texture);
 }
 
 Item::~Item()
 {
 
+}
+
+void Item::draw(RenderTarget &target, RenderStates states) const
+{
+	states.transform *= getTransform();
+	target.draw(sprite);
+}
+
+void Item::setPosition(Vector2f position)
+{
+	sprite.setPosition(position);
 }
 
 std::string Item::getName()
@@ -22,7 +34,7 @@ short Item::getId()
 
 Weapon::Weapon()
 {
-
+	sprite.setTextureRect(IntRect(0, 128, 128, 128));
 }
 
 Weapon::~Weapon()
@@ -37,7 +49,7 @@ unsigned short Weapon::getAttackValue()
 
 Armor::Armor()
 {
-
+	sprite.setTextureRect(IntRect(0, 256, 128, 128));
 }
 
 Armor::~Armor()
