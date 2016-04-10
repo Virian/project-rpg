@@ -43,7 +43,5 @@ private:
 	RectangleShape itemInfo;
 	Sprite backpackSlot;
 	Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
-	//Text playerName, playerClass, playerLvl, playerExp, playerExpForNextLevel, playerStr, playerInt, playerAgi;
-	Text playerStats[8];
-	Text stats;
+	Text playerStats;
 };

@@ -76,13 +76,8 @@ Gui::Gui()
 	itemInfoHeader.setStyle(Text::Bold);
 	itemInfoHeader.setString("Item information");
 
-	for (short i = 0; i < 8; ++i)
-	{
-		playerStats[i].setFont(font);
-		playerStats[i].setCharacterSize(55);
-	}
-	stats.setFont(font);
-	stats.setCharacterSize(55);
+	playerStats.setFont(font);
+	playerStats.setCharacterSize(55);
 }
 
 Gui::~Gui()
@@ -180,8 +175,8 @@ void Gui::drawEquipment(RenderWindow &window, Player* player)
 	characterInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(130, -14)));
 	itemInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(870, -14)));
 
-	stats.setString("Name: " + player->getName() + "\nClass: " + "\nLevel: " + to_string(player->getLvl()) + "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel()) + "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: " + to_string(player->getAgi()));
-	stats.setPosition(window.mapPixelToCoords(Vector2i(130, 40)));
+	playerStats.setString("Name: " + player->getName() + "\nClass: " + "\nLevel: " + to_string(player->getLvl()) + "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel()) + "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: " + to_string(player->getAgi()));
+	playerStats.setPosition(window.mapPixelToCoords(Vector2i(130, 40)));
 
 	window.draw(backpackBackground);
 	window.draw(activeEquipment);
@@ -190,7 +185,7 @@ void Gui::drawEquipment(RenderWindow &window, Player* player)
 	window.draw(activeEquipmentHeader);
 	window.draw(characterInfoHeader);
 	window.draw(itemInfoHeader);
-	window.draw(stats);
+	window.draw(playerStats);
 
 	for (short i = 0; i < 2; ++i)
 	{
