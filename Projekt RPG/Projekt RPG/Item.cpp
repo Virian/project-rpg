@@ -35,6 +35,8 @@ short Item::getId()
 Weapon::Weapon()
 {
 	sprite.setTextureRect(IntRect(0, 128, 128, 128));
+	name = "weapon";
+	attackValue = rand() % 4 + 4;
 }
 
 Weapon::~Weapon()
@@ -50,6 +52,8 @@ unsigned short Weapon::getAttackValue()
 Armor::Armor()
 {
 	sprite.setTextureRect(IntRect(0, 256, 128, 128));
+	name = "armor";
+	armorValue = rand() % 4 + 4;
 }
 
 Armor::~Armor()
