@@ -190,7 +190,7 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	characterInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(130, -14)));
 	itemInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(870, -14)));
 
-	playerStats.setString("Name: " + player->getName() + "\nClass: " + "\nLevel: " + to_string(player->getLvl())
+	playerStats.setString("Name: " + player->getName() + "\nClass: " + player->getClassName() + "\nLevel: " + to_string(player->getLvl())
 		+ "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel())
 		+ "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: "
 		+ to_string(player->getAgi()));

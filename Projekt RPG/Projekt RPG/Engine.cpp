@@ -142,7 +142,7 @@ Engine::Engine(RenderWindow &_window)
 	{
 		tileSprites[y].resize(tileCountWidth, standard);
 	}
-	player = new Player(); /*Reminder - np. tu mozna zmieniac na Soldiera, Juggernauta, Sentinela*/
+	player = new Soldier(); /*Reminder - np. tu mozna zmieniac na Soldiera, Juggernauta, Sentinela*/
 	setMap(_window, "test.level"); /*Reminder - do zmiany sciezka*/
 	startEngine(_window);	
 }

@@ -229,6 +229,11 @@ Juggernaut::~Juggernaut()
 
 }
 
+std::string Juggernaut::getClassName()
+{
+	return "Juggernaut";
+}
+
 Soldier::Soldier()
 {
 
@@ -239,6 +244,11 @@ Soldier::~Soldier()
 
 }
 
+std::string Soldier::getClassName()
+{
+	return "Soldier";
+}
+
 Sentinel::Sentinel()
 {
 
@@ -247,4 +257,9 @@ Sentinel::Sentinel()
 Sentinel::~Sentinel()
 {
 
+}
+
+std::string Sentinel::getClassName()
+{
+	return "Sentinel";
 }

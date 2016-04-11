@@ -21,6 +21,7 @@ public:
 	Vector2f getPosition();
 	void setPosition(Tile::Coord);
 	std::string getName();
+	virtual std::string getClassName() = 0;
 	Equipment getEquipment();
 	short getHp();
 	short getMaxHp();
@@ -60,6 +61,7 @@ class Juggernaut : public Player
 public:	
 	Juggernaut();
 	~Juggernaut();
+	std::string getClassName();
 };
 
 class Soldier : public Player
@@ -67,6 +69,7 @@ class Soldier : public Player
 public:	
 	Soldier();
 	~Soldier();
+	std::string getClassName();
 };
 
 class Sentinel : public Player
@@ -74,4 +77,5 @@ class Sentinel : public Player
 public:	
 	Sentinel();
 	~Sentinel();
+	std::string getClassName();
 };
