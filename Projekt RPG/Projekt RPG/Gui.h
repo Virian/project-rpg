@@ -46,4 +46,5 @@ private:
 	Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
 	Text playerStats;
 	Text itemStats;
+	Text activeEquipmentInfo;
 };

@@ -82,6 +82,8 @@ Gui::Gui()
 	playerStats.setCharacterSize(55);
 	itemStats.setFont(font);
 	itemStats.setCharacterSize(55);
+	activeEquipmentInfo.setFont(font);
+	activeEquipmentInfo.setCharacterSize(65);
 }
 
 Gui::~Gui()
@@ -229,6 +231,16 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 			window.draw(backpackSlot);
 		}
 	}
+	activeEquipmentInfo.setString("Weapon");
+	activeEquipmentInfo.setPosition(window.mapPixelToCoords(Vector2i(960, 264)));
+	backpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 340)));
+	window.draw(backpackSlot);
+	window.draw(activeEquipmentInfo);
+	activeEquipmentInfo.setString("Armor");
+	activeEquipmentInfo.setPosition(window.mapPixelToCoords(Vector2i(970, 446)));
+	backpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 520)));
+	window.draw(backpackSlot);
+	window.draw(activeEquipmentInfo);
 	
 	for (size_t i = 0, j = 0; i < backpack.size(); ++i)
 	{
