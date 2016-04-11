@@ -204,9 +204,19 @@ void Player::levelUp()
 	++parLvl;
 	for (double i = 1.0; i < parLvl + 1; ++i)
 	{
-		sum += floor(i + 300.0 * pow(2.0, i/7.0)); /*nie dziala, bo chyba pow cos zle zwraca*/
+		sum += floor(i + 300.0 * pow(2.0, i/7.0));
 	}
 	parExpForNextLevel = static_cast<int>(floor(sum/4.0));
+}
+
+void Player::deleteItem(short position)
+{
+	equipment.deleteItem(position);
+}
+
+void Player::addItem(Item* newItem)
+{
+	equipment.addItem(newItem);
 }
 
 Juggernaut::Juggernaut()

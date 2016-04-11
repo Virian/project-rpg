@@ -31,6 +31,8 @@ public:
 	unsigned short getAgi();
 	unsigned short getInt();
 	void levelUp();
+	void deleteItem(short);
+	void addItem(Item*);
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
 	Texture texture;

@@ -11,7 +11,7 @@ public:
 	~Gui();
 	void drawScreen(RenderWindow&, Player*);
 	void drawPauseMenu(RenderWindow&);
-	void drawEquipment(RenderWindow&, Player*);
+	void drawEquipment(RenderWindow&, Player*, short);
 	RectangleShape getResumeButton();
 	RectangleShape getLoadButton();
 	RectangleShape getQuitButton();
@@ -45,4 +45,5 @@ private:
 	Sprite backpackSlot;
 	Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
 	Text playerStats;
+	Text itemStats;
 };

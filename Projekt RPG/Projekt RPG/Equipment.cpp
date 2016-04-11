@@ -45,4 +45,11 @@ void Equipment::clearBackpack()
 	{
 		delete backpack[i];
 	}
+	backpack.clear();
+}
+
+void Equipment::deleteItem(short position)
+{
+	delete backpack[position];
+	backpack.erase(backpack.begin() + position);
 }

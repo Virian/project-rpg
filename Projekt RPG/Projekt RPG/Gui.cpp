@@ -80,6 +80,8 @@ Gui::Gui()
 
 	playerStats.setFont(font);
 	playerStats.setCharacterSize(55);
+	itemStats.setFont(font);
+	itemStats.setCharacterSize(55);
 }
 
 Gui::~Gui()
@@ -102,9 +104,9 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	else if ((hpPercent <= 200.0f / 6.0f) && (hpPercent > 100.0f / 6.0f)) hpGauge.setTextureRect(IntRect(512, 1024, 128, 128));
 	else if ((hpPercent <= 100.0f / 6.0f) && (hpPercent > 0))
 	{
-		if (flash.getElapsedTime().asSeconds() > 1 && flash.getElapsedTime().asSeconds() <= 2)
+		if (flash.getElapsedTime().asSeconds() > 0.5 && flash.getElapsedTime().asSeconds() <= 1)
 			hpGauge.setTextureRect(IntRect(768, 1024, 128, 128));
-		else if (flash.getElapsedTime().asSeconds() > 2)
+		else if (flash.getElapsedTime().asSeconds() > 1)
 		{
 			hpGauge.setTextureRect(IntRect(640, 1024, 128, 128));
 			flash.restart();
@@ -173,7 +175,7 @@ void Gui::drawPauseMenu(RenderWindow &window)
 	window.draw(quitButton);
 }
 
-void Gui::drawEquipment(RenderWindow &window, Player* player)
+void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 {
 	vector<Item*> backpack;
 	
@@ -186,8 +188,28 @@ void Gui::drawEquipment(RenderWindow &window, Player* player)
 	characterInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(130, -14)));
 	itemInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(870, -14)));
 
-	playerStats.setString("Name: " + player->getName() + "\nClass: " + "\nLevel: " + to_string(player->getLvl()) + "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel()) + "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: " + to_string(player->getAgi()));
+	playerStats.setString("Name: " + player->getName() + "\nClass: " + "\nLevel: " + to_string(player->getLvl())
+		+ "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel())
+		+ "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: "
+		+ to_string(player->getAgi()));
 	playerStats.setPosition(window.mapPixelToCoords(Vector2i(130, 40)));
+
+	backpack = player->getEquipment().getBackpack();
+
+	if (position == -1) itemStats.setString("");
+	else
+	{
+		if (position < backpack.size())
+		{
+			Weapon* temp1;
+			Armor* temp2;
+			if (temp1 = dynamic_cast<Weapon*>(backpack[position]))
+				itemStats.setString(backpack[position]->getName() + "\nAttack: " + to_string(temp1->getAttackValue()));
+			else if (temp2 = dynamic_cast<Armor*>(backpack[position]))
+				itemStats.setString(backpack[position]->getName() + "\nArmor: " + to_string(temp2->getArmorValue()));
+		}
+	}
+	itemStats.setPosition(window.mapPixelToCoords(Vector2i(870, 40)));
 
 	window.draw(backpackBackground);
 	window.draw(activeEquipment);
@@ -197,6 +219,7 @@ void Gui::drawEquipment(RenderWindow &window, Player* player)
 	window.draw(characterInfoHeader);
 	window.draw(itemInfoHeader);
 	window.draw(playerStats);
+	window.draw(itemStats);
 
 	for (short i = 0; i < 2; ++i)
 	{
@@ -206,7 +229,7 @@ void Gui::drawEquipment(RenderWindow &window, Player* player)
 			window.draw(backpackSlot);
 		}
 	}
-	backpack = player->getEquipment().getBackpack();
+	
 	for (size_t i = 0, j = 0; i < backpack.size(); ++i)
 	{
 		if (i == 5) ++j;

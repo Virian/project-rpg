@@ -19,4 +19,5 @@ public:
 	vector<Item*> getBackpack();
 	void addItem(Item*);
 	void clearBackpack();
+	void deleteItem(short);
 };

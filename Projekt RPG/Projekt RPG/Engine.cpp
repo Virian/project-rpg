@@ -156,7 +156,7 @@ Engine::~Engine()
 	}
 }
 
-void Engine::draw(RenderWindow &window, bool pause, bool equipment)
+void Engine::draw(RenderWindow &window, bool pause, bool equipment, short position)
 {
 	window.clear();
 	for (unsigned short y = 0; y < tileCountHeight; y++)
@@ -174,7 +174,7 @@ void Engine::draw(RenderWindow &window, bool pause, bool equipment)
 	gui.drawScreen(window, player);
 	if (equipment)
 	{
-		gui.drawEquipment(window, player);
+		gui.drawEquipment(window, player, position);
 	}
 	if (pause)
 	{
@@ -188,15 +188,16 @@ void Engine::startEngine(RenderWindow &window)
 	bool quit = false;
 	bool pause = false;
 	bool equipment = false;
+	short position = -1;
 	
 	updateMap();
 	window.setView(view);
-	draw(window, pause, equipment);
+	draw(window, pause, equipment, position);
 	while (!quit)
 	{
 		Event event;
-		sf::Vector2f mouse(Mouse::getPosition(window));
-		sf::Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
+		Vector2f mouse(Mouse::getPosition(window));
+		Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
 
 		if (!pause && !equipment)
 		{
@@ -272,9 +273,26 @@ void Engine::startEngine(RenderWindow &window)
 				if ((event.type == Event::KeyReleased) && ((event.key.code == Keyboard::I) || (event.key.code == Keyboard::Escape)))
 				{
 					equipment = false;
+					position = -1;
+				}
+				for (short i = 0; i < 2; ++i)
+				{
+					for (short j = 0; j < 5; ++j)
+					{
+						Vector2f slotPosition = window.mapPixelToCoords(Vector2i(140 + j * 128, 418 + i * 128));
+						if ((FloatRect(slotPosition, Vector2f(128, 128)).contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+						{
+							position = 5 * i + j;
+						}
+						if ((FloatRect(slotPosition, Vector2f(128, 128)).contains(worldPos)) && (Keyboard::isKeyPressed(Keyboard::LShift)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+						{
+							player->deleteItem(5 * i + j);
+							position = -1;
+						}
+					}
 				}
 			}
 		}
-		draw(window, pause, equipment);
+		draw(window, pause, equipment, position);
 	}
 }
