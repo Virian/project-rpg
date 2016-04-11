@@ -27,6 +27,8 @@ Gui::Gui()
 	skill2.setFillColor(Color::Green);
 	skill3.setFillColor(Color::Green);	
 
+	flash.restart();
+
 	pauseMenu.setSize(Vector2f(350, 450));
 	resumeButton.setSize(Vector2f(320, 100));
 	loadButton.setSize(Vector2f(320, 100));
@@ -98,7 +100,16 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	else if ((hpPercent <= 400.0f / 6.0f) && (hpPercent > 50)) hpGauge.setTextureRect(IntRect(256, 1024, 128, 128));
 	else if ((hpPercent <= 50) && (hpPercent > 200.0f / 6.0f)) hpGauge.setTextureRect(IntRect(384, 1024, 128, 128));
 	else if ((hpPercent <= 200.0f / 6.0f) && (hpPercent > 100.0f / 6.0f)) hpGauge.setTextureRect(IntRect(512, 1024, 128, 128));
-	else if ((hpPercent <= 100.0f / 6.0f) && (hpPercent > 0)) hpGauge.setTextureRect(IntRect(640, 1024, 128, 128));
+	else if ((hpPercent <= 100.0f / 6.0f) && (hpPercent > 0))
+	{
+		if (flash.getElapsedTime().asSeconds() > 1 && flash.getElapsedTime().asSeconds() <= 2)
+			hpGauge.setTextureRect(IntRect(768, 1024, 128, 128));
+		else if (flash.getElapsedTime().asSeconds() > 2)
+		{
+			hpGauge.setTextureRect(IntRect(640, 1024, 128, 128));
+			flash.restart();
+		}
+	}
 
 	float expPercent = (static_cast<float>(exp) / static_cast<float>(expForNextLevel)) * 100.0f;
 	if ((expPercent <= 100) && (expPercent > 500.0f / 6.0f)) expGauge.setTextureRect(IntRect(0, 896, 128, 128));

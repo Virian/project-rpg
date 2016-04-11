@@ -30,6 +30,7 @@ private:
 	RectangleShape skill1;
 	RectangleShape skill2;
 	RectangleShape skill3;
+	Clock flash;
 	/*Reminder - chyba dodac potki*/
 	/*pauza*/
 	RectangleShape pauseMenu;
