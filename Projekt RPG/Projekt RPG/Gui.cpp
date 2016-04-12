@@ -203,7 +203,11 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	activeWeapon = player->getEquipment().getActiveWeapon();
 
 	if (position == -1) itemStats.setString("");
-	else if ((position == -2) && (activeWeapon != NULL)) itemStats.setString(activeWeapon->getName() + "\nAttack: " + to_string(activeWeapon->getAttackValue()));
+	else if ((position == -2) && (activeWeapon != NULL))
+	{
+		if (activeWeapon->isRanged()) itemStats.setString(activeWeapon->getName() + "\nAttack: " + to_string(activeWeapon->getAttackValue()) + "\nRange: Ranged");
+		else itemStats.setString(activeWeapon->getName() + "\nAttack: " + to_string(activeWeapon->getAttackValue()) + "\nRange: Melee");
+	}
 	else if ((position == -3) && (activeArmor != NULL)) itemStats.setString(activeArmor->getName() + "\nArmor: " + to_string(activeArmor->getArmorValue()));
 	else
 	{
@@ -212,7 +216,10 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 			Weapon* temp1;
 			Armor* temp2;
 			if (temp1 = dynamic_cast<Weapon*>(backpack[position]))
-				itemStats.setString(backpack[position]->getName() + "\nAttack: " + to_string(temp1->getAttackValue()));
+			{				
+				if (temp1->isRanged()) itemStats.setString(backpack[position]->getName() + "\nAttack: " + to_string(temp1->getAttackValue()) + "\nRange: Ranged");
+				else itemStats.setString(backpack[position]->getName() + "\nAttack: " + to_string(temp1->getAttackValue()) + "\nRange: Melee");
+			}
 			else if (temp2 = dynamic_cast<Armor*>(backpack[position]))
 				itemStats.setString(backpack[position]->getName() + "\nArmor: " + to_string(temp2->getArmorValue()));
 		}

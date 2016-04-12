@@ -24,10 +24,12 @@ class Weapon : public Item
 {
 private:
 	unsigned short attackValue;
+	bool ranged;
 public:
-	Weapon();
+	Weapon(bool);
 	~Weapon();
 	unsigned short getAttackValue();
+	bool isRanged();
 };
 
 class Armor : public Item

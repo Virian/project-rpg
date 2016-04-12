@@ -5,15 +5,15 @@ Equipment::Equipment()
 	potionCount = 1;
 	activeArmor = NULL;
 	activeWeapon = NULL;
-	Item* temp1 = new Weapon();
+	Item* temp1 = new Weapon(true);
 	Item* temp2 = new Armor();
 	Item* temp3 = new Armor();
 	Item* temp4 = new Armor();
 	Item* temp5 = new Armor();
 	Item* temp6 = new Armor();
-	Item* temp7 = new Weapon();
-	Item* temp8 = new Weapon();
-	Item* temp9 = new Weapon();
+	Item* temp7 = new Weapon(true);
+	Item* temp8 = new Weapon(false);
+	Item* temp9 = new Weapon(false);
 
 	backpack.push_back(temp1);
 	backpack.push_back(temp2);
@@ -26,7 +26,7 @@ Equipment::Equipment()
 	backpack.push_back(temp9);
 
 	activeArmor = new Armor();
-	activeWeapon = new Weapon();
+	activeWeapon = new Weapon(true);
 }
 
 Equipment::~Equipment()
