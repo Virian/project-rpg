@@ -180,6 +180,8 @@ void Gui::drawPauseMenu(RenderWindow &window)
 void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 {
 	vector<Item*> backpack;
+	Weapon* activeWeapon;
+	Armor* activeArmor;
 	
 	backpackBackground.setPosition(window.mapPixelToCoords(Vector2i(120, 398)));
 	activeEquipment.setPosition(window.mapPixelToCoords(Vector2i(860, 254)));
@@ -197,8 +199,12 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	playerStats.setPosition(window.mapPixelToCoords(Vector2i(130, 40)));
 
 	backpack = player->getEquipment().getBackpack();
+	activeArmor = player->getEquipment().getActiveArmor();
+	activeWeapon = player->getEquipment().getActiveWeapon();
 
 	if (position == -1) itemStats.setString("");
+	else if ((position == -2) && (activeWeapon != NULL)) itemStats.setString(activeWeapon->getName() + "\nAttack: " + to_string(activeWeapon->getAttackValue()));
+	else if ((position == -3) && (activeArmor != NULL)) itemStats.setString(activeArmor->getName() + "\nArmor: " + to_string(activeArmor->getArmorValue()));
 	else
 	{
 		if (position < backpack.size())
@@ -248,6 +254,17 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 		backpack[i]->setPosition(window.mapPixelToCoords(Vector2i(140 + i * 128 - 5 * j * 128, 418 + j * 128)));
 		window.draw(*backpack[i]);
 	}
+
+	if (activeWeapon != NULL)
+	{
+		activeWeapon->setPosition(window.mapPixelToCoords(Vector2i(946, 340)));
+		window.draw(*activeWeapon);
+	}
+	if (activeArmor != NULL)
+	{
+		activeArmor->setPosition(window.mapPixelToCoords(Vector2i(946, 520)));
+		window.draw(*activeArmor);
+	}	
 }
 
 void Gui::draw(RenderTarget &target, RenderStates states) const

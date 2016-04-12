@@ -219,6 +219,16 @@ void Player::addItem(Item* newItem)
 	equipment.addItem(newItem);
 }
 
+void Player::swapActiveItem(short position)
+{
+	equipment.swapActiveItem(position);
+}
+
+void Player::usePotion()
+{
+	if (equipment.usePotion() == 0) parHp += 0.6 * parMaxHp;
+}
+
 Juggernaut::Juggernaut()
 {
 

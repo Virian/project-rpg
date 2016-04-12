@@ -66,7 +66,7 @@ unsigned short Armor::getArmorValue()
 	return armorValue;
 }
 
-Potion::Potion()
+/*Potion::Potion()
 {
 
 }
@@ -74,4 +74,4 @@ Potion::Potion()
 Potion::~Potion()
 {
 
-}
+}*/

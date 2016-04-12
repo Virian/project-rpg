@@ -34,6 +34,8 @@ public:
 	void levelUp();
 	void deleteItem(short);
 	void addItem(Item*);
+	void swapActiveItem(short);
+	void usePotion();
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
 	Texture texture;

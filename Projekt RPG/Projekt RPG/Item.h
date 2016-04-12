@@ -41,9 +41,9 @@ public:
 };
 
 /*Reminder - potki moga sie na dobra sprawe nie przydac*/
-class Potion : public Item
+/*class Potion : public Item
 {
 public:
 	Potion();
 	~Potion();
-};
+};*/

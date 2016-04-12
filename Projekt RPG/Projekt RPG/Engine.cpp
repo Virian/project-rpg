@@ -189,7 +189,7 @@ void Engine::startEngine(RenderWindow &window)
 	bool pause = false;
 	bool equipment = false;
 	short position = -1;
-	
+
 	updateMap();
 	window.setView(view);
 	draw(window, pause, equipment, position);
@@ -219,6 +219,10 @@ void Engine::startEngine(RenderWindow &window)
 				{
 					if (event.mouseButton.button == Mouse::Right) player->stop();
 				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Space))
+				{
+					player->usePotion();
+				}
 			}
 
 			player->update(worldPos, &level);
@@ -229,7 +233,7 @@ void Engine::startEngine(RenderWindow &window)
 				{
 					enemy->update(&level);
 				}
-				
+
 			}
 			if (player->getStatus() == Player::Status::WALK)
 			{
@@ -289,9 +293,42 @@ void Engine::startEngine(RenderWindow &window)
 							player->deleteItem(5 * i + j);
 							position = -1;
 						}
+						if ((FloatRect(slotPosition, Vector2f(128, 128)).contains(worldPos)) && (Keyboard::isKeyPressed(Keyboard::LControl)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+						{
+							player->swapActiveItem(5 * i + j);
+							position = -1;
+						}
 					}
 				}
-			}
+				if ((FloatRect(946, 340, 128, 128).contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					position = -2;
+				}
+				if ((FloatRect(946, 520, 128, 128).contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					position = -3;
+				}
+				if ((FloatRect(946, 340, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LShift)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					player->deleteItem(-1);
+					position = -1;
+				}
+				if ((FloatRect(946, 520, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LShift)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					player->deleteItem(-2);
+					position = -1;
+				}
+				if ((FloatRect(946, 340, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LControl)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					player->swapActiveItem(-1);
+					position = -1;
+				}
+				if ((FloatRect(946, 520, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LControl)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					player->swapActiveItem(-2);
+					position = -1;
+				}
+			}			
 		}
 		draw(window, pause, equipment, position);
 	}
