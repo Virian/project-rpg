@@ -75,7 +75,7 @@ void Equipment::deleteItem(short position)
 		delete activeArmor;
 		activeArmor = NULL;
 	}
-	else
+	else if(position < backpack.size())
 	{
 		delete backpack[position];
 		backpack.erase(backpack.begin() + position);
@@ -86,7 +86,7 @@ void Equipment::swapActiveItem(short position)
 {
 	if (position == -1)
 	{
-		if (backpack.size() + 1 <= backpackSize)
+		if ((backpack.size() + 1 <= backpackSize) && (activeWeapon != NULL))
 		{
 			backpack.push_back(activeWeapon);
 			activeWeapon = NULL;
@@ -94,13 +94,13 @@ void Equipment::swapActiveItem(short position)
 	}
 	else if (position == -2)
 	{
-		if (backpack.size() + 1 <= backpackSize)
+		if ((backpack.size() + 1 <= backpackSize) && (activeArmor != NULL))
 		{
 			backpack.push_back(activeArmor);
 			activeArmor = NULL;
 		}
 	}
-	else
+	else if (position < backpack.size())
 	{
 		Weapon* temp1;
 		Armor* temp2;
