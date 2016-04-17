@@ -24,6 +24,7 @@ Player::Player()
 	parMaxHp = parHp = 100;
 	parHp = 81;
 	parStr = parAgi = parInt = 10; /*Reminder - pewnie tez do zmiany*/
+	attackInterval.restart();
 }
 
 Player::~Player()
@@ -229,9 +230,24 @@ void Player::usePotion()
 	if (equipment.usePotion() == 0) parHp += 0.6 * parMaxHp;
 }
 
+void Player::takeDamage(unsigned damage)
+{
+	parHp -= damage;
+}
+
+Clock Player::getAttackInterval()
+{
+	return attackInterval;
+}
+
+void Player::restartAttackInterval()
+{
+	attackInterval.restart();
+}
+
 Juggernaut::Juggernaut()
 {
-
+	sprite.setColor(Color(255, 140, 140));
 }
 
 Juggernaut::~Juggernaut()
@@ -246,7 +262,7 @@ std::string Juggernaut::getClassName()
 
 Soldier::Soldier()
 {
-
+	sprite.setColor(Color::Yellow);
 }
 
 Soldier::~Soldier()
@@ -261,7 +277,7 @@ std::string Soldier::getClassName()
 
 Sentinel::Sentinel()
 {
-
+	sprite.setColor(Color(140, 140, 255));
 }
 
 Sentinel::~Sentinel()

@@ -36,6 +36,9 @@ public:
 	void addItem(Item*);
 	void swapActiveItem(short);
 	void usePotion();
+	void takeDamage(unsigned);
+	Clock getAttackInterval();
+	void restartAttackInterval();
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
 	Texture texture;
@@ -55,6 +58,7 @@ protected: /*dodac co najmniej str, dex, int*/
 	unsigned short parStr;
 	unsigned short parAgi;
 	unsigned short parInt;
+	Clock attackInterval;
 	//co z setName ??
 };
 

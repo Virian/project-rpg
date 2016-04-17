@@ -58,15 +58,22 @@ Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 	speed = 5.5f;
 	frame = 0;
 	anim_clock.restart();
-	idleTime.restart();
-	walkTime.restart();
+	time.restart();
+	attackInterval.restart();
 	status = STOP;
 	rot = rand() % 360;
 	sprite.setRotation(rot);
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
 
-	par_hp = par_str = par_agi = par_int = 10;
+	parHp = parStr = parAgi = parInt = 10;
+	alive = true;
+	attackValue = rand() % 4 + 4;
+	armorValue = rand() % 4 + 4;
+	short random; /*bedzie w konstruktorze*/
+	random = rand() % 2;
+	if (random == 0) ranged = false;
+	else ranged = true;
 }
 
 Enemy::~Enemy()
@@ -83,10 +90,10 @@ void Enemy::update(Level* level)
 {	
 	bool collision = false;
 	
-	if (idleTime.getElapsedTime() > milliseconds(idleT))
+	if (time.getElapsedTime() > milliseconds(idleT))
 	{		
 		sprite.setRotation(rot);
-		if (walkTime.getElapsedTime() < milliseconds(idleT) + milliseconds(walkT))
+		if (time.getElapsedTime() < milliseconds(idleT) + milliseconds(walkT))
 		{
 			status = WALK;
 			collision = false;
@@ -177,10 +184,55 @@ void Enemy::stop(bool collision)
 	frame = 0;
 	sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64)); /*Reminder - ustawic odpowiednia teksture*/
 	anim_clock.restart();
-	idleTime.restart();
-	walkTime.restart();
+	time.restart();
 	if (collision) rot = rot + 180; /*Reminder - mo¿na zmienic na widelki ale ryzyko zablokowania*/
 	else rot = rand() % 360;
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
+}
+
+void Enemy::takeDamage(unsigned damage)
+{
+	parHp -= damage;
+	if (parHp <= 0) alive = false;
+}
+
+unsigned short Enemy::getStr()
+{
+	return parStr;
+}
+
+unsigned short Enemy::getAgi()
+{
+	return parAgi;
+}
+
+unsigned short Enemy::getAttackValue()
+{
+	return attackValue;
+}
+
+unsigned short Enemy::getArmorValue()
+{
+	return armorValue;
+}
+
+bool Enemy::isRanged()
+{
+	return ranged;
+}
+
+bool Enemy::isAlive()
+{
+	return alive;
+}
+
+Clock Enemy::getAttackInterval()
+{
+	return attackInterval;
+}
+
+void Enemy::restartAttackInterval()
+{
+	attackInterval.restart();
 }

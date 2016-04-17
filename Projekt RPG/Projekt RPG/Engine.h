@@ -1,7 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "Player.h"
-#include "Level.h"
 #include "Gui.h"
 #include "Npc.h"
 
@@ -15,6 +13,7 @@ private:
 	View view;
 	Level level;
 	vector<Npc*> npcs;
+	enum Attacker { PLAYER, NPC };
 	Texture tileTextures[Tile::COUNT]; /*tablica na tekstury kafli*/
 	vector<vector<Sprite>> tileSprites; /*kontener sprite'ow kafli*/
 	unsigned short tileCountHeight; /*ilosc wyswietlanych kafli w pionie*/
@@ -22,6 +21,7 @@ private:
 	void draw(RenderWindow&, bool, bool, short);
 	void setMap(RenderWindow&, string);
 	void updateMap();
+	void fight(unsigned, Attacker);
 public:
 	Engine(RenderWindow&);
 	~Engine();

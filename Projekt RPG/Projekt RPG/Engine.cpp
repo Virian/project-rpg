@@ -156,6 +156,73 @@ Engine::~Engine()
 	}
 }
 
+void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
+{
+	unsigned hitChance, dodgeChance;
+	Enemy* enemy;
+
+	enemy = dynamic_cast<Enemy*>(npcs[enemyIndex]);
+
+	switch (attacker)
+	{
+	case PLAYER:
+		if (player->getEquipment().getActiveWeapon()->isRanged())
+		{
+			if (player->getAttackInterval().getElapsedTime().asSeconds() < 0.5) return;
+			hitChance = rand() % 20 + 1 + player->getAgi() + 3;
+		}
+		else
+		{
+			if (player->getAttackInterval().getElapsedTime().asSeconds() < 0.7) return;
+			hitChance = rand() % 20 + 1 + player->getStr() + 3;
+		}
+
+		dodgeChance = 10 + enemy->getAgi() + enemy->getArmorValue();
+
+		if (hitChance > dodgeChance)
+		{
+			unsigned damage;
+
+			if (player->getEquipment().getActiveWeapon()->isRanged())
+				damage = player->getEquipment().getActiveWeapon()->getAttackValue();
+			else
+				damage = player->getEquipment().getActiveWeapon()->getAttackValue() + player->getStr() / 15;
+
+			enemy->takeDamage(damage);
+		}
+		player->restartAttackInterval();
+		break;
+	case NPC:
+		if (enemy->isRanged())
+		{
+			if (enemy->getAttackInterval().getElapsedTime().asSeconds() < 0.5) return;
+			hitChance = rand() % 20 + 1 + enemy->getAgi() + 3;
+		}
+		else
+		{
+			if (enemy->getAttackInterval().getElapsedTime().asSeconds() < 0.7) return;
+			hitChance = rand() % 20 + 1 + enemy->getStr() + 3;
+		}
+
+		dodgeChance = 10 + player->getAgi() + player->getEquipment().getActiveArmor()->getArmorValue();
+
+		if (hitChance > dodgeChance)
+		{
+			unsigned damage;
+
+			if (enemy->isRanged())
+				damage = enemy->getAttackValue();
+			else
+				damage = enemy->getAttackValue() + enemy->getStr() / 15;
+
+			player->takeDamage(damage);
+		}
+		enemy->restartAttackInterval();
+		break;
+	}
+	
+}
+
 void Engine::draw(RenderWindow &window, bool pause, bool equipment, short position)
 {
 	window.clear();
@@ -188,7 +255,9 @@ void Engine::startEngine(RenderWindow &window)
 	bool quit = false;
 	bool pause = false;
 	bool equipment = false;
+	bool attacked = false;
 	short position = -1;
+	//size_t npcsSize;
 
 	updateMap();
 	window.setView(view);
@@ -203,6 +272,7 @@ void Engine::startEngine(RenderWindow &window)
 		{
 			while (window.pollEvent(event))
 			{
+				bool attacked = false;
 				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 				{
 					pause = true;
@@ -211,11 +281,32 @@ void Engine::startEngine(RenderWindow &window)
 				{
 					equipment = true;
 				}
-				if ((event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
+				for (size_t i = 0; i < npcs.size(); ++i)
+				{
+					if ((npcs[i]->getBoundingBox().contains(worldPos)) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
+					{
+						fight(i, PLAYER);
+						attacked = true;
+					}
+					Enemy* enemy;
+					if (enemy = dynamic_cast<Enemy*>(npcs[i]))
+					{
+						if (enemy->isAlive())
+							enemy->update(&level);
+						else
+						{
+							delete npcs[i];
+							npcs.erase(npcs.begin() + i);
+							--i;
+						}
+					}
+
+				}
+				if ((!attacked) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
 				{
 					player->walk();
 				}
-				else if (event.type == Event::MouseButtonReleased)
+				else if ((!attacked) && (event.type == Event::MouseButtonReleased))
 				{
 					if (event.mouseButton.button == Mouse::Right) player->stop();
 				}
@@ -226,15 +317,23 @@ void Engine::startEngine(RenderWindow &window)
 			}
 
 			player->update(worldPos, &level);
-			for (size_t i = 0; i < npcs.size(); ++i)
+			//npcsSize = npcs.size();
+			/*for (size_t i = 0; i < npcs.size(); ++i)
 			{
 				Enemy* enemy;
 				if (enemy = dynamic_cast<Enemy*>(npcs[i]))
 				{
-					enemy->update(&level);
+					if (enemy->isAlive())
+						enemy->update(&level);
+					else
+					{
+						delete npcs[i];
+						npcs.erase(npcs.begin() + i);
+						--i;
+					}
 				}
 
-			}
+			}*/
 			if (player->getStatus() == Player::Status::WALK)
 			{
 				view.setCenter(player->getPosition());

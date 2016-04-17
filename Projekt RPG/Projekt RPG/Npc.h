@@ -40,19 +40,32 @@ public:
 	Vector2f getMove();
 	//void walk();
 	void stop(bool);
+	void takeDamage(unsigned);
+	unsigned short getStr();
+	unsigned short getAgi();
+	unsigned short getAttackValue();
+	unsigned short getArmorValue();
+	bool isRanged();
+	bool isAlive();
+	Clock getAttackInterval();
+	void restartAttackInterval();
 private:
 	float speed;
 	unsigned frame;
 	Clock anim_clock;
-	Clock idleTime;
-	Clock walkTime;
+	Clock time;
 	float rot;
 	int idleT;
 	int walkT;
 	Status status;
 	/*statystyki*/
-	short par_hp;
-	unsigned short par_str;
-	unsigned short par_agi;
-	unsigned short par_int;
+	short parHp;
+	unsigned short parStr;
+	unsigned short parAgi;
+	unsigned short parInt; /*moze okazac sie niepotrzebny*/
+	unsigned short attackValue;
+	unsigned short armorValue;
+	bool ranged;
+	bool alive;
+	Clock attackInterval;
 };
