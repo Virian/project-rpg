@@ -49,6 +49,7 @@ public:
 	bool isAlive();
 	Clock getAttackInterval();
 	void restartAttackInterval();
+	unsigned getExperienceGiven();
 private:
 	float speed;
 	unsigned frame;
@@ -63,6 +64,7 @@ private:
 	unsigned short parStr;
 	unsigned short parAgi;
 	unsigned short parInt; /*moze okazac sie niepotrzebny*/
+	unsigned experienceGiven;
 	unsigned short attackValue;
 	unsigned short armorValue;
 	bool ranged;

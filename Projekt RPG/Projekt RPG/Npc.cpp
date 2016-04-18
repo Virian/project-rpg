@@ -67,6 +67,7 @@ Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 	idleT = rand() % 5000 + 7000;
 
 	parHp = parStr = parAgi = parInt = 10;
+	experienceGiven = 20; /*Reminder - do zmiany*/
 	alive = true;
 	attackValue = rand() % 4 + 4;
 	armorValue = rand() % 4 + 4;
@@ -235,4 +236,9 @@ Clock Enemy::getAttackInterval()
 void Enemy::restartAttackInterval()
 {
 	attackInterval.restart();
+}
+
+unsigned Enemy::getExperienceGiven()
+{
+	return experienceGiven;
 }

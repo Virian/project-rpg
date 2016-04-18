@@ -230,6 +230,11 @@ void Player::usePotion()
 	if (equipment.usePotion() == 0) parHp += 0.6 * parMaxHp;
 }
 
+void Player::increaseExperience(unsigned experience)
+{
+	parExp += experience;
+}
+
 void Player::takeDamage(unsigned damage)
 {
 	parHp -= damage;

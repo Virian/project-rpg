@@ -39,6 +39,7 @@ public:
 	void takeDamage(unsigned);
 	Clock getAttackInterval();
 	void restartAttackInterval();
+	void increaseExperience(unsigned);
 protected: /*dodac co najmniej str, dex, int*/
 	Sprite sprite;
 	Texture texture;

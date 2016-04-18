@@ -257,7 +257,6 @@ void Engine::startEngine(RenderWindow &window)
 	bool equipment = false;
 	bool attacked = false;
 	short position = -1;
-	//size_t npcsSize;
 
 	updateMap();
 	window.setView(view);
@@ -288,19 +287,6 @@ void Engine::startEngine(RenderWindow &window)
 						fight(i, PLAYER);
 						attacked = true;
 					}
-					Enemy* enemy;
-					if (enemy = dynamic_cast<Enemy*>(npcs[i]))
-					{
-						if (enemy->isAlive())
-							enemy->update(&level);
-						else
-						{
-							delete npcs[i];
-							npcs.erase(npcs.begin() + i);
-							--i;
-						}
-					}
-
 				}
 				if ((!attacked) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
 				{
@@ -317,8 +303,7 @@ void Engine::startEngine(RenderWindow &window)
 			}
 
 			player->update(worldPos, &level);
-			//npcsSize = npcs.size();
-			/*for (size_t i = 0; i < npcs.size(); ++i)
+			for (size_t i = 0; i < npcs.size(); ++i)
 			{
 				Enemy* enemy;
 				if (enemy = dynamic_cast<Enemy*>(npcs[i]))
@@ -327,13 +312,14 @@ void Engine::startEngine(RenderWindow &window)
 						enemy->update(&level);
 					else
 					{
+						player->increaseExperience(enemy->getExperienceGiven());
 						delete npcs[i];
 						npcs.erase(npcs.begin() + i);
 						--i;
 					}
 				}
 
-			}*/
+			}
 			if (player->getStatus() == Player::Status::WALK)
 			{
 				view.setCenter(player->getPosition());
