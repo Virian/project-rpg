@@ -160,6 +160,8 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 {
 	unsigned hitChance, dodgeChance;
 	Enemy* enemy;
+	unsigned damage;
+	Gui::TextDamage* damageInfo = new Gui::TextDamage();
 
 	enemy = dynamic_cast<Enemy*>(npcs[enemyIndex]);
 
@@ -181,14 +183,19 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 
 		if (hitChance > dodgeChance)
 		{
-			unsigned damage;
-
 			if (player->getEquipment().getActiveWeapon()->isRanged())
 				damage = player->getEquipment().getActiveWeapon()->getAttackValue();
 			else
 				damage = player->getEquipment().getActiveWeapon()->getAttackValue() + player->getStr() / 15;
 
 			enemy->takeDamage(damage);
+			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0));
+			gui.pushDamageInfo(damageInfo, std::to_string(damage));
+		}
+		else
+		{
+			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0));
+			gui.pushDamageInfo(damageInfo, "MISS");
 		}
 		player->restartAttackInterval();
 		break;

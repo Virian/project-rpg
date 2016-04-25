@@ -7,6 +7,11 @@ using namespace sf;
 class Gui : public Drawable, Transformable
 {
 public:
+	struct TextDamage {
+		Text text;
+		Clock lifeTime;
+		Clock tick;
+	};
 	Gui();
 	~Gui();
 	void drawScreen(RenderWindow&, Player*);
@@ -18,6 +23,7 @@ public:
 	void setResumeHighlight(short);
 	void setLoadHighlight(short);
 	void setQuitHighlight(short);
+	void pushDamageInfo(TextDamage*, std::string);
 private:
 	virtual void draw(RenderTarget&, RenderStates) const;
 	Texture texture;
@@ -30,7 +36,8 @@ private:
 	RectangleShape skill1;
 	RectangleShape skill2;
 	RectangleShape skill3;
-	Clock flash;
+	Clock flash; /*miganie hp gdy jest niskie*/
+	vector<TextDamage*> damageInfo;
 	/*Reminder - chyba dodac potki*/
 	/*pauza*/
 	RectangleShape pauseMenu;

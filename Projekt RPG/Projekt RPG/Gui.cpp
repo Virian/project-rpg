@@ -98,6 +98,24 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	unsigned exp = player->getExp();
 	unsigned expForNextLevel = player->getExpForNextLevel();
 	
+	for (size_t i = 0; i < damageInfo.size(); ++i)
+	{
+		if (damageInfo[i]->lifeTime.getElapsedTime() > seconds(0.6))
+		{
+			delete damageInfo[i];
+			damageInfo.erase(damageInfo.begin() + i);
+		}
+		else
+		{
+			window.draw(damageInfo[i]->text);
+			if (damageInfo[i]->tick.getElapsedTime() > milliseconds(10))
+			{
+				damageInfo[i]->text.move(0.0f, -1.0f);
+				damageInfo[i]->tick.restart();
+			}
+		}
+	}
+
 	float hpPercent = (static_cast<float>(currentHp) / static_cast<float>(maxHp)) * 100.0f;
 	if ((hpPercent <= 100) && (hpPercent > 500.0f/6.0f)) hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
 	else if ((hpPercent <= 500.0f / 6.0f) && (hpPercent > 400.0f / 6.0f)) hpGauge.setTextureRect(IntRect(128, 1024, 128, 128));
@@ -315,4 +333,17 @@ void Gui::setQuitHighlight(short swtch)
 {
 	if (swtch == 0) quitButton.setOutlineThickness(0);
 	else quitButton.setOutlineThickness(-4);
+}
+
+void Gui::pushDamageInfo(TextDamage* newText, std::string damageValue)
+{
+	newText->text.setFont(font);
+	newText->text.setColor(Color::Red);
+	newText->text.setCharacterSize(40);
+	newText->text.setString(damageValue);
+	/*setstring*/
+	/*setposition*/
+	newText->tick.restart();
+	newText->lifeTime.restart();
+	damageInfo.push_back(newText);
 }
