@@ -110,7 +110,12 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 			window.draw(damageInfo[i]->text);
 			if (damageInfo[i]->tick.getElapsedTime() > milliseconds(10))
 			{
+				Color tempColor;
+
 				damageInfo[i]->text.move(0.0f, -1.0f);
+				tempColor = damageInfo[i]->text.getColor();
+				tempColor.a -= 4;
+				damageInfo[i]->text.setColor(tempColor);
 				damageInfo[i]->tick.restart();
 			}
 		}
@@ -335,14 +340,12 @@ void Gui::setQuitHighlight(short swtch)
 	else quitButton.setOutlineThickness(-4);
 }
 
-void Gui::pushDamageInfo(TextDamage* newText, std::string damageValue)
+void Gui::pushDamageInfo(TextDamage* newText)
 {
 	newText->text.setFont(font);
 	newText->text.setColor(Color::Red);
 	newText->text.setCharacterSize(40);
-	newText->text.setString(damageValue);
-	/*setstring*/
-	/*setposition*/
+	newText->text.move(-newText->text.getGlobalBounds().width / 2, 0.0);
 	newText->tick.restart();
 	newText->lifeTime.restart();
 	damageInfo.push_back(newText);

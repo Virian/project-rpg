@@ -189,13 +189,15 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 				damage = player->getEquipment().getActiveWeapon()->getAttackValue() + player->getStr() / 15;
 
 			enemy->takeDamage(damage);
+			damageInfo->text.setString(std::to_string(damage));
 			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0));
-			gui.pushDamageInfo(damageInfo, std::to_string(damage));
+			gui.pushDamageInfo(damageInfo);
 		}
 		else
 		{
+			damageInfo->text.setString("MISS");
 			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0));
-			gui.pushDamageInfo(damageInfo, "MISS");
+			gui.pushDamageInfo(damageInfo);
 		}
 		player->restartAttackInterval();
 		break;
@@ -289,11 +291,6 @@ void Engine::startEngine(RenderWindow &window)
 				}
 				for (size_t i = 0; i < npcs.size(); ++i)
 				{
-					/*if ((npcs[i]->getBoundingBox().contains(worldPos)) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
-					{
-						fight(i, PLAYER);
-						attacked = true;
-					}*/
 					if ((player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
 					{						
 						attacked = true;

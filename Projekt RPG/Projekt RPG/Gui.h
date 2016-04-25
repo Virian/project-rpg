@@ -23,7 +23,7 @@ public:
 	void setResumeHighlight(short);
 	void setLoadHighlight(short);
 	void setQuitHighlight(short);
-	void pushDamageInfo(TextDamage*, std::string);
+	void pushDamageInfo(TextDamage*);
 private:
 	virtual void draw(RenderTarget&, RenderStates) const;
 	Texture texture;
