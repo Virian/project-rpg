@@ -289,9 +289,13 @@ void Engine::startEngine(RenderWindow &window)
 				}
 				for (size_t i = 0; i < npcs.size(); ++i)
 				{
-					if ((npcs[i]->getBoundingBox().contains(worldPos)) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
+					/*if ((npcs[i]->getBoundingBox().contains(worldPos)) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
 					{
 						fight(i, PLAYER);
+						attacked = true;
+					}*/
+					if ((player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+					{						
 						attacked = true;
 					}
 				}
@@ -313,6 +317,10 @@ void Engine::startEngine(RenderWindow &window)
 			for (size_t i = 0; i < npcs.size(); ++i)
 			{
 				Enemy* enemy;
+				if ((player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+				{
+					fight(i, PLAYER);
+				}
 				if (enemy = dynamic_cast<Enemy*>(npcs[i]))
 				{
 					if (enemy->isAlive())
