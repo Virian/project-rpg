@@ -293,7 +293,30 @@ void Engine::startEngine(RenderWindow &window)
 				{
 					if ((player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
 					{						
+						Vertex line[2];
+						float distance;
+						float sinus;
+						float cosinus;
+						line[0].position = player->getPosition();
+						line[1].position = npcs[i]->getPosition();
 						attacked = true;
+						player->attack();
+						do
+						{
+							if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
+							{
+								attacked = false;
+								player->stop();
+								break;
+							}
+							distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
+							sinus = (line[0].position.x - line[1].position.x) / distance;
+							cosinus = (line[0].position.y - line[1].position.y) / distance;
+							distance -= 1.0f;
+							line[0].position.x = sinus * distance + line[1].position.x;
+							line[0].position.y = cosinus * distance + line[1].position.y;
+						} while (distance > 1);
+						
 					}
 				}
 				if ((!attacked) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
@@ -314,7 +337,7 @@ void Engine::startEngine(RenderWindow &window)
 			for (size_t i = 0; i < npcs.size(); ++i)
 			{
 				Enemy* enemy;
-				if ((player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+				if ((player->getStatus() == Player::ATTACK) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))				
 				{
 					fight(i, PLAYER);
 				}

@@ -46,7 +46,7 @@ void Player::update(Vector2f mouse, Level *level)
 	
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
-		if (status == STOP) return;
+		if (status != WALK) return;
 		if (frame < 7) /*liczba klatek animacji - 1*/
 			frame++;
 		else
@@ -109,6 +109,11 @@ void Player::stop()
 	frame = 0;
 	sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
 	anim_clock.restart();
+}
+
+void Player::attack()
+{
+	status = ATTACK;
 }
 
 void Player::draw(RenderTarget &target, RenderStates states) const

@@ -14,7 +14,8 @@ public:
 	void update(Vector2f, Level*);
 	void walk();
 	void stop();
-	enum Status { STOP, WALK };
+	void attack();
+	enum Status { STOP, WALK, ATTACK };
 	Status getStatus();
 	FloatRect getBoundingBox();
 	Vector2f getMove();
