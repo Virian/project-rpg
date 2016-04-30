@@ -310,9 +310,15 @@ void Engine::startEngine(RenderWindow &window)
 								break;
 							}
 							distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
+							if ((!player->getEquipment().getActiveWeapon()->isRanged()) && (distance > 70))
+							{
+								attacked = false; /*Reminder - ustawic zeby zaatakowal jak podejdzie*/
+								player->stop();
+								break;
+							}
 							sinus = (line[0].position.x - line[1].position.x) / distance;
 							cosinus = (line[0].position.y - line[1].position.y) / distance;
-							distance -= 1.0f;
+							distance -= 1.5f;
 							line[0].position.x = sinus * distance + line[1].position.x;
 							line[0].position.y = cosinus * distance + line[1].position.y;
 						} while (distance > 1);
