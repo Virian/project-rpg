@@ -2,6 +2,7 @@
 #include "Npc.h"
 #include <Windows.h>
 #include <cstdlib>
+#include <cmath>
 
 Npc::Npc(Tile::Coord spawnCoord) : spawnCoord(spawnCoord)
 {
@@ -55,7 +56,7 @@ Neutral::~Neutral()
 
 Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
-	speed = 5.5f;
+	speed = 4.0f;
 	frame = 0;
 	anim_clock.restart();
 	time.restart();
@@ -87,11 +88,85 @@ Enemy::Status Enemy::getStatus()
 	return status;
 }
 
-void Enemy::update(Level* level)
+void Enemy::update(Level* level, Vector2f playerPosition)
 {	
 	bool collision = false;
-	
-	if (time.getElapsedTime() > milliseconds(idleT))
+	/*ma przestawac atakowac, moze podazac*/
+	if (status == ENGAGED)
+	{
+		rot = atan2f(playerPosition.y - sprite.getPosition().y, playerPosition.x - sprite.getPosition().x);
+		rot = rot * 180.f / M_PI;
+		rot += 90;
+		sprite.setRotation(rot);
+		collision = false;
+		if (anim_clock.getElapsedTime() > seconds(0.04f))
+		{
+			if (frame < 7) /*liczba klatek animacji - 1*/
+				frame++;
+			else
+				frame = 0; /*animacja sie zapetla*/
+			sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
+			sprite.move(getMove());
+			/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
+			if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			if (sprite.getGlobalBounds().top + 15 < 0) /*gorna krawedz poziomu*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			if (sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15 > level->getWidth() * 64) /*prawa krawedz poziomu*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15 > level->getHeight() * 64) /*dolna krawedz poziomu*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]->isWall()) /*kolizja z kaflem po lewej*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]->isWall()) /*kolizja z kaflem po prawej*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z gory*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z dolu*/
+			{
+				sprite.move(-getMove());
+				collision = true;
+				stop(collision);
+			}
+			anim_clock.restart();
+		}
+	}
+	else if (status == ATTACK)
+	{
+		rot = atan2f(playerPosition.y - sprite.getPosition().y, playerPosition.x - sprite.getPosition().x);
+		rot = rot * 180.f / M_PI;
+		rot += 90;
+		sprite.setRotation(rot);
+	}
+	else if (time.getElapsedTime() > milliseconds(idleT))
 	{		
 		sprite.setRotation(rot);
 		if (time.getElapsedTime() < milliseconds(idleT) + milliseconds(walkT))
@@ -192,6 +267,16 @@ void Enemy::stop(bool collision)
 	idleT = rand() % 5000 + 7000;
 }
 
+void Enemy::engage()
+{
+	status = ENGAGED;
+}
+
+void Enemy::attack()
+{
+	status = ATTACK;
+}
+
 void Enemy::takeDamage(unsigned damage)
 {
 	parHp -= damage;
@@ -226,6 +311,18 @@ bool Enemy::isRanged()
 bool Enemy::isAlive()
 {
 	return alive;
+}
+
+bool Enemy::isEngaged()
+{
+	if (status == ENGAGED) return true;
+	else return false;
+}
+
+bool Enemy::isAttacking()
+{
+	if (status == ATTACK) return true;
+	else return false;
 }
 
 Clock Enemy::getAttackInterval()

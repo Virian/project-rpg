@@ -190,13 +190,13 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 
 			enemy->takeDamage(damage);
 			damageInfo->text.setString(std::to_string(damage));
-			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0));
+			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
 		else
 		{
 			damageInfo->text.setString("MISS");
-			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0));
+			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
 		player->restartAttackInterval();
@@ -217,14 +217,21 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 
 		if (hitChance > dodgeChance)
 		{
-			unsigned damage;
-
 			if (enemy->isRanged())
 				damage = enemy->getAttackValue();
 			else
 				damage = enemy->getAttackValue() + enemy->getStr() / 15;
 
 			player->takeDamage(damage);
+			damageInfo->text.setString(std::to_string(damage));
+			damageInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
+			gui.pushDamageInfo(damageInfo);
+		}
+		else
+		{
+			damageInfo->text.setString("MISS");
+			damageInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
+			gui.pushDamageInfo(damageInfo);
 		}
 		enemy->restartAttackInterval();
 		break;
@@ -291,7 +298,8 @@ void Engine::startEngine(RenderWindow &window)
 				}
 				for (size_t i = 0; i < npcs.size(); ++i)
 				{
-					if ((player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+					Enemy* enemy;
+					if ((enemy = dynamic_cast<Enemy*>(npcs[i])) && (player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
 					{						
 						Vertex line[2];
 						float distance;
@@ -318,11 +326,10 @@ void Engine::startEngine(RenderWindow &window)
 							}
 							sinus = (line[0].position.x - line[1].position.x) / distance;
 							cosinus = (line[0].position.y - line[1].position.y) / distance;
-							distance -= 1.5f;
+							distance -= 2.0f;
 							line[0].position.x = sinus * distance + line[1].position.x;
 							line[0].position.y = cosinus * distance + line[1].position.y;
-						} while (distance > 1);
-						
+						} while (distance > 1);						
 					}
 				}
 				if ((!attacked) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
@@ -343,14 +350,56 @@ void Engine::startEngine(RenderWindow &window)
 			for (size_t i = 0; i < npcs.size(); ++i)
 			{
 				Enemy* enemy;
-				if ((player->getStatus() == Player::ATTACK) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))				
-				{
-					fight(i, PLAYER);
-				}
 				if (enemy = dynamic_cast<Enemy*>(npcs[i]))
 				{
+					Vertex line[2];
+					float distance, distanceTemp;
+					float sinus;
+					float cosinus;
+					line[0].position = player->getPosition();
+					line[1].position = npcs[i]->getPosition();
+					distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
+					distanceTemp = distance;
+					if (distance > 450)
+					{
+						if (enemy->getStatus() != Enemy::STOP) enemy->stop(false);
+					}
+					else
+					{
+						if (enemy->getStatus() != Enemy::ATTACK) enemy->engage();
+						do
+						{
+							if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
+							{
+								if (enemy->getStatus() != Enemy::STOP) enemy->stop(false);
+								break;
+							}
+							distanceTemp = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
+							sinus = (line[0].position.x - line[1].position.x) / distanceTemp;
+							cosinus = (line[0].position.y - line[1].position.y) / distanceTemp;
+							distanceTemp -= 2.0f;
+							line[0].position.x = sinus * distanceTemp + line[1].position.x;
+							line[0].position.y = cosinus * distanceTemp + line[1].position.y;
+						} while (distanceTemp > 1);
+					}
+					if ((player->getStatus() == Player::ATTACK) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+					{
+						fight(i, PLAYER);
+						if (enemy->getStatus() != Enemy::ATTACK) enemy->engage();
+					}
 					if (enemy->isAlive())
-						enemy->update(&level);
+					{
+						enemy->update(&level, player->getPosition());
+						if ((enemy->isEngaged()) || (enemy->isAttacking()))
+						{
+							if ((enemy->isRanged()) || ((!enemy->isRanged()) && (distance < 70)))
+							{
+								enemy->attack();
+								fight(i, NPC);
+							}
+							else enemy->engage();
+						}
+					}
 					else
 					{
 						player->increaseExperience(enemy->getExperienceGiven());

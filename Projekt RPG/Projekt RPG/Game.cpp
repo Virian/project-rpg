@@ -42,7 +42,7 @@ void Game::menu()
 		text[i].setFont(font);
 		text[i].setCharacterSize(70);
 		text[i].setString(options[i]);
-		text[i].setPosition(1280 / 2 - text[i].getGlobalBounds().width / 2, 270 + i * 100);
+		text[i].setPosition(1280.0f / 2 - text[i].getGlobalBounds().width / 2, 270.0f + i * 100);
 	}
 
 	while (state == MENU)

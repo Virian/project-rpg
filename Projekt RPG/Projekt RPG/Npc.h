@@ -34,12 +34,14 @@ class Enemy : public Npc
 public:
 	Enemy(Tile::Coord); /*Reminder - trzeba bedzie dodac np parametr speed, str, int itp.*/
 	~Enemy();
-	enum Status { STOP, WALK };
+	enum Status { STOP, WALK, ENGAGED, ATTACK };
 	Status getStatus();
-	void update(Level*);
+	void update(Level*, Vector2f);
 	Vector2f getMove();
 	//void walk();
 	void stop(bool);
+	void engage();
+	void attack();
 	void takeDamage(unsigned);
 	unsigned short getStr();
 	unsigned short getAgi();
@@ -47,6 +49,8 @@ public:
 	unsigned short getArmorValue();
 	bool isRanged();
 	bool isAlive();
+	bool isEngaged();
+	bool isAttacking();
 	Clock getAttackInterval();
 	void restartAttackInterval();
 	unsigned getExperienceGiven();
