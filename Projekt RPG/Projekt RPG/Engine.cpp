@@ -190,12 +190,14 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 
 			enemy->takeDamage(damage);
 			damageInfo->text.setString(std::to_string(damage));
+			damageInfo->text.setColor(Color::Red);
 			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
 		else
 		{
 			damageInfo->text.setString("MISS");
+			damageInfo->text.setColor(Color::Red);
 			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
@@ -223,13 +225,16 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 				damage = enemy->getAttackValue() + enemy->getStr() / 15;
 
 			player->takeDamage(damage);
-			damageInfo->text.setString(std::to_string(damage));
+			delete damageInfo;
+			/*damageInfo->text.setString(std::to_string(damage));
+			damageInfo->text.setColor(Color::Red);
 			damageInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
-			gui.pushDamageInfo(damageInfo);
+			gui.pushDamageInfo(damageInfo);*/
 		}
 		else
 		{
 			damageInfo->text.setString("MISS");
+			damageInfo->text.setColor(Color::Red);
 			damageInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
@@ -285,6 +290,7 @@ void Engine::startEngine(RenderWindow &window)
 
 		if (!pause && !equipment)
 		{
+			short tempHp = player->getHp();
 			while (window.pollEvent(event))
 			{
 				bool attacked = false;
@@ -342,7 +348,7 @@ void Engine::startEngine(RenderWindow &window)
 				}
 				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Space))
 				{
-					player->usePotion();
+					player->usePotion();					
 				}
 			}
 
@@ -362,7 +368,7 @@ void Engine::startEngine(RenderWindow &window)
 					distanceTemp = distance;
 					if (distance > 450)
 					{
-						if (enemy->getStatus() != Enemy::STOP) enemy->stop(false);
+						if ((enemy->getStatus() != Enemy::STOP) && ((enemy->getStatus() != Enemy::WALK))) enemy->stop(false);
 					}
 					else
 					{
@@ -417,6 +423,16 @@ void Engine::startEngine(RenderWindow &window)
 				window.setView(view);
 			}
 			if (player->getExp() >= player->getExpForNextLevel()) player->levelUp();
+			if (player->getHp() != tempHp)
+			{
+				Gui::TextDamage* hpInfo = new Gui::TextDamage();
+
+				hpInfo->text.setString(std::to_string(abs(player->getHp() - tempHp)));
+				if (player->getHp() > tempHp) hpInfo->text.setColor(Color::Green);
+				else hpInfo->text.setColor(Color::Red);
+				hpInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
+				gui.pushDamageInfo(hpInfo);
+			}
 		}
 		if (pause)
 		{

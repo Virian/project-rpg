@@ -343,7 +343,7 @@ void Gui::setQuitHighlight(short swtch)
 void Gui::pushDamageInfo(TextDamage* newText)
 {
 	newText->text.setFont(font);
-	newText->text.setColor(Color::Red);
+	//newText->text.setColor(Color::Red);
 	newText->text.setCharacterSize(40);
 	newText->text.move(-newText->text.getGlobalBounds().width / 2, 0.0);
 	newText->tick.restart();
