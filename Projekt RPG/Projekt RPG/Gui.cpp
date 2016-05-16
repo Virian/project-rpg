@@ -14,6 +14,8 @@ Gui::Gui()
 	maximHp.setCharacterSize(45);
 	experience.setFont(font);
 	experience.setCharacterSize(100);
+	potions.setFont(font);
+	potions.setCharacterSize(70);
 	texture.loadFromFile("placeholder.png");
 	hpGauge.setTexture(texture);
 	hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
@@ -155,12 +157,14 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	currHp.setString(std::to_string(currentHp));
 	maximHp.setString(std::to_string(maxHp));
 	experience.setString(std::to_string(static_cast<int>(expPercent)) + "%");
+	potions.setString("Potions: " + std::to_string(player->getEquipment().getPotionCount()));
 	
 	if (currentHp > 99) currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 550))); /*Reminder - fajnie by bylo dodac zeby pozycja zalezala od ilosci cyfr*/
 	else if (currentHp <= 99 && currentHp > 9) currHp.setPosition(window.mapPixelToCoords(Vector2i(78, 550)));
 	else currHp.setPosition(window.mapPixelToCoords(Vector2i(86, 550)));
 	maximHp.setPosition(window.mapPixelToCoords(Vector2i(85, 610)));
 	experience.setPosition(window.mapPixelToCoords(Vector2i(1142, 546)));
+	potions.setPosition(window.mapPixelToCoords(Vector2i(170, 625)));
 
 	window.draw(hpGauge);
 	window.draw(expGauge);
@@ -185,6 +189,12 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	experience.move(Vector2f(-2, -2));
 	experience.setColor(Color::White);
 	window.draw(experience);
+	potions.move(Vector2f(2, 2));
+	potions.setColor(Color::Black);
+	window.draw(potions);
+	potions.move(Vector2f(-2, -2));
+	potions.setColor(Color::White);
+	window.draw(potions);
 }
 
 void Gui::drawPauseMenu(RenderWindow &window)

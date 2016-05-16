@@ -24,4 +24,5 @@ public:
 	void deleteItem(short);
 	void swapActiveItem(short);
 	unsigned short usePotion();
+	short getPotionCount();
 };

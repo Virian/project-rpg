@@ -128,3 +128,8 @@ unsigned short Equipment::usePotion()
 	}
 	else return 1;
 }
+
+short Equipment::getPotionCount()
+{
+	return potionCount;
+}

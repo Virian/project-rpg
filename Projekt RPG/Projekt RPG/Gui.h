@@ -33,6 +33,7 @@ private:
 	Sprite expGauge;
 	Text currHp, maximHp;
 	Text experience;
+	Text potions;
 	RectangleShape skill1;
 	RectangleShape skill2;
 	RectangleShape skill3;
