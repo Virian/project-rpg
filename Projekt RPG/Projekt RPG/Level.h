@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "Tile.h"
+#include <SFML/System/Vector2.hpp>
 
 using namespace std;
 
@@ -24,4 +25,6 @@ public:
 	Tile::Coord getPlayerSpawnCoords();
 	vector<Tile::Coord> getNpcCoords();
 	vector<vector<Tile*>> getMap();
+	void spawnLootChest(sf::Vector2f);
+	void deleteLootChest(sf::Vector2f);
 };

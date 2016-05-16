@@ -11,7 +11,7 @@ class Player : public Drawable, Transformable
 public:
 	Player();
 	virtual ~Player();
-	void update(Vector2f, Level*);
+	short update(Vector2f, Level*);
 	void walk();
 	void stop();
 	void attack();

@@ -352,7 +352,7 @@ void Engine::startEngine(RenderWindow &window)
 				}
 			}
 
-			player->update(worldPos, &level);
+			if (player->update(worldPos, &level) == 1) updateMap();
 			for (size_t i = 0; i < npcs.size(); ++i)
 			{
 				Enemy* enemy;
@@ -409,9 +409,15 @@ void Engine::startEngine(RenderWindow &window)
 					else
 					{
 						player->increaseExperience(enemy->getExperienceGiven());
+						short lootChance = rand() % 100 + 1;
+						if (lootChance > 60)
+						{
+							level.spawnLootChest(npcs[i]->getPosition());
+							updateMap();
+						}
 						delete npcs[i];
 						npcs.erase(npcs.begin() + i);
-						--i;
+						--i;						
 					}
 				}
 

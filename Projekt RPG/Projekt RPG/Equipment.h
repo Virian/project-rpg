@@ -4,8 +4,6 @@
 
 using namespace std;
 
-const int backpackSize = 10;
-
 class Equipment
 {
 private:
@@ -14,6 +12,7 @@ private:
 	vector<Item*> backpack;
 	short potionCount;
 public:
+	static const int backpackSize = 10;
 	Equipment();
 	~Equipment();
 	vector<Item*> getBackpack();
@@ -25,4 +24,5 @@ public:
 	void swapActiveItem(short);
 	unsigned short usePotion();
 	short getPotionCount();
+	void addPotion();
 };

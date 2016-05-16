@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include <Windows.h>
 
 Tile::Tile()
 {
@@ -72,6 +73,35 @@ short TrapFountain::getHpChange()
 		}
 	}
 	else return 0;
+}
+
+LootChest::LootChest(short tileCode, bool _wall, bool _interaction) : Tile(tileCode, _wall, _interaction)
+{
+	tileUnder = nullptr;
+	if (rand() % 100 + 1 > 60) content = ITEM;
+	else content = POTION;
+}
+
+LootChest::LootChest(short tileCode, bool _wall, bool _interaction, Tile* _tileUnder) : Tile(tileCode, _wall, _interaction), tileUnder(_tileUnder)
+{
+	if (rand() % 100 + 1 > 65) content = ITEM;
+	else content = POTION;
+}
+
+LootChest::~LootChest()
+{
+	/*Reminder - gdy wychodzimy z gry gdy chest stoi to pewnie bedzie wyciek pamieci*/
+}
+
+Tile* LootChest::getTileUnder()
+{
+	return tileUnder;
+}
+
+bool LootChest::containsPotion()
+{
+	if (content == POTION) return true;
+	else return false;
 }
 
 Teleport::Teleport()

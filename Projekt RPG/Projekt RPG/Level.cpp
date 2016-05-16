@@ -49,8 +49,8 @@ Tile* Level::getTile(short tileCode)
 	case Tile::TELEPORT1:
 		tile = new Tile(tileCode, false, true);
 		break;
-	case Tile::TYPE8:
-		tile = new Tile(tileCode, true, true);
+	case Tile::LOOTCHEST1:
+		tile = new LootChest(tileCode, true, true);
 		break;
 	/*case Tile::TYPE9:
 		tile = new Tile(tileCode, true, true);
@@ -134,4 +134,24 @@ vector<Tile::Coord> Level::getNpcCoords()
 vector<vector<Tile*>> Level::getMap()
 {
 	return map;
+}
+
+void Level::spawnLootChest(sf::Vector2f chestPosition)
+{
+	int y = static_cast<int>(chestPosition.y / 64);
+	int x = static_cast<int>(chestPosition.x / 64);
+	Tile* tileUnder = map[y][x];
+	
+	Tile* newChest = new LootChest(Tile::LOOTCHEST1, true, true, tileUnder);
+	map[y][x] = newChest;
+}
+
+void Level::deleteLootChest(sf::Vector2f chestPosition)
+{
+	int y = static_cast<int>(chestPosition.y / 64);
+	int x = static_cast<int>(chestPosition.x / 64);
+	LootChest* chest = dynamic_cast<LootChest*>(map[y][x]);
+	Tile* tileUnder = chest->getTileUnder();
+	delete chest;
+	map[y][x] = tileUnder;
 }

@@ -32,21 +32,23 @@ Player::~Player()
 	equipment.clearBackpack();
 }
 
-void Player::update(Vector2f mouse, Level *level) 
+short Player::update(Vector2f mouse, Level *level) 
 {
-	TrapFountain* temp;
+	short result = 0;
+	TrapFountain* temp1;
+	LootChest* temp2;
 	Vector2f norm = mouse - sprite.getPosition();
 	float rot = atan2(norm.y, norm.x); /*gdy przod playera jest na gorze tekstury, gdyby byl na dole to zamienic x z y*/
 	rot = rot * 180.f / M_PI;
 	rot += 90;
 	sprite.setRotation(rot);
 
-	if (temp = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp->getHpChange();
+	if (temp1 = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp1->getHpChange();
 	if (parHp > parMaxHp) parHp = parMaxHp;
 	
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
-		if (status != WALK) return;
+		if (status != WALK) return result;
 		if (frame < 7) /*liczba klatek animacji - 1*/
 			frame++;
 		else
@@ -76,26 +78,107 @@ void Player::update(Vector2f mouse, Level *level)
 		}
 		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]->isWall()) /*kolizja z kaflem po lewej*/
 		{
+			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]))
+			{
+				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				{
+					if (temp2->containsPotion()) equipment.addPotion();
+					else
+					{
+						Item* item;
+						if (rand() % 2 == 0) item = new Armor();
+						else
+						{
+							if (rand() % 2 == 0) item = new Weapon(false);
+							else item = new Weapon(true);
+						}
+						equipment.addItem(item);
+					}
+					level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + 15, getPosition().y));
+					result = 1;
+				}
+			}
 			sprite.move(-getMove());
 			stop();
 		}
 		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]->isWall()) /*kolizja z kaflem po prawej*/
 		{
+			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]))
+			{
+				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				{
+					if (temp2->containsPotion()) equipment.addPotion();
+					else
+					{
+						Item* item;
+						if (rand() % 2 == 0) item = new Armor();
+						else
+						{
+							if (rand() % 2 == 0) item = new Weapon(false);
+							else item = new Weapon(true);
+						}
+						equipment.addItem(item);
+					}
+					level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15, getPosition().y));
+					result = 1;
+				}
+			}
 			sprite.move(-getMove());
 			stop();
 		}
 		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z gory*/
 		{
+			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]))
+			{
+				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				{
+					if (temp2->containsPotion()) equipment.addPotion();
+					else
+					{
+						Item* item;
+						if (rand() % 2 == 0) item = new Armor();
+						else
+						{
+							if (rand() % 2 == 0) item = new Weapon(false);
+							else item = new Weapon(true);
+						}
+						equipment.addItem(item);
+					}
+					level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + 15));
+					result = 1;
+				}
+			}
 			sprite.move(-getMove());
 			stop();
 		}
 		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z dolu*/
 		{
+			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]))
+			{
+				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				{
+					if (temp2->containsPotion()) equipment.addPotion();
+					else
+					{
+						Item* item;
+						if (rand() % 2 == 0) item = new Armor();
+						else
+						{
+							if (rand() % 2 == 0) item = new Weapon(false);
+							else item = new Weapon(true);
+						}
+						equipment.addItem(item);
+					}
+					level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15));
+					result = 1;
+				}
+			}
 			sprite.move(-getMove());
 			stop();
 		}
 		anim_clock.restart();		
 	}
+	return result;
 }
 
 void Player::walk()

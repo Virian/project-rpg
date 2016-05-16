@@ -9,7 +9,7 @@ public:
 		unsigned short x;
 		unsigned short y;
 	};
-	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TRAP1, FOUNTAIN1, TELEPORT1, TYPE8, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
+	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TRAP1, FOUNTAIN1, TELEPORT1, LOOTCHEST1, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
 	Tile();
 	Tile(short, bool, bool);
 	virtual ~Tile();
@@ -36,6 +36,20 @@ public:
 	short getHpChange();
 private:
 	sf::Clock delay;
+};
+
+class LootChest : public Tile
+{
+public:
+	enum Content { POTION, ITEM };
+	LootChest(short, bool, bool);
+	LootChest(short, bool, bool, Tile*);
+	~LootChest();
+	Tile* getTileUnder();
+	bool containsPotion();
+private:
+	Tile* tileUnder;
+	Content content;
 };
 
 class Teleport : public Tile
