@@ -313,6 +313,18 @@ void Engine::startEngine(RenderWindow &window)
 				{
 					equipment = true;
 				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1))
+				{
+					player->useSkill1();
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num2))
+				{
+					player->useSkill2();
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num3))
+				{
+					player->useSkill3();
+				}
 				for (size_t i = 0; i < npcs.size(); ++i)
 				{
 					Enemy* enemy;

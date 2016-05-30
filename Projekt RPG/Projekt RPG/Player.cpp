@@ -17,7 +17,9 @@ Player::Player(string _name) : name(_name)
 	speed = 5.5f;
 	frame = 0;
 	anim_clock.restart();
-	//name = "noname";
+	activeSkill1 = false;
+	activeSkill2 = false;
+	activeSkill3 = false;
 	parExp = 5;
 	parLvl = 1;
 	parExpForNextLevel = 83;
@@ -45,6 +47,10 @@ short Player::update(Vector2f mouse, Level *level)
 
 	if (temp1 = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp1->getHpChange();
 	if (parHp > parMaxHp) parHp = parMaxHp;
+
+	if (effectSkill1.isExpired() && activeSkill1) clearEffectSkill1();
+	if (effectSkill2.isExpired() && activeSkill2) clearEffectSkill2();
+	if (effectSkill3.isExpired() && activeSkill3) clearEffectSkill3();
 	
 	if (anim_clock.getElapsedTime() > seconds(0.04f))
 	{
@@ -353,9 +359,15 @@ std::string Juggernaut::getClassName()
 	return "Juggernaut";
 }
 
-void Juggernaut::useSkill1()
+void Juggernaut::useSkill1() /*nietykalnosc*/
 {
-
+	if (cooldownSkill1.isExpired())
+	{
+		parAgi += 99999;
+		cooldownSkill2.restart(seconds(120.f));
+		effectSkill1.restart(seconds(1.7f + parInt / 100.f)); /*+0.1s za kazde 10 int*/
+		activeSkill1 = true;
+	}
 }
 
 void Juggernaut::useSkill2()
@@ -364,6 +376,22 @@ void Juggernaut::useSkill2()
 }
 
 void Juggernaut::useSkill3()
+{
+
+}
+
+void Juggernaut::clearEffectSkill1()
+{
+	parAgi -= 99999;
+	activeSkill1 = false;
+}
+
+void Juggernaut::clearEffectSkill2()
+{
+
+}
+
+void Juggernaut::clearEffectSkill3()
 {
 
 }
@@ -388,12 +416,35 @@ void Soldier::useSkill1()
 
 }
 
-void Soldier::useSkill2()
+void Soldier::useSkill2() /*przyspieszenie*/
+{
+	if (cooldownSkill2.isExpired())
+	{
+		/*przyspiesza o stala wartosc + 0.1 za kazde 10 int*/
+		speed += 3.f + parInt / 100.f;
+		cooldownSkill2.restart(seconds(24.f));
+		effectSkill2.restart(seconds(3.5f));
+		activeSkill2 = true;
+	}
+}
+
+void Soldier::useSkill3()
 {
 
 }
 
-void Soldier::useSkill3()
+void Soldier::clearEffectSkill1()
+{
+	
+}
+
+void Soldier::clearEffectSkill2()
+{
+	speed -= 3.3f;
+	activeSkill2 = false;
+}
+
+void Soldier::clearEffectSkill3()
 {
 
 }
@@ -413,17 +464,44 @@ std::string Sentinel::getClassName()
 	return "Sentinel";
 }
 
-void Sentinel::useSkill1()
+void Sentinel::useSkill1() /*heal*/
 {
-
+	/*leczy 30% hp + 1% za kazde 10 int*/
+	if (cooldownSkill1.isExpired())
+	{
+		parHp += ((30.0 + parInt / 10.0) / 100.0) * parMaxHp;
+		cooldownSkill1.restart(seconds(40.f));
+	}
 }
 
-void Sentinel::useSkill2()
+void Sentinel::useSkill2() /*zwiekszenie szansy na dodge*/
 {
-
+	if (cooldownSkill2.isExpired())
+	{
+		parAgi += (0.33f + parInt / 100.f) * parAgi;
+		cooldownSkill2.restart(seconds(35.f));
+		effectSkill2.restart(seconds(7.f));
+		activeSkill2 = true;
+	}
 }
 
 void Sentinel::useSkill3()
+{
+
+}
+
+void Sentinel::clearEffectSkill1()
+{
+
+}
+
+void Sentinel::clearEffectSkill2()
+{
+	parAgi = 100.f * parAgi / (133.f + parInt / 10.f); /*Reminder - na razie dziala, ale nie wiem czy dla wszystkich wartosci bedzie poprawnie wracac*/
+	activeSkill2 = false;
+}
+
+void Sentinel::clearEffectSkill3()
 {
 
 }

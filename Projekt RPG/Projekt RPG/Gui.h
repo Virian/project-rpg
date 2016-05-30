@@ -39,7 +39,6 @@ private:
 	RectangleShape skill3;
 	Clock flash; /*miganie hp gdy jest niskie*/
 	vector<TextDamage*> damageInfo;
-	/*Reminder - chyba dodac potki*/
 	/*pauza*/
 	RectangleShape pauseMenu;
 	RectangleShape resumeButton;

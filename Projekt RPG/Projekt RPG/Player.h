@@ -3,6 +3,7 @@
 #include <string>
 #include "Level.h"
 #include "Equipment.h"
+#include "Time.h"
 
 using namespace sf;
 
@@ -42,9 +43,15 @@ public:
 	void restartAttackInterval();
 	void increaseExperience(unsigned);
 	/*skille*/
+	bool activeSkill1;
+	bool activeSkill2;
+	bool activeSkill3;
 	virtual void useSkill1() = 0;
 	virtual void useSkill2() = 0;
 	virtual void useSkill3() = 0;
+	virtual void clearEffectSkill1() = 0;
+	virtual void clearEffectSkill2() = 0;
+	virtual void clearEffectSkill3() = 0;
 protected:
 	Sprite sprite;
 	Texture texture;
@@ -65,6 +72,12 @@ protected:
 	unsigned short parAgi;
 	unsigned short parInt;
 	Clock attackInterval;
+	Timer cooldownSkill1;
+	Timer cooldownSkill2;
+	Timer cooldownSkill3;
+	Timer effectSkill1;
+	Timer effectSkill2;
+	Timer effectSkill3;
 };
 
 class Juggernaut : public Player
@@ -76,6 +89,9 @@ public:
 	void useSkill1();
 	void useSkill2();
 	void useSkill3();
+	void clearEffectSkill1();
+	void clearEffectSkill2();
+	void clearEffectSkill3();
 };
 
 class Soldier : public Player
@@ -87,6 +103,9 @@ public:
 	void useSkill1();
 	void useSkill2();
 	void useSkill3();
+	void clearEffectSkill1();
+	void clearEffectSkill2();
+	void clearEffectSkill3();
 };
 
 class Sentinel : public Player
@@ -98,4 +117,7 @@ public:
 	void useSkill1();
 	void useSkill2();
 	void useSkill3();
+	void clearEffectSkill1();
+	void clearEffectSkill2();
+	void clearEffectSkill3();
 };
