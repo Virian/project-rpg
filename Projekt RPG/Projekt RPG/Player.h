@@ -9,7 +9,7 @@ using namespace sf;
 class Player : public Drawable, Transformable
 {
 public:
-	Player();
+	Player(string);
 	virtual ~Player();
 	short update(Vector2f, Level*);
 	void walk();
@@ -41,7 +41,11 @@ public:
 	Clock getAttackInterval();
 	void restartAttackInterval();
 	void increaseExperience(unsigned);
-protected: /*dodac co najmniej str, dex, int*/
+	/*skille*/
+	virtual void useSkill1() = 0;
+	virtual void useSkill2() = 0;
+	virtual void useSkill3() = 0;
+protected:
 	Sprite sprite;
 	Texture texture;
 	Status status;
@@ -61,29 +65,37 @@ protected: /*dodac co najmniej str, dex, int*/
 	unsigned short parAgi;
 	unsigned short parInt;
 	Clock attackInterval;
-	//co z setName ??
 };
 
 class Juggernaut : public Player
 {
 public:	
-	Juggernaut();
+	Juggernaut(string);
 	~Juggernaut();
 	std::string getClassName();
+	void useSkill1();
+	void useSkill2();
+	void useSkill3();
 };
 
 class Soldier : public Player
 {
 public:	
-	Soldier();
+	Soldier(string);
 	~Soldier();
 	std::string getClassName();
+	void useSkill1();
+	void useSkill2();
+	void useSkill3();
 };
 
 class Sentinel : public Player
 {
 public:	
-	Sentinel();
+	Sentinel(string);
 	~Sentinel();
 	std::string getClassName();
+	void useSkill1();
+	void useSkill2();
+	void useSkill3();
 };

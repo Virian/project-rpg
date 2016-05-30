@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <cmath>
 
-Player::Player()
+Player::Player(string _name) : name(_name)
 {
 	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
 	{
@@ -17,7 +17,7 @@ Player::Player()
 	speed = 5.5f;
 	frame = 0;
 	anim_clock.restart();
-	name = "noname";
+	//name = "noname";
 	parExp = 5;
 	parLvl = 1;
 	parExpForNextLevel = 83;
@@ -338,7 +338,7 @@ void Player::restartAttackInterval()
 	attackInterval.restart();
 }
 
-Juggernaut::Juggernaut()
+Juggernaut::Juggernaut(string _name) : Player(_name)
 {
 	sprite.setColor(Color(255, 140, 140));
 }
@@ -353,7 +353,22 @@ std::string Juggernaut::getClassName()
 	return "Juggernaut";
 }
 
-Soldier::Soldier()
+void Juggernaut::useSkill1()
+{
+
+}
+
+void Juggernaut::useSkill2()
+{
+
+}
+
+void Juggernaut::useSkill3()
+{
+
+}
+
+Soldier::Soldier(string _name) : Player(_name)
 {
 	sprite.setColor(Color::Yellow);
 }
@@ -368,7 +383,22 @@ std::string Soldier::getClassName()
 	return "Soldier";
 }
 
-Sentinel::Sentinel()
+void Soldier::useSkill1()
+{
+
+}
+
+void Soldier::useSkill2()
+{
+
+}
+
+void Soldier::useSkill3()
+{
+
+}
+
+Sentinel::Sentinel(string _name) : Player(_name)
 {
 	sprite.setColor(Color(140, 140, 255));
 }
@@ -381,4 +411,19 @@ Sentinel::~Sentinel()
 std::string Sentinel::getClassName()
 {
 	return "Sentinel";
+}
+
+void Sentinel::useSkill1()
+{
+
+}
+
+void Sentinel::useSkill2()
+{
+
+}
+
+void Sentinel::useSkill3()
+{
+
 }

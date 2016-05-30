@@ -126,7 +126,7 @@ void Engine::setMap(RenderWindow &window, string filePath)
 	window.setView(view);
 }
 
-Engine::Engine(RenderWindow &_window)
+Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 {
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
@@ -142,7 +142,18 @@ Engine::Engine(RenderWindow &_window)
 	{
 		tileSprites[y].resize(tileCountWidth, standard);
 	}
-	player = new Soldier(); /*Reminder - np. tu mozna zmieniac na Soldiera, Juggernauta, Sentinela*/
+	switch (classCode)
+	{
+	case 1:
+		player = new Soldier(characterName);
+		break;
+	case 2:
+		player = new Sentinel(characterName);
+		break;
+	case 3:
+		player = new Juggernaut(characterName);
+		break;
+	}
 	setMap(_window, "test.level"); /*Reminder - do zmiany sciezka*/
 	startEngine(_window);	
 }

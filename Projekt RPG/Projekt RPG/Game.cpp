@@ -16,7 +16,7 @@ Game::Game()
 		return;
 	}
 	state = MENU;
-	window.create(VideoMode(1280, 720), "Galaxy Guardian Pre-Alpha 1.11", Style::Titlebar);
+	window.create(VideoMode(1280, 720), "Galaxy Guardian Alpha 1.00", Style::Titlebar);
 }
 
 Game::~Game()
@@ -28,7 +28,7 @@ void Game::menu()
 {
 	Text title("Galaxy Guardian", font, 150);
 	const short numberOfOptions = 3; /*ilosc opcji do klikniecia w menu*/
-	string options[] = {"New game", "Load game", "Quit"};
+	string options[] = { "New game", "Load game", "Quit" };
 	Text text[numberOfOptions];
 	/*Reminder - do dodania na pewno jakies tlo
 	mozna tez zamienic napisy na obrazki */
@@ -84,7 +84,103 @@ void Game::menu()
 
 void Game::newGame()
 {
-	Engine engine(window);
+	Text header("Create your character", font, 120);
+	Text ok("OK", font, 120);
+	Text select("Select your class", font, 90);
+	Text enterName("Enter your name", font, 90);
+	const short numberOfClasses = 3;
+	string classesNames[] = { "Soldier", "Sentinel", "Juggernaut" };
+	Text classes[numberOfClasses];
+	string characterName;
+	Text name;
+	short checked = 0;
+	bool created = false;
+
+	header.setStyle(Text::Bold);
+	header.setPosition(1280 / 2 - header.getGlobalBounds().width / 2, 0.f);
+	ok.setStyle(Text::Bold);
+	ok.setPosition(1280 / 2 - ok.getGlobalBounds().width / 2, 570.f);
+	select.setPosition(1280 / 2 - select.getGlobalBounds().width / 2, 150.f);
+	enterName.setPosition(1280 / 2 - enterName.getGlobalBounds().width / 2, 370.f);
+	name.setFont(font);
+	name.setCharacterSize(120);
+	for (short i = 0; i < numberOfClasses; i++)
+	{
+		classes[i].setFont(font);
+		classes[i].setCharacterSize(70);
+		classes[i].setString(classesNames[i]);
+		classes[i].setPosition(200.f + i * 300.f, 270.f);
+	}
+
+	while (!created)
+	{
+		Vector2f mouse(Mouse::getPosition(window)); /*window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu*/
+		Event event;
+
+		while (window.pollEvent(event))
+		{
+			if ((ok.getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+			{				
+				if (checked == 0) MessageBox(NULL, "Select a class for your character!", "ERROR", NULL);
+				else if (characterName.size() == 0) MessageBox(NULL, "Enter a name for your character!", "ERROR", NULL);
+				else created = true;
+			}
+			else if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::BackSpace) && (characterName.size() > 0)) characterName.pop_back();
+			else if ((event.type == Event::TextEntered) && (characterName.size() < 20) && ((event.text.unicode > 96) && (event.text.unicode < 123)) || ((event.text.unicode > 64) && (event.text.unicode < 91)) || (event.text.unicode == 32)) characterName.push_back(event.text.unicode);
+			for (short i = 0; i < numberOfClasses; ++i)
+			{
+				if ((event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left) && (classes[i].getGlobalBounds().contains(mouse))) checked = i + 1;
+			}
+		}
+		window.clear();
+		window.draw(background);
+		header.move(Vector2f(4, 4));
+		header.setColor(Color::Black);
+		window.draw(header);
+		header.move(Vector2f(-4, -4));
+		header.setColor(Color::White);
+		window.draw(header);
+		select.move(Vector2f(4, 4));
+		select.setColor(Color::Black);
+		window.draw(select);
+		select.move(Vector2f(-4, -4));
+		select.setColor(Color::White);
+		window.draw(select);
+		enterName.move(Vector2f(4, 4));
+		enterName.setColor(Color::Black);
+		window.draw(enterName);
+		enterName.move(Vector2f(-4, -4));
+		enterName.setColor(Color::White);
+		window.draw(enterName);
+		ok.move(Vector2f(4, 4));
+		ok.setColor(Color::Black);
+		window.draw(ok);
+		ok.move(Vector2f(-4, -4));
+		if (ok.getGlobalBounds().contains(mouse)) ok.setColor(Color::Green);
+		else ok.setColor(Color::White);
+		window.draw(ok);
+		name.setString(characterName);
+		name.setPosition(1280 / 2 - name.getGlobalBounds().width / 2, 460.f);
+		name.move(Vector2f(4, 4));
+		name.setColor(Color::Black);
+		window.draw(name);
+		name.move(Vector2f(-4, -4));
+		name.setColor(Color::White);
+		window.draw(name);
+		for (short i = 0; i < numberOfClasses; i++)
+		{
+			classes[i].move(Vector2f(3, 3));
+			classes[i].setColor(Color::Black);
+			window.draw(classes[i]);
+			classes[i].move(Vector2f(-3, -3));
+			if (checked == i + 1) classes[i].setColor(Color::Green);
+			else classes[i].setColor(Color::White);
+			window.draw(classes[i]);
+		}
+		window.display();
+	}
+	
+	Engine engine(window, characterName, checked);
 
 	state = MENU;
 }

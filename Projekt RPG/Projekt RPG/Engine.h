@@ -23,7 +23,7 @@ private:
 	void updateMap();
 	void fight(unsigned, Attacker);
 public:
-	Engine(RenderWindow&);
+	Engine(RenderWindow&, string, int);
 	~Engine();
 	void startEngine(RenderWindow&);
 };
