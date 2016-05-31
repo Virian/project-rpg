@@ -191,7 +191,10 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 	case PLAYER:
 		if (player->getEquipment().getActiveWeapon()->isRanged())
 		{
-			if (player->getAttackInterval().getElapsedTime().asSeconds() < 0.5) return;
+			double interval;
+			if (player->isActiveSkill1() && player->getClassName() == "Soldier") interval = 0.3;
+			else interval = 0.5;
+			if (player->getAttackInterval().getElapsedTime().asSeconds() < interval) return;
 			hitChance = rand() % 20 + 1 + player->getAgi() + 3;
 		}
 		else

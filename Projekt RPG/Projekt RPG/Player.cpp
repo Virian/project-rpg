@@ -369,6 +369,21 @@ void Player::restartAttackInterval()
 	attackInterval.restart();
 }
 
+bool Player::isActiveSkill1()
+{
+	return activeSkill1;
+}
+
+bool Player::isActiveSkill2()
+{
+	return activeSkill2;
+}
+
+bool Player::isActiveSkill3()
+{
+	return activeSkill3;
+}
+
 Juggernaut::Juggernaut(string _name) : Player(_name)
 {
 	sprite.setColor(Color(255, 140, 140));
@@ -443,9 +458,14 @@ std::string Soldier::getClassName()
 	return "Soldier";
 }
 
-void Soldier::useSkill1()
+void Soldier::useSkill1() /*szybsze strzelanie*/
 {
-
+	if (cooldownSkill1.isExpired())
+	{
+		cooldownSkill1.restart(seconds(40.f));
+		effectSkill1.restart(seconds(1.f + parInt / 100.f));
+		activeSkill1 = true;
+	}
 }
 
 void Soldier::useSkill2() /*przyspieszenie*/
@@ -467,7 +487,7 @@ void Soldier::useSkill3()
 
 void Soldier::clearEffectSkill1()
 {
-	
+	activeSkill1 = false;
 }
 
 void Soldier::clearEffectSkill2()

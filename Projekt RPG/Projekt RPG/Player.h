@@ -47,9 +47,9 @@ public:
 	void restartAttackInterval();
 	void increaseExperience(unsigned);
 	/*skille*/
-	bool activeSkill1;
-	bool activeSkill2;
-	bool activeSkill3;
+	bool isActiveSkill1();
+	bool isActiveSkill2();
+	bool isActiveSkill3();
 	virtual void useSkill1() = 0;
 	virtual void useSkill2() = 0;
 	virtual void useSkill3() = 0;
@@ -77,6 +77,9 @@ protected:
 	unsigned short parInt;
 	unsigned short parPointsToSpend;
 	Clock attackInterval;
+	bool activeSkill1;
+	bool activeSkill2;
+	bool activeSkill3;
 	Timer cooldownSkill1;
 	Timer cooldownSkill2;
 	Timer cooldownSkill3;
