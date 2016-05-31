@@ -27,12 +27,16 @@ public:
 	Equipment getEquipment();
 	short getHp();
 	short getMaxHp();
+	unsigned short getPointsToSpend();
 	unsigned getExp();
 	unsigned getExpForNextLevel();
 	unsigned short getLvl();
 	unsigned short getStr();
 	unsigned short getAgi();
 	unsigned short getInt();
+	void increaseStr();
+	void increaseAgi();
+	void increaseInt();
 	void levelUp();
 	void deleteItem(short);
 	void addItem(Item*);
@@ -71,6 +75,7 @@ protected:
 	unsigned short parStr;
 	unsigned short parAgi;
 	unsigned short parInt;
+	unsigned short parPointsToSpend;
 	Clock attackInterval;
 	Timer cooldownSkill1;
 	Timer cooldownSkill2;

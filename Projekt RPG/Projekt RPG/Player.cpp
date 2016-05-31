@@ -20,12 +20,13 @@ Player::Player(string _name) : name(_name)
 	activeSkill1 = false;
 	activeSkill2 = false;
 	activeSkill3 = false;
-	parExp = 5;
 	parLvl = 1;
+	parPointsToSpend = 0;
+	parExp = 0;	
 	parExpForNextLevel = 83;
 	parMaxHp = parHp = 100;
-	parHp = 81;
-	parStr = parAgi = parInt = 10; /*Reminder - pewnie tez do zmiany*/
+	//parHp = 81;
+	//parStr = parAgi = parInt = 10; /*Reminder - pewnie tez do zmiany*/
 	attackInterval.restart();
 }
 
@@ -261,6 +262,11 @@ short Player::getMaxHp()
 	return parMaxHp;
 }
 
+unsigned short Player::getPointsToSpend()
+{
+	return parPointsToSpend;
+}
+
 unsigned Player::getExp()
 {
 	return parExp;
@@ -291,6 +297,24 @@ unsigned short Player::getInt()
 	return parInt;
 }
 
+void Player::increaseStr()
+{
+	++parStr;
+	--parPointsToSpend;
+}
+
+void Player::increaseAgi()
+{
+	++parAgi;
+	--parPointsToSpend;
+}
+
+void Player::increaseInt()
+{
+	++parInt;
+	--parPointsToSpend;
+}
+
 void Player::levelUp()
 {
 	double sum = 0.0;
@@ -302,6 +326,7 @@ void Player::levelUp()
 		sum += floor(i + 300.0 * pow(2.0, i/7.0));
 	}
 	parExpForNextLevel = static_cast<int>(floor(sum/4.0));
+	parPointsToSpend += 5;
 }
 
 void Player::deleteItem(short position)
@@ -347,6 +372,9 @@ void Player::restartAttackInterval()
 Juggernaut::Juggernaut(string _name) : Player(_name)
 {
 	sprite.setColor(Color(255, 140, 140));
+	parStr = 18;
+	parAgi = 6;
+	parInt = 6;
 }
 
 Juggernaut::~Juggernaut()
@@ -363,7 +391,7 @@ void Juggernaut::useSkill1() /*nietykalnosc*/
 {
 	if (cooldownSkill1.isExpired())
 	{
-		parAgi += 99999;
+		parAgi += 20000;
 		cooldownSkill2.restart(seconds(120.f));
 		effectSkill1.restart(seconds(1.7f + parInt / 100.f)); /*+0.1s za kazde 10 int*/
 		activeSkill1 = true;
@@ -382,7 +410,7 @@ void Juggernaut::useSkill3()
 
 void Juggernaut::clearEffectSkill1()
 {
-	parAgi -= 99999;
+	parAgi -= 20000;
 	activeSkill1 = false;
 }
 
@@ -399,6 +427,10 @@ void Juggernaut::clearEffectSkill3()
 Soldier::Soldier(string _name) : Player(_name)
 {
 	sprite.setColor(Color::Yellow);
+	parAgi = 16;
+	parStr = 6;
+	parInt = 8;
+
 }
 
 Soldier::~Soldier()
@@ -452,6 +484,9 @@ void Soldier::clearEffectSkill3()
 Sentinel::Sentinel(string _name) : Player(_name)
 {
 	sprite.setColor(Color(140, 140, 255));
+	parInt = 19;
+	parStr = 5;
+	parAgi = 6;
 }
 
 Sentinel::~Sentinel()

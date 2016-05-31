@@ -121,6 +121,15 @@ void Engine::setMap(RenderWindow &window, string filePath)
 	{
 		Npc* tmp = new Enemy(level.getNpcCoords()[i]);
 		npcs.push_back(tmp);
+		Enemy* temp;
+		if (temp = dynamic_cast<Enemy*>(tmp))
+		{
+			Gui::HpBar* hpInfo = new Gui::HpBar();
+			hpInfo->characterPosition = temp->getPosition();
+			hpInfo->currentHp.setSize(Vector2f((temp->getHp() / temp->getMaxHp()) * 64.f,6));
+			hpInfo->missingHp.setSize(Vector2f(64.f - (temp->getHp() / temp->getMaxHp()) * 64.f,6));
+			gui.pushHpInfo(hpInfo);
+		}
 	}
 	updateMap();
 	window.setView(view);
@@ -165,6 +174,7 @@ Engine::~Engine()
 	{
 		delete npcs[i];
 	}
+
 }
 
 void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
@@ -419,6 +429,7 @@ void Engine::startEngine(RenderWindow &window)
 					if (enemy->isAlive())
 					{
 						enemy->update(&level, player->getPosition());
+						gui.updateHpInfo(i, enemy->getPosition(), enemy->getHp(), enemy->getMaxHp());
 						if ((enemy->isEngaged()) || (enemy->isAttacking()))
 						{
 							if ((enemy->isRanged()) || ((!enemy->isRanged()) && (distance < 70)))
@@ -438,6 +449,7 @@ void Engine::startEngine(RenderWindow &window)
 							level.spawnLootChest(npcs[i]->getPosition());
 							updateMap();
 						}
+						gui.eraseHpInfo(i);
 						delete npcs[i];
 						npcs.erase(npcs.begin() + i);
 						--i;						
@@ -498,6 +510,25 @@ void Engine::startEngine(RenderWindow &window)
 				{
 					equipment = false;
 					position = -1;
+				}
+				for (short i = 0; i < 3; ++i)
+				{
+					Vector2f plusPosition = window.mapPixelToCoords(Vector2i(340, 235 + i * 30));
+					if ((FloatRect(plusPosition, Vector2f(20, 20)).contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left) && (player->getPointsToSpend() > 0))
+					{
+						switch (i)
+						{
+						case 0:
+							player->increaseStr();
+							break;
+						case 1:
+							player->increaseInt();
+							break;
+						case 2:
+							player->increaseAgi();
+							break;
+						}
+					}
 				}
 				for (short i = 0; i < 2; ++i)
 				{

@@ -86,11 +86,27 @@ Gui::Gui()
 	itemStats.setCharacterSize(55);
 	activeEquipmentInfo.setFont(font);
 	activeEquipmentInfo.setCharacterSize(65);
+
+	plus.setSize(Vector2f(20, 20));
+	plus.setFillColor(Color::Green);
 }
 
 Gui::~Gui()
 {
+	for (size_t i = 0; i < damageInfo.size(); ++i)
+	{
+		delete damageInfo[i];
+	}
+	for (size_t i = 0; i < hpInfo.size(); ++i)
+	{
+		delete hpInfo[i];
+	}
+}
 
+Gui::HpBar::HpBar()
+{
+	currentHp.setFillColor(Color::Red);
+	missingHp.setFillColor(Color(120, 0, 0));
 }
 
 void Gui::drawScreen(RenderWindow &window, Player* player)
@@ -121,6 +137,14 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 				damageInfo[i]->tick.restart();
 			}
 		}
+	}
+
+	for (size_t i = 0; i < hpInfo.size(); ++i)
+	{
+		hpInfo[i]->currentHp.setPosition(Vector2f(hpInfo[i]->characterPosition.x - 32, hpInfo[i]->characterPosition.y - 24));
+		hpInfo[i]->missingHp.setPosition(Vector2f(hpInfo[i]->characterPosition.x - 32 + hpInfo[i]->currentHp.getGlobalBounds().width, hpInfo[i]->characterPosition.y - 24));
+		window.draw(hpInfo[i]->currentHp);
+		window.draw(hpInfo[i]->missingHp);
 	}
 
 	float hpPercent = (static_cast<float>(currentHp) / static_cast<float>(maxHp)) * 100.0f;
@@ -228,9 +252,9 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	playerStats.setString("Name: " + player->getName() + "\nClass: " + player->getClassName() + "\nLevel: " + to_string(player->getLvl())
 		+ "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel())
 		+ "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: "
-		+ to_string(player->getAgi()));
+		+ to_string(player->getAgi()) + "\nAvailable points to spend: " + to_string(player->getPointsToSpend()));
 	playerStats.setPosition(window.mapPixelToCoords(Vector2i(130, 40)));
-
+	
 	backpack = player->getEquipment().getBackpack();
 	activeArmor = player->getEquipment().getActiveArmor();
 	activeWeapon = player->getEquipment().getActiveWeapon();
@@ -268,6 +292,15 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	window.draw(itemInfoHeader);
 	window.draw(playerStats);
 	window.draw(itemStats);
+	if (player->getPointsToSpend() > 0)
+	{
+		plus.setPosition(window.mapPixelToCoords(Vector2i(340, 235)));
+		window.draw(plus);
+		plus.setPosition(window.mapPixelToCoords(Vector2i(340, 265)));
+		window.draw(plus);
+		plus.setPosition(window.mapPixelToCoords(Vector2i(340, 295)));
+		window.draw(plus);
+	}
 
 	for (short i = 0; i < 2; ++i)
 	{
@@ -359,4 +392,22 @@ void Gui::pushDamageInfo(TextDamage* newText)
 	newText->tick.restart();
 	newText->lifeTime.restart();
 	damageInfo.push_back(newText);
+}
+
+void Gui::pushHpInfo(HpBar* newHpInfo)
+{
+	hpInfo.push_back(newHpInfo);
+}
+
+void Gui::updateHpInfo(size_t i, Vector2f position, short currentHp, short maximumHp)
+{
+	hpInfo[i]->characterPosition = position;
+	hpInfo[i]->currentHp.setSize(Vector2f((static_cast<float>(currentHp) / static_cast<float>(maximumHp)) * 64.f, 6));
+	hpInfo[i]->missingHp.setSize(Vector2f(64.f - (static_cast<float>(currentHp) / static_cast<float>(maximumHp)) * 64.f, 6));
+}
+
+void Gui::eraseHpInfo(size_t i)
+{
+	delete hpInfo[i];
+	hpInfo.erase(hpInfo.begin() + i);
 }

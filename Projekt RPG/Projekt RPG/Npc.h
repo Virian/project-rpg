@@ -43,6 +43,8 @@ public:
 	void engage();
 	void attack();
 	void takeDamage(unsigned);
+	short getHp();
+	short getMaxHp();
 	unsigned short getStr();
 	unsigned short getAgi();
 	unsigned short getAttackValue();
@@ -65,6 +67,7 @@ private:
 	Status status;
 	/*statystyki*/
 	short parHp;
+	short parMaxHp;
 	unsigned short parStr;
 	unsigned short parAgi;
 	unsigned short parInt; /*moze okazac sie niepotrzebny*/

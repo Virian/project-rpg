@@ -12,6 +12,12 @@ public:
 		Clock lifeTime;
 		Clock tick;
 	};
+	struct HpBar {
+		Vector2f characterPosition;
+		RectangleShape currentHp;
+		RectangleShape missingHp;
+		HpBar();
+	};
 	Gui();
 	~Gui();
 	void drawScreen(RenderWindow&, Player*);
@@ -24,6 +30,9 @@ public:
 	void setLoadHighlight(short);
 	void setQuitHighlight(short);
 	void pushDamageInfo(TextDamage*);
+	void pushHpInfo(HpBar*);
+	void updateHpInfo(size_t, Vector2f, short, short);
+	void eraseHpInfo(size_t);
 private:
 	virtual void draw(RenderTarget&, RenderStates) const;
 	Texture texture;
@@ -39,6 +48,7 @@ private:
 	RectangleShape skill3;
 	Clock flash; /*miganie hp gdy jest niskie*/
 	vector<TextDamage*> damageInfo;
+	vector<HpBar*> hpInfo;
 	/*pauza*/
 	RectangleShape pauseMenu;
 	RectangleShape resumeButton;
@@ -49,6 +59,7 @@ private:
 	RectangleShape activeEquipment;
 	RectangleShape characterInfo;
 	RectangleShape itemInfo;
+	RectangleShape plus; /*Reminder - do zamiany na obrazek plusa*/
 	Sprite backpackSlot;
 	Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
 	Text playerStats;

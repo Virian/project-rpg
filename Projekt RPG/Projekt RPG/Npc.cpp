@@ -67,7 +67,7 @@ Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
 
-	parHp = parStr = parAgi = parInt = 10;
+	parHp = parMaxHp = parStr = parAgi = parInt = 10;
 	experienceGiven = 20; /*Reminder - do zmiany*/
 	alive = true;
 	attackValue = rand() % 4 + 4;
@@ -281,6 +281,16 @@ void Enemy::takeDamage(unsigned damage)
 {
 	parHp -= damage;
 	if (parHp <= 0) alive = false;
+}
+
+short Enemy::getHp()
+{
+	return parHp;
+}
+
+short Enemy::getMaxHp()
+{
+	return parMaxHp;
 }
 
 unsigned short Enemy::getStr()
