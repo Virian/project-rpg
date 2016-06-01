@@ -210,7 +210,14 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 			if (player->getEquipment().getActiveWeapon()->isRanged())
 				damage = player->getEquipment().getActiveWeapon()->getAttackValue();
 			else
+			{
 				damage = player->getEquipment().getActiveWeapon()->getAttackValue() + player->getStr() / 15;
+				if (player->isActiveSkill2() && player->getClassName() == "Juggernaut")
+				{
+					damage += damage / 2;
+					player->clearEffectSkill2();
+				}
+			}
 
 			enemy->takeDamage(damage);
 			damageInfo->text.setString(std::to_string(damage));

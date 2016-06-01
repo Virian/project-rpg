@@ -407,15 +407,20 @@ void Juggernaut::useSkill1() /*nietykalnosc*/
 	if (cooldownSkill1.isExpired())
 	{
 		parAgi += 20000;
-		cooldownSkill2.restart(seconds(120.f));
+		cooldownSkill1.restart(seconds(120.f));
 		effectSkill1.restart(seconds(1.7f + parInt / 100.f)); /*+0.1s za kazde 10 int*/
 		activeSkill1 = true;
 	}
 }
 
-void Juggernaut::useSkill2()
+void Juggernaut::useSkill2() /*mocniejszy atak o 50%*/
 {
-
+	if (cooldownSkill2.isExpired())
+	{
+		cooldownSkill2.restart(seconds(10.f - parInt / 50.f)); /*-0.1s za kazde 5 int*/
+		effectSkill2.restart(seconds(3.f));
+		activeSkill2 = true;
+	}
 }
 
 void Juggernaut::useSkill3()
@@ -431,7 +436,7 @@ void Juggernaut::clearEffectSkill1()
 
 void Juggernaut::clearEffectSkill2()
 {
-
+	activeSkill2 = false;
 }
 
 void Juggernaut::clearEffectSkill3()
