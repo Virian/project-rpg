@@ -47,21 +47,26 @@ Player::Player(string _name, fstream &file) : name(_name)
 	activeSkill3 = false;
 
 	string text, name;
-	int value;
+	short value;
 	file >> parLvl >> parExp >> parExpForNextLevel;
 	file >> parHp >> parMaxHp;
 	file >> parStr >> parInt >> parAgi >> parPointsToSpend;
+	file >> value;
+	equipment.setPotionCount(value);
 	file >> text;
 	if (text == "[ACTIVEWEAPON]")
 	{
 		file >> text;
 		if (text != "[NULL]")
 		{
-			file >> text;
+			Item* tmp;
 			file >> value;
 			getline(file, name);
 			name.erase(0, 1);
-			if (text == "[RANGED]")
+			if (text == "[RANGED]") tmp = new Weapon(true);
+			else tmp = new Weapon(false);
+			equipment.addItem(tmp);
+			equipment.swapActiveItem(0);
 		}
 	}
 	while (!file.eof())

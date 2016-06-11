@@ -134,6 +134,11 @@ short Equipment::getPotionCount()
 	return potionCount;
 }
 
+void Equipment::setPotionCount(short _count)
+{
+	potionCount = _count;
+}
+
 void Equipment::addPotion()
 {
 	++potionCount;
