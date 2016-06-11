@@ -22,6 +22,7 @@ private:
 	void setMap(RenderWindow&, string);
 	void updateMap();
 	void fight(unsigned, Attacker);
+	void saveGame();
 public:
 	Engine(RenderWindow&, string, int);
 	~Engine();

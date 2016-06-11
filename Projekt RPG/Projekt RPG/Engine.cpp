@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include <Windows.h>
+#include <fstream>
 
 void Engine::updateMap()
 {
@@ -308,6 +309,50 @@ void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, s
 	window.display();
 }
 
+void Engine::saveGame()
+{
+	fstream file;
+
+	file.open("SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
+	file << player->getName() << " " << player->getClassName() << endl;
+	file << player->getLvl() << " " << player->getExp() << " " << player->getExpForNextLevel() << endl;
+	file << player->getHp() << " " << player->getMaxHp() << endl;
+	file << player->getStr() << " " << player->getInt() << " " << player->getAgi() << " " << player->getPointsToSpend() << endl;
+	file << player->getEquipment().getPotionCount() << endl;
+	file << "[ACTIVEWEAPON] ";
+	if (player->getEquipment().getActiveWeapon() == NULL) file << "[NULL]" << endl;
+	else
+	{
+		if (player->getEquipment().getActiveWeapon()->isRanged()) file << "[RANGED] ";
+		else file << "[MELEE] ";
+		file << player->getEquipment().getActiveWeapon()->getAttackValue() << " " << player->getEquipment().getActiveWeapon()->getName() << endl; /*Reminder - bedzie sie krzaczyc na dluzszych nazwach*/
+	}
+	file << "[ACTIVEARMOR] ";
+	if (player->getEquipment().getActiveArmor() == NULL) file << "[NULL]" << endl;
+	else
+	{
+		file << player->getEquipment().getActiveArmor()->getArmorValue() << " " << player->getEquipment().getActiveArmor()->getName() << endl;
+	}
+	for (size_t i = 0; i < player->getEquipment().getBackpack().size(); ++i)
+	{
+		Armor* tempArmor;
+		Weapon* tempWeapon;
+
+		if (tempArmor = dynamic_cast<Armor*>(player->getEquipment().getBackpack()[i]))
+		{
+			file << "[ARMOR] " << tempArmor->getArmorValue() << " " << tempArmor->getName() << endl;
+		}
+		else if (tempWeapon = dynamic_cast<Weapon*>(player->getEquipment().getBackpack()[i]))
+		{
+			if (tempWeapon->isRanged()) file << "[WEAPON] [RANGED] " << tempWeapon->getAttackValue() << " " << tempWeapon->getName() << endl;
+			else file << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getName() << endl;
+		}
+	}
+	file << level.getLevelName() << endl;
+	/*Reminder - jeszcze miejsce na mapie jesli mialyby byc tylko wyznaczone miejsca do zapisu*/
+	file.close();
+}
+
 void Engine::startEngine(RenderWindow &window)
 {
 	bool quit = false;
@@ -524,6 +569,11 @@ void Engine::startEngine(RenderWindow &window)
 				if ((gui.getResumeButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
 				{
 					pause = false;
+				}
+				if ((gui.getLoadButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				{
+					saveGame();
+					MessageBox(NULL, "Successfully saved game!", "SUCCESS", NULL);
 				}
 			}
 			if (gui.getResumeButton().getGlobalBounds().contains(worldPos)) gui.setResumeHighlight(1);

@@ -68,6 +68,7 @@ bool Level::load(string filePath)
 
 	file.open(filePath);
 	if (!file.is_open()) return false;
+	levelName = filePath;
 	npcsCoords.clear();
 	file >> width >> height;
 	if ((height == 0) || (width == 0))
@@ -155,4 +156,9 @@ void Level::deleteLootChest(sf::Vector2f chestPosition)
 	Tile* tileUnder = chest->getTileUnder();
 	delete chest;
 	map[y][x] = tileUnder;
+}
+
+string Level::getLevelName()
+{
+	return levelName;
 }
