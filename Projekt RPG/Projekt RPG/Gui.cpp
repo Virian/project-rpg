@@ -340,6 +340,29 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	}	
 }
 
+void Gui::drawDeathScreen(RenderWindow& window)
+{
+	Text info1("You are dead!", font, 200);
+	Text info2("Press ENTER to return to the menu", font, 90);
+
+	info1.setPosition(window.mapPixelToCoords(Vector2i(window.getSize().x / 2 - info1.getGlobalBounds().width / 2, 120)));
+	info2.setPosition(window.mapPixelToCoords(Vector2i(window.getSize().x / 2 - info2.getGlobalBounds().width / 2, 400)));
+
+	info1.setColor(Color::Black);
+	info1.move(Vector2f(4, 4));
+	window.draw(info1);
+	info1.setColor(Color::White);
+	info1.move(Vector2f(-4, -4));
+	window.draw(info1);
+
+	info2.setColor(Color::Black);
+	info2.move(Vector2f(4, 4));
+	window.draw(info2);
+	info2.setColor(Color::White);
+	info2.move(Vector2f(-4, -4));
+	window.draw(info2);
+}
+
 void Gui::draw(RenderTarget &target, RenderStates states) const
 {
 	states.transform *= getTransform();
@@ -386,7 +409,6 @@ void Gui::setQuitHighlight(short swtch)
 void Gui::pushDamageInfo(TextDamage* newText)
 {
 	newText->text.setFont(font);
-	//newText->text.setColor(Color::Red);
 	newText->text.setCharacterSize(40);
 	newText->text.move(-newText->text.getGlobalBounds().width / 2, 0.0);
 	newText->tick.restart();

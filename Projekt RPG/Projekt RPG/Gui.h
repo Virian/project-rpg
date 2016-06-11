@@ -23,6 +23,7 @@ public:
 	void drawScreen(RenderWindow&, Player*);
 	void drawPauseMenu(RenderWindow&);
 	void drawEquipment(RenderWindow&, Player*, short);
+	void drawDeathScreen(RenderWindow&);
 	RectangleShape getResumeButton();
 	RectangleShape getLoadButton();
 	RectangleShape getQuitButton();

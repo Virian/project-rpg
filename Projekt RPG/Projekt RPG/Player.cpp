@@ -25,8 +25,6 @@ Player::Player(string _name) : name(_name)
 	parExp = 0;	
 	parExpForNextLevel = 83;
 	parMaxHp = parHp = 100;
-	//parHp = 81;
-	//parStr = parAgi = parInt = 10; /*Reminder - pewnie tez do zmiany*/
 	attackInterval.restart();
 }
 

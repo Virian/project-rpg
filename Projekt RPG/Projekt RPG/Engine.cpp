@@ -263,10 +263,6 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 
 			player->takeDamage(damage);
 			delete damageInfo;
-			/*damageInfo->text.setString(std::to_string(damage));
-			damageInfo->text.setColor(Color::Red);
-			damageInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
-			gui.pushDamageInfo(damageInfo);*/
 		}
 		else
 		{
@@ -281,7 +277,7 @@ void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
 	
 }
 
-void Engine::draw(RenderWindow &window, bool pause, bool equipment, short position)
+void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, short position)
 {
 	window.clear();
 	for (unsigned short y = 0; y < tileCountHeight; y++)
@@ -305,6 +301,10 @@ void Engine::draw(RenderWindow &window, bool pause, bool equipment, short positi
 	{
 		gui.drawPauseMenu(window);
 	}
+	if (dead)
+	{
+		gui.drawDeathScreen(window);
+	}
 	window.display();
 }
 
@@ -313,189 +313,197 @@ void Engine::startEngine(RenderWindow &window)
 	bool quit = false;
 	bool pause = false;
 	bool equipment = false;
+	bool dead = false;
 	bool attacked = false;
 	short position = -1;
 
 	updateMap();
 	window.setView(view);
-	draw(window, pause, equipment, position);
+	draw(window, pause, equipment, dead, position);
 	while (!quit)
 	{
 		Event event;
 		Vector2f mouse(Mouse::getPosition(window));
 		Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
 
-		if (!pause && !equipment)
+		if (!pause && !equipment && !dead)
 		{
 			short tempHp = player->getHp();
-			while (window.pollEvent(event))
+			if (tempHp > 0)
 			{
-				bool attacked = false;
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L)) /*Reminder - do zmiany na jakies normalne wywolywanie*/
+				while (window.pollEvent(event))
 				{
-					setMap(window, "test2.level");
+					bool attacked = false;
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L)) /*Reminder - do zmiany na jakies normalne wywolywanie*/
+					{
+						setMap(window, "test2.level");
+					}
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+					{
+						pause = true;
+					}
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::I))
+					{
+						equipment = true;
+					}
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1))
+					{
+						player->useSkill1();
+					}
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num2))
+					{
+						player->useSkill2();
+					}
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num3))
+					{
+						player->useSkill3();
+					}
+					for (size_t i = 0; i < npcs.size(); ++i)
+					{
+						Enemy* enemy;
+						if ((enemy = dynamic_cast<Enemy*>(npcs[i])) && (player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+						{
+							Vertex line[2];
+							float distance;
+							float sinus;
+							float cosinus;
+							line[0].position = player->getPosition();
+							line[1].position = npcs[i]->getPosition();
+							attacked = true;
+							player->attack();
+							do
+							{
+								if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
+								{
+									attacked = false;
+									player->stop();
+									break;
+								}
+								distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
+								if ((!player->getEquipment().getActiveWeapon()->isRanged()) && (distance > 70))
+								{
+									attacked = false; /*Reminder - ustawic zeby zaatakowal jak podejdzie*/
+									player->stop();
+									break;
+								}
+								sinus = (line[0].position.x - line[1].position.x) / distance;
+								cosinus = (line[0].position.y - line[1].position.y) / distance;
+								distance -= 2.0f;
+								line[0].position.x = sinus * distance + line[1].position.x;
+								line[0].position.y = cosinus * distance + line[1].position.y;
+							} while (distance > 1);
+						}
+					}
+					if ((!attacked) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
+					{
+						player->walk();
+					}
+					else if ((!attacked) && (event.type == Event::MouseButtonReleased))
+					{
+						if (event.mouseButton.button == Mouse::Right) player->stop();
+					}
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Space))
+					{
+						player->usePotion();
+					}
 				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
-				{
-					pause = true;
-				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::I))
-				{
-					equipment = true;
-				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1))
-				{
-					player->useSkill1();
-				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num2))
-				{
-					player->useSkill2();
-				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num3))
-				{
-					player->useSkill3();
-				}
+
+				if (player->update(worldPos, &level) == 1) updateMap();
 				for (size_t i = 0; i < npcs.size(); ++i)
 				{
 					Enemy* enemy;
-					if ((enemy = dynamic_cast<Enemy*>(npcs[i])) && (player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
-					{						
+					if (enemy = dynamic_cast<Enemy*>(npcs[i]))
+					{
 						Vertex line[2];
-						float distance;
+						float distance, distanceTemp;
 						float sinus;
 						float cosinus;
 						line[0].position = player->getPosition();
 						line[1].position = npcs[i]->getPosition();
-						attacked = true;
-						player->attack();
-						do
+						distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
+						distanceTemp = distance;
+						if (distance > 450)
 						{
-							if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
-							{
-								attacked = false;
-								player->stop();
-								break;
-							}
-							distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
-							if ((!player->getEquipment().getActiveWeapon()->isRanged()) && (distance > 70))
-							{
-								attacked = false; /*Reminder - ustawic zeby zaatakowal jak podejdzie*/
-								player->stop();
-								break;
-							}
-							sinus = (line[0].position.x - line[1].position.x) / distance;
-							cosinus = (line[0].position.y - line[1].position.y) / distance;
-							distance -= 2.0f;
-							line[0].position.x = sinus * distance + line[1].position.x;
-							line[0].position.y = cosinus * distance + line[1].position.y;
-						} while (distance > 1);						
-					}
-				}
-				if ((!attacked) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
-				{
-					player->walk();
-				}
-				else if ((!attacked) && (event.type == Event::MouseButtonReleased))
-				{
-					if (event.mouseButton.button == Mouse::Right) player->stop();
-				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Space))
-				{
-					player->usePotion();					
-				}
-			}
-
-			if (player->update(worldPos, &level) == 1) updateMap();
-			for (size_t i = 0; i < npcs.size(); ++i)
-			{
-				Enemy* enemy;
-				if (enemy = dynamic_cast<Enemy*>(npcs[i]))
-				{
-					Vertex line[2];
-					float distance, distanceTemp;
-					float sinus;
-					float cosinus;
-					line[0].position = player->getPosition();
-					line[1].position = npcs[i]->getPosition();
-					distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
-					distanceTemp = distance;
-					if (distance > 450)
-					{
-						if ((enemy->getStatus() != Enemy::STOP) && ((enemy->getStatus() != Enemy::WALK))) enemy->stop(false);
-					}
-					else
-					{
-						if (enemy->getStatus() != Enemy::ATTACK)
-						{
-							if (!player->isActiveSkill3() || player->getClassName() != "Soldier") enemy->engage();
+							if ((enemy->getStatus() != Enemy::STOP) && ((enemy->getStatus() != Enemy::WALK))) enemy->stop(false);
 						}
-						do
+						else
 						{
-							if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
+							if (enemy->getStatus() != Enemy::ATTACK)
 							{
-								if (enemy->getStatus() != Enemy::STOP) enemy->stop(false);
-								break;
+								if (!player->isActiveSkill3() || player->getClassName() != "Soldier") enemy->engage();
 							}
-							distanceTemp = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
-							sinus = (line[0].position.x - line[1].position.x) / distanceTemp;
-							cosinus = (line[0].position.y - line[1].position.y) / distanceTemp;
-							distanceTemp -= 2.0f;
-							line[0].position.x = sinus * distanceTemp + line[1].position.x;
-							line[0].position.y = cosinus * distanceTemp + line[1].position.y;
-						} while (distanceTemp > 1);
-					}
-					if ((player->getStatus() == Player::ATTACK) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
-					{
-						fight(i, PLAYER);
-						if (enemy->getStatus() != Enemy::ATTACK) enemy->engage();
-					}
-					if (enemy->isAlive())
-					{
-						enemy->update(&level, player->getPosition());
-						gui.updateHpInfo(i, enemy->getPosition(), enemy->getHp(), enemy->getMaxHp());
-						if ((enemy->isEngaged()) || (enemy->isAttacking()))
+							do
+							{
+								if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
+								{
+									if (enemy->getStatus() != Enemy::STOP) enemy->stop(false);
+									break;
+								}
+								distanceTemp = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
+								sinus = (line[0].position.x - line[1].position.x) / distanceTemp;
+								cosinus = (line[0].position.y - line[1].position.y) / distanceTemp;
+								distanceTemp -= 2.0f;
+								line[0].position.x = sinus * distanceTemp + line[1].position.x;
+								line[0].position.y = cosinus * distanceTemp + line[1].position.y;
+							} while (distanceTemp > 1);
+						}
+						if ((player->getStatus() == Player::ATTACK) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
 						{
-							if ((enemy->isRanged()) || ((!enemy->isRanged()) && (distance < 70)))
+							fight(i, PLAYER);
+							if (enemy->getStatus() != Enemy::ATTACK) enemy->engage();
+						}
+						if (enemy->isAlive())
+						{
+							enemy->update(&level, player->getPosition());
+							gui.updateHpInfo(i, enemy->getPosition(), enemy->getHp(), enemy->getMaxHp());
+							if ((enemy->isEngaged()) || (enemy->isAttacking()))
 							{
-								enemy->attack();
-								fight(i, NPC);
+								if ((enemy->isRanged()) || ((!enemy->isRanged()) && (distance < 70)))
+								{
+									enemy->attack();
+									fight(i, NPC);
+								}
+								else if (!player->isActiveSkill3() && player->getClassName() != "Soldier") enemy->engage();
 							}
-							else if (!player->isActiveSkill3() && player->getClassName() != "Soldier") enemy->engage();
+						}
+						else
+						{
+							player->increaseExperience(enemy->getExperienceGiven());
+							short lootChance = rand() % 100 + 1;
+							if (lootChance > 60)
+							{
+								level.spawnLootChest(npcs[i]->getPosition());
+								updateMap();
+							}
+							gui.eraseHpInfo(i);
+							delete npcs[i];
+							npcs.erase(npcs.begin() + i);
+							--i;
 						}
 					}
-					else
-					{
-						player->increaseExperience(enemy->getExperienceGiven());
-						short lootChance = rand() % 100 + 1;
-						if (lootChance > 60)
-						{
-							level.spawnLootChest(npcs[i]->getPosition());
-							updateMap();
-						}
-						gui.eraseHpInfo(i);
-						delete npcs[i];
-						npcs.erase(npcs.begin() + i);
-						--i;						
-					}
+
 				}
+				if (player->getStatus() == Player::Status::WALK)
+				{
+					view.setCenter(player->getPosition());
+					updateMap();
+					window.setView(view);
+				}
+				if (player->getExp() >= player->getExpForNextLevel()) player->levelUp();
+				if (player->getHp() != tempHp)
+				{
+					Gui::TextDamage* hpInfo = new Gui::TextDamage();
 
+					hpInfo->text.setString(std::to_string(abs(player->getHp() - tempHp)));
+					if (player->getHp() > tempHp) hpInfo->text.setColor(Color::Green);
+					else hpInfo->text.setColor(Color::Red);
+					hpInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
+					gui.pushDamageInfo(hpInfo);
+				}
 			}
-			if (player->getStatus() == Player::Status::WALK)
+			else
 			{
-				view.setCenter(player->getPosition());
-				updateMap();
-				window.setView(view);
-			}
-			if (player->getExp() >= player->getExpForNextLevel()) player->levelUp();
-			if (player->getHp() != tempHp)
-			{
-				Gui::TextDamage* hpInfo = new Gui::TextDamage();
-
-				hpInfo->text.setString(std::to_string(abs(player->getHp() - tempHp)));
-				if (player->getHp() > tempHp) hpInfo->text.setColor(Color::Green);
-				else hpInfo->text.setColor(Color::Red);
-				hpInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
-				gui.pushDamageInfo(hpInfo);
+				dead = true;
 			}
 		}
 		if (pause)
@@ -604,6 +612,19 @@ void Engine::startEngine(RenderWindow &window)
 				}
 			}			
 		}
-		draw(window, pause, equipment, position);
+		if (dead)
+		{
+			while (window.pollEvent(event))
+			{
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Return))
+				{
+					view.setCenter(1280 / 2, 720 / 2);
+					window.setView(view);
+					dead = false;
+					quit = true;
+				}
+			}
+		}
+		draw(window, pause, equipment, dead, position);
 	}
 }
