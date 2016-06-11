@@ -14,8 +14,9 @@ private:
 	Texture texture;
 	void menu();
 	void newGame();
+	void loadGame();
 protected:
-	enum GameState {MENU, GAME, GAME_OVER, END};
+	enum GameState {MENU, NEW_GAME, LOAD_GAME, END};
 	GameState state;
 public:
 	Game();

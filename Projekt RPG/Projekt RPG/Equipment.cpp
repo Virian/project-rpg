@@ -2,7 +2,7 @@
 
 Equipment::Equipment()
 {
-	potionCount = 1;
+	potionCount = 0;
 	activeArmor = NULL;
 	activeWeapon = NULL;
 	Item* temp1 = new Weapon(true);

@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <Windows.h>
 #include <string>
+#include <fstream>
 
 Game::Game()
 {
@@ -52,10 +53,10 @@ void Game::menu()
 
 		while (window.pollEvent(event))
 		{
-			/*klikniecie X*/
-			if (event.type == Event::Closed) state = END;
 			/*klikniecie new game*/
-			else if ((text[0].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = GAME;
+			if ((text[0].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = NEW_GAME;
+			/*klikniecie load game*/
+			else if ((text[1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = LOAD_GAME;
 			/*klikniecie quit*/
 			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = END;
 		}
@@ -185,6 +186,21 @@ void Game::newGame()
 	state = MENU;
 }
 
+void Game::loadGame()
+{
+	fstream file("SavedGame.sav");
+	
+	if (!file.is_open())
+	{
+		MessageBox(NULL, "Couldn't find a save file!", "ERROR", NULL);
+		state = MENU;
+		return;
+	}
+	Engine engine(window, file);
+
+	state = MENU;
+}
+
 void Game::start()
 {
 	while (state != END)
@@ -194,8 +210,11 @@ void Game::start()
 		case GameState::MENU:
 			menu();
 			break;
-		case GameState::GAME:
+		case GameState::NEW_GAME:
 			newGame();
+			break;
+		case GameState::LOAD_GAME:
+			loadGame();
 			break;
 		}
 	}

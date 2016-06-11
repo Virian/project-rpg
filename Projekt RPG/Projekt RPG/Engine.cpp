@@ -1,6 +1,5 @@
 #include "Engine.h"
 #include <Windows.h>
-#include <fstream>
 
 void Engine::updateMap()
 {
@@ -174,6 +173,36 @@ Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 	startEngine(_window);	
 }
 
+Engine::Engine(RenderWindow &_window, fstream &file)
+{
+	view.setSize(1280, 720);
+	view.setCenter(1280 / 2, 720 / 2);
+	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
+	{
+		tileTextures[i].loadFromFile("placeholder.png", IntRect(i * 64, 512, 64, 64));
+	}
+	tileCountHeight = (_window.getSize().y / 64) + 3;
+	tileCountWidth = (_window.getSize().x / 64) + 3;
+	Sprite standard(tileTextures[0]);
+	tileSprites.resize(tileCountHeight);
+	for (unsigned short y = 0; y < tileCountHeight; y++)
+	{
+		tileSprites[y].resize(tileCountWidth, standard);
+	}
+	/*wczytanie wszystkiego z pliku*/
+	string characterName;
+	string className;
+	string levelPath;
+	file >> characterName >> className;
+	file >> levelPath;
+	if (className == "Soldier") player = new Soldier(characterName, file);
+	else if (className == "Sentinel") player = new Sentinel(characterName, file);
+	else player = new Juggernaut(characterName, file);
+	file.close();
+	setMap(_window, levelPath);
+	startEngine(_window);
+}
+
 Engine::~Engine()
 {
 	delete player;
@@ -315,6 +344,8 @@ void Engine::saveGame()
 
 	file.open("SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
 	file << player->getName() << " " << player->getClassName() << endl;
+	file << level.getLevelName() << endl;
+	/*Reminder - jeszcze miejsce na mapie jesli mialyby byc tylko wyznaczone miejsca do zapisu*/
 	file << player->getLvl() << " " << player->getExp() << " " << player->getExpForNextLevel() << endl;
 	file << player->getHp() << " " << player->getMaxHp() << endl;
 	file << player->getStr() << " " << player->getInt() << " " << player->getAgi() << " " << player->getPointsToSpend() << endl;
@@ -348,8 +379,6 @@ void Engine::saveGame()
 			else file << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getName() << endl;
 		}
 	}
-	file << level.getLevelName() << endl;
-	/*Reminder - jeszcze miejsce na mapie jesli mialyby byc tylko wyznaczone miejsca do zapisu*/
 	file.close();
 }
 

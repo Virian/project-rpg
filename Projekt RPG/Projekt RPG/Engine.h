@@ -25,6 +25,7 @@ private:
 	void saveGame();
 public:
 	Engine(RenderWindow&, string, int);
+	Engine(RenderWindow&, fstream&);
 	~Engine();
 	void startEngine(RenderWindow&);
 };

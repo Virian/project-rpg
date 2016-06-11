@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <fstream>
 #include "Level.h"
 #include "Equipment.h"
 #include "Time.h"
@@ -11,6 +12,7 @@ class Player : public Drawable, Transformable
 {
 public:
 	Player(string);
+	Player(string, fstream&);
 	virtual ~Player();
 	short update(Vector2f, Level*);
 	void walk();
@@ -92,6 +94,7 @@ class Juggernaut : public Player
 {
 public:	
 	Juggernaut(string);
+	Juggernaut(string, fstream&);
 	~Juggernaut();
 	std::string getClassName();
 	void useSkill1();
@@ -106,6 +109,7 @@ class Soldier : public Player
 {
 public:	
 	Soldier(string);
+	Soldier(string, fstream&);
 	~Soldier();
 	std::string getClassName();
 	void useSkill1();
@@ -120,6 +124,7 @@ class Sentinel : public Player
 {
 public:	
 	Sentinel(string);
+	Sentinel(string, fstream&);
 	~Sentinel();
 	std::string getClassName();
 	void useSkill1();

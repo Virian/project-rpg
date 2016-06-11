@@ -28,6 +28,51 @@ Player::Player(string _name) : name(_name)
 	attackInterval.restart();
 }
 
+Player::Player(string _name, fstream &file) : name(_name)
+{
+	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
+	{
+		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
+		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/
+	}
+	sprite.setTexture(texture);
+	sprite.setTextureRect(IntRect(0, 640, 64, 64));
+	sprite.setOrigin(32, 32);
+
+	speed = 5.5f;
+	frame = 0;
+	anim_clock.restart();
+	activeSkill1 = false;
+	activeSkill2 = false;
+	activeSkill3 = false;
+
+	string text, name;
+	int value;
+	file >> parLvl >> parExp >> parExpForNextLevel;
+	file >> parHp >> parMaxHp;
+	file >> parStr >> parInt >> parAgi >> parPointsToSpend;
+	file >> text;
+	if (text == "[ACTIVEWEAPON]")
+	{
+		file >> text;
+		if (text != "[NULL]")
+		{
+			file >> text;
+			file >> value;
+			getline(file, name);
+			name.erase(0, 1);
+			if (text == "[RANGED]")
+		}
+	}
+	while (!file.eof())
+	{
+		file >> text;
+
+	}
+
+	attackInterval.restart();
+}
+
 Player::~Player()
 {
 	equipment.clearBackpack();
@@ -390,6 +435,11 @@ Juggernaut::Juggernaut(string _name) : Player(_name)
 	parInt = 6;
 }
 
+Juggernaut::Juggernaut(string _name, fstream &file) : Player(_name, file)
+{
+	sprite.setColor(Color(255, 140, 140));
+}
+
 Juggernaut::~Juggernaut()
 {
 
@@ -449,6 +499,11 @@ Soldier::Soldier(string _name) : Player(_name)
 	parStr = 6;
 	parInt = 8;
 
+}
+
+Soldier::Soldier(string _name, fstream &file) : Player(_name, file)
+{
+	sprite.setColor(Color::Yellow);
 }
 
 Soldier::~Soldier()
@@ -522,6 +577,11 @@ Sentinel::Sentinel(string _name) : Player(_name)
 	parInt = 19;
 	parStr = 5;
 	parAgi = 6;
+}
+
+Sentinel::Sentinel(string _name, fstream &file) : Player(_name, file)
+{
+	sprite.setColor(Color(140, 140, 255));
 }
 
 Sentinel::~Sentinel()
