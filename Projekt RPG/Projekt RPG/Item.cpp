@@ -32,7 +32,7 @@ short Item::getId()
 	return id;
 }
 
-Weapon::Weapon(bool ranged) : ranged(ranged)
+Weapon::Weapon(bool _ranged) : ranged(_ranged)
 {
 	sprite.setTextureRect(IntRect(0, 128, 128, 128));
 	name = "weapon";
@@ -40,6 +40,12 @@ Weapon::Weapon(bool ranged) : ranged(ranged)
 	/*short range = rand() % 2;
 	if (range == 0) ranged = false;
 	else ranged = true;*/
+}
+
+Weapon::Weapon(std::string _name, unsigned short _attackValue, bool _ranged) : attackValue(_attackValue), ranged(_ranged)
+{
+	sprite.setTextureRect(IntRect(0, 128, 128, 128));
+	name = _name;
 }
 
 Weapon::~Weapon()
@@ -97,6 +103,12 @@ Armor::Armor()
 	name += "Armor";
 }
 
+Armor::Armor(std::string _name, unsigned short _armorValue) : armorValue(_armorValue)
+{
+	sprite.setTextureRect(IntRect(0, 256, 128, 128));
+	name = _name;
+}
+
 Armor::~Armor()
 {
 
@@ -106,13 +118,3 @@ unsigned short Armor::getArmorValue()
 {
 	return armorValue;
 }
-
-/*Potion::Potion()
-{
-
-}
-
-Potion::~Potion()
-{
-
-}*/

@@ -193,7 +193,9 @@ Engine::Engine(RenderWindow &_window, fstream &file)
 	string characterName;
 	string className;
 	string levelPath;
-	file >> characterName >> className;
+	file >> className;
+	getline(file, characterName);
+	characterName.erase(0, 1);
 	file >> levelPath;
 	if (className == "Soldier") player = new Soldier(characterName, file);
 	else if (className == "Sentinel") player = new Sentinel(characterName, file);
@@ -343,7 +345,7 @@ void Engine::saveGame()
 	fstream file;
 
 	file.open("SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
-	file << player->getName() << " " << player->getClassName() << endl;
+	file << player->getClassName() << " " << player->getName() << endl;
 	file << level.getLevelName() << endl;
 	/*Reminder - jeszcze miejsce na mapie jesli mialyby byc tylko wyznaczone miejsca do zapisu*/
 	file << player->getLvl() << " " << player->getExp() << " " << player->getExpForNextLevel() << endl;

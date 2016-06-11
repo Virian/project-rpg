@@ -63,8 +63,22 @@ Player::Player(string _name, fstream &file) : name(_name)
 			file >> value;
 			getline(file, name);
 			name.erase(0, 1);
-			if (text == "[RANGED]") tmp = new Weapon(true);
+			if (text == "[RANGED]") tmp = new Weapon(name, value, true);
 			else tmp = new Weapon(false);
+			equipment.addItem(tmp);
+			equipment.swapActiveItem(0);
+		}
+	}
+	file >> text;
+	if (text == "[ACTIVEARMOR]")
+	{
+		file >> text;
+		if (text != "[NULL]")
+		{
+			Item* tmp;
+			getline(file, name);
+			name.erase(0, 1);
+			tmp = new Armor(name, stoi(text));
 			equipment.addItem(tmp);
 			equipment.swapActiveItem(0);
 		}
@@ -72,7 +86,26 @@ Player::Player(string _name, fstream &file) : name(_name)
 	while (!file.eof())
 	{
 		file >> text;
-
+		if (text == "[ARMOR]")
+		{
+			Item* tmp;
+			file >> value;
+			getline(file, name);
+			name.erase(0, 1);
+			tmp = new Armor(name, value);
+			equipment.addItem(tmp);
+		}
+		else if (text == "[WEAPON]")
+		{
+			Item* tmp;
+			file >> text;
+			file >> value;
+			getline(file, name);
+			name.erase(0, 1);
+			if (text == "[RANGED]") tmp = new Weapon(name, value, true);
+			else tmp = new Weapon(name, value, false);
+			equipment.addItem(tmp);
+		}
 	}
 
 	attackInterval.restart();

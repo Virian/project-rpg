@@ -27,6 +27,7 @@ private:
 	bool ranged;
 public:
 	Weapon(bool);
+	Weapon(std::string, unsigned short, bool);
 	~Weapon();
 	unsigned short getAttackValue();
 	bool isRanged();
@@ -38,14 +39,7 @@ private:
 	unsigned short armorValue;
 public:
 	Armor();
+	Armor(std::string, unsigned short);
 	~Armor();
 	unsigned short getArmorValue();
 };
-
-/*Reminder - potki moga sie na dobra sprawe nie przydac*/
-/*class Potion : public Item
-{
-public:
-	Potion();
-	~Potion();
-};*/

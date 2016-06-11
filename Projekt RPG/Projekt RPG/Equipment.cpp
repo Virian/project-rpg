@@ -5,7 +5,7 @@ Equipment::Equipment()
 	potionCount = 0;
 	activeArmor = NULL;
 	activeWeapon = NULL;
-	Item* temp1 = new Weapon(true);
+	/*Item* temp1 = new Weapon(true);
 	Item* temp2 = new Armor();
 	Item* temp3 = new Armor();
 	Item* temp4 = new Armor();
@@ -26,7 +26,7 @@ Equipment::Equipment()
 	backpack.push_back(temp9);
 
 	activeArmor = new Armor();
-	activeWeapon = new Weapon(true);
+	activeWeapon = new Weapon(true);*/
 }
 
 Equipment::~Equipment()
@@ -110,7 +110,7 @@ void Equipment::swapActiveItem(short position)
 			else backpack[position] = activeWeapon;
 			activeWeapon = temp1;
 		}
-		if (temp2 = dynamic_cast<Armor*>(backpack[position]))
+		else if (temp2 = dynamic_cast<Armor*>(backpack[position]))
 		{
 			if (activeArmor == NULL) backpack.erase(backpack.begin() + position);
 			else backpack[position] = activeArmor;
