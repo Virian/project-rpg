@@ -487,7 +487,16 @@ void Soldier::useSkill2() /*przyspieszenie*/
 
 void Soldier::useSkill3()
 {
-
+	if (cooldownSkill3.isExpired())
+	{
+		/*niewidzialnosc*/
+		Color color = sprite.getColor();
+		color.a -= 130;
+		sprite.setColor(color);
+		cooldownSkill3.restart(seconds(60.f));
+		effectSkill3.restart(seconds(20.f)); /*Reminder - do zmiany, tylko dla testow*/
+		activeSkill3 = true;
+	}
 }
 
 void Soldier::clearEffectSkill1()
@@ -503,7 +512,10 @@ void Soldier::clearEffectSkill2()
 
 void Soldier::clearEffectSkill3()
 {
-
+	Color color = sprite.getColor();
+	color.a += 130;
+	sprite.setColor(color);
+	activeSkill3 = false;
 }
 
 Sentinel::Sentinel(string _name) : Player(_name)
@@ -547,7 +559,7 @@ void Sentinel::useSkill2() /*zwiekszenie szansy na dodge*/
 
 void Sentinel::useSkill3()
 {
-
+	
 }
 
 void Sentinel::clearEffectSkill1()

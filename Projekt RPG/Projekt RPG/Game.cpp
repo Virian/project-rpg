@@ -119,7 +119,7 @@ void Game::newGame()
 
 		while (window.pollEvent(event))
 		{
-			if ((ok.getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+			if (((ok.getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) || ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Return)))
 			{				
 				if (checked == 0) MessageBox(NULL, "Select a class for your character!", "ERROR", NULL);
 				else if (characterName.size() == 0) MessageBox(NULL, "Enter a name for your character!", "ERROR", NULL);

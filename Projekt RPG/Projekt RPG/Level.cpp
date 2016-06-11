@@ -68,6 +68,7 @@ bool Level::load(string filePath)
 
 	file.open(filePath);
 	if (!file.is_open()) return false;
+	npcsCoords.clear();
 	file >> width >> height;
 	if ((height == 0) || (width == 0))
 	{

@@ -411,3 +411,13 @@ void Gui::eraseHpInfo(size_t i)
 	delete hpInfo[i];
 	hpInfo.erase(hpInfo.begin() + i);
 }
+
+size_t Gui::getHpInfoSize()
+{
+	return hpInfo.size();
+}
+
+void Gui::clearHpInfo()
+{
+	hpInfo.clear();
+}

@@ -115,6 +115,12 @@ void Engine::setMap(RenderWindow &window, string filePath)
 		delete npcs[i];
 	}
 	npcs.clear();
+	for (size_t i = 0; i < gui.getHpInfoSize(); ++i)
+	{
+		gui.eraseHpInfo(i);
+		--i;
+	}
+	gui.clearHpInfo();
 	player->setPosition(level.getPlayerSpawnCoords());
 	view.setCenter(player->getPosition());
 	for (size_t i = 0; i < level.getNpcCoords().size(); ++i)
@@ -325,6 +331,10 @@ void Engine::startEngine(RenderWindow &window)
 			while (window.pollEvent(event))
 			{
 				bool attacked = false;
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L)) /*Reminder - do zmiany na jakies normalne wywolywanie*/
+				{
+					setMap(window, "test2.level");
+				}
 				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 				{
 					pause = true;
@@ -415,7 +425,10 @@ void Engine::startEngine(RenderWindow &window)
 					}
 					else
 					{
-						if (enemy->getStatus() != Enemy::ATTACK) enemy->engage();
+						if (enemy->getStatus() != Enemy::ATTACK)
+						{
+							if (!player->isActiveSkill3() || player->getClassName() != "Soldier") enemy->engage();
+						}
 						do
 						{
 							if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
@@ -447,7 +460,7 @@ void Engine::startEngine(RenderWindow &window)
 								enemy->attack();
 								fight(i, NPC);
 							}
-							else enemy->engage();
+							else if (!player->isActiveSkill3() && player->getClassName() != "Soldier") enemy->engage();
 						}
 					}
 					else

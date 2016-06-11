@@ -33,6 +33,8 @@ public:
 	void pushHpInfo(HpBar*);
 	void updateHpInfo(size_t, Vector2f, short, short);
 	void eraseHpInfo(size_t);
+	size_t getHpInfoSize();
+	void clearHpInfo();
 private:
 	virtual void draw(RenderTarget&, RenderStates) const;
 	Texture texture;
