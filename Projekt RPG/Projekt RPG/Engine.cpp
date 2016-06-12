@@ -94,7 +94,7 @@ void Engine::updateMap()
 	{																											// h - horizontal
 		for (int x = 0, v = static_cast<int>(leftBorder); x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
 		{
-			tileSprites[y][x].setPosition(v * 64, h * 64);
+			tileSprites[y][x].setPosition(v * 64.f, h * 64.f);
 			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v]->getType()]);
 			v++;
 		}
@@ -218,7 +218,7 @@ Engine::~Engine()
 
 }
 
-void Engine::fight(unsigned enemyIndex, Engine::Attacker attacker)
+void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 {
 	unsigned hitChance, dodgeChance;
 	Enemy* enemy;
@@ -350,7 +350,6 @@ void Engine::saveGame(unsigned short id)
 	file.open("SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
 	file << player->getClassName() << " " << player->getName() << endl;
 	file << level.getLevelPath() << endl;
-	/*Reminder - jeszcze miejsce na mapie jesli mialyby byc tylko wyznaczone miejsca do zapisu*/
 	file << id << endl;
 	file << player->getLvl() << " " << player->getExp() << " " << player->getExpForNextLevel() << endl;
 	file << player->getHp() << " " << player->getMaxHp() << endl;
@@ -453,7 +452,7 @@ void Engine::startEngine(RenderWindow &window)
 							player->attack();
 							do
 							{
-								if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
+								if (level.getMap()[static_cast<unsigned __int64>(line[0].position.y / 64)][static_cast<unsigned __int64>(line[0].position.x / 64)]->isWall())
 								{
 									attacked = false;
 									player->stop();
@@ -514,7 +513,7 @@ void Engine::startEngine(RenderWindow &window)
 							}
 							do
 							{
-								if (level.getMap()[line[0].position.y / 64][line[0].position.x / 64]->isWall())
+								if (level.getMap()[static_cast<unsigned __int64>(line[0].position.y / 64)][static_cast<unsigned __int64>(line[0].position.x / 64)]->isWall())
 								{
 									if (enemy->getStatus() != Enemy::STOP) enemy->stop(false);
 									break;
@@ -608,7 +607,7 @@ void Engine::startEngine(RenderWindow &window)
 				if ((gui.getLoadButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
 				{
 					Save* temp;
-					if (temp = dynamic_cast<Save*>(level.getMap()[player->getPosition().y / 64][player->getPosition().x / 64]))
+					if (temp = dynamic_cast<Save*>(level.getMap()[static_cast<unsigned __int64>(player->getPosition().y / 64)][static_cast<unsigned __int64>(player->getPosition().x / 64)]))
 					{
 						saveGame(temp->getId());
 						MessageBox(NULL, "Successfully saved game!", "SUCCESS", NULL);

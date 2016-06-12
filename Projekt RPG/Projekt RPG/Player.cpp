@@ -125,7 +125,7 @@ short Player::update(Vector2f mouse, Level *level)
 	LootChest* temp2;
 	Vector2f norm = mouse - sprite.getPosition();
 	float rot = atan2(norm.y, norm.x); /*gdy przod playera jest na gorze tekstury, gdyby byl na dole to zamienic x z y*/
-	rot = rot * 180.f / M_PI;
+	rot = rot * 180.f / static_cast<float>(M_PI);
 	rot += 90;
 	sprite.setRotation(rot);
 
@@ -309,8 +309,8 @@ FloatRect Player::getBoundingBox()
 Vector2f Player::getMove()
 {
 	float rotation = sprite.getRotation();
-	float vx = sin((rotation * M_PI) / 180.0f);
-	float vy = -cos((rotation * M_PI) / 180.0f);
+	float vx = sin((rotation * static_cast<float>(M_PI)) / 180.0f);
+	float vy = -cos((rotation * static_cast<float>(M_PI)) / 180.0f);
 
 	return Vector2f(vx * speed, vy * speed);
 }
@@ -322,7 +322,7 @@ Vector2f Player::getPosition()
 
 void Player::setPosition(Tile::Coord coord)
 {
-	sprite.setPosition(coord.x * 64 + 32, coord.y * 64 + 32);
+	sprite.setPosition(coord.x * 64.f + 32.f, coord.y * 64.f + 32.f);
 }
 
 std::string Player::getName()
@@ -429,7 +429,7 @@ void Player::swapActiveItem(short position)
 
 void Player::usePotion()
 {
-	if (equipment.usePotion() == 0) parHp += 0.6 * parMaxHp;
+	if (equipment.usePotion() == 0) parHp += static_cast<short>(0.6 * parMaxHp);
 }
 
 void Player::increaseExperience(unsigned experience)
@@ -639,7 +639,7 @@ void Sentinel::useSkill1() /*heal*/
 	/*leczy 30% hp + 1% za kazde 10 int*/
 	if (cooldownSkill1.isExpired())
 	{
-		parHp += ((30.0 + parInt / 10.0) / 100.0) * parMaxHp;
+		parHp += static_cast<short>(((30.0 + parInt / 10.0) / 100.0) * parMaxHp);
 		cooldownSkill1.restart(seconds(40.f));
 	}
 }
@@ -648,7 +648,7 @@ void Sentinel::useSkill2() /*zwiekszenie szansy na dodge*/
 {
 	if (cooldownSkill2.isExpired())
 	{
-		parAgi += (0.33f + parInt / 100.f) * parAgi;
+		parAgi += static_cast<unsigned short>((0.33f + parInt / 100.f) * parAgi);
 		cooldownSkill2.restart(seconds(35.f));
 		effectSkill2.restart(seconds(7.f));
 		activeSkill2 = true;
@@ -667,7 +667,7 @@ void Sentinel::clearEffectSkill1()
 
 void Sentinel::clearEffectSkill2()
 {
-	parAgi = 100.f * parAgi / (133.f + parInt / 10.f); /*Reminder - na razie dziala, ale nie wiem czy dla wszystkich wartosci bedzie poprawnie wracac*/
+	parAgi = static_cast<unsigned short>(100.f * parAgi / (133.f + parInt / 10.f)); /*Reminder - na razie dziala, ale nie wiem czy dla wszystkich wartosci bedzie poprawnie wracac*/
 	activeSkill2 = false;
 }
 

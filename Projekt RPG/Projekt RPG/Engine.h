@@ -21,7 +21,7 @@ private:
 	void draw(RenderWindow&, bool, bool, bool, short);
 	void setMap(RenderWindow&, string, unsigned short);
 	void updateMap();
-	void fight(unsigned, Attacker);
+	void fight(size_t, Attacker);
 	void saveGame(unsigned short);
 public:
 	Engine(RenderWindow&, string, int);

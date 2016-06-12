@@ -118,7 +118,7 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	
 	for (size_t i = 0; i < damageInfo.size(); ++i)
 	{
-		if (damageInfo[i]->lifeTime.getElapsedTime() > seconds(0.6))
+		if (damageInfo[i]->lifeTime.getElapsedTime() > seconds(0.6f))
 		{
 			delete damageInfo[i];
 			damageInfo.erase(damageInfo.begin() + i);
@@ -324,7 +324,7 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	for (size_t i = 0, j = 0; i < backpack.size(); ++i)
 	{
 		if (i == 5) ++j;
-		backpack[i]->setPosition(window.mapPixelToCoords(Vector2i(140 + i * 128 - 5 * j * 128, 418 + j * 128)));
+		backpack[i]->setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(140 + i * 128 - 5 * j * 128), static_cast<int>(418 + j * 128))));
 		window.draw(*backpack[i]);
 	}
 
@@ -345,8 +345,8 @@ void Gui::drawDeathScreen(RenderWindow& window)
 	Text info1("You are dead!", font, 200);
 	Text info2("Press ENTER to return to the menu", font, 90);
 
-	info1.setPosition(window.mapPixelToCoords(Vector2i(window.getSize().x / 2 - info1.getGlobalBounds().width / 2, 120)));
-	info2.setPosition(window.mapPixelToCoords(Vector2i(window.getSize().x / 2 - info2.getGlobalBounds().width / 2, 400)));
+	info1.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - info1.getGlobalBounds().width / 2), 120)));
+	info2.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - info2.getGlobalBounds().width / 2), 400)));
 
 	info1.setColor(Color::Black);
 	info1.move(Vector2f(4, 4));

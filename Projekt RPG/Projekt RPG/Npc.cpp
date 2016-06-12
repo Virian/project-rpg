@@ -14,7 +14,7 @@ Npc::Npc(Tile::Coord spawnCoord) : spawnCoord(spawnCoord)
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64)); /*Reminder - do zmiany, obecnie jest to tekstura playera*/
 	sprite.setOrigin(32, 32);
-	sprite.setPosition(64 * spawnCoord.x + 32, 64 * spawnCoord.y + 32);
+	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 }
 
 Npc::~Npc()
@@ -41,7 +41,7 @@ Vector2f Npc::getPosition()
 
 void Npc::setPosition(Tile::Coord coord)
 {
-	sprite.setPosition(coord.x * 64 + 32, coord.y * 64 + 32);
+	sprite.setPosition(coord.x * 64.f + 32.f, coord.y * 64.f + 32.f);
 }
 
 Neutral::Neutral(Tile::Coord spawnCoord) : Npc(spawnCoord)
@@ -62,7 +62,7 @@ Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 	time.restart();
 	attackInterval.restart();
 	status = STOP;
-	rot = rand() % 360;
+	rot = static_cast<float>(rand() % 360);
 	sprite.setRotation(rot);
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
@@ -95,7 +95,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 	if (status == ENGAGED)
 	{
 		rot = atan2f(playerPosition.y - sprite.getPosition().y, playerPosition.x - sprite.getPosition().x);
-		rot = rot * 180.f / M_PI;
+		rot = rot * 180.f / static_cast<float>(M_PI);
 		rot += 90;
 		sprite.setRotation(rot);
 		collision = false;
@@ -162,7 +162,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 	else if (status == ATTACK)
 	{
 		rot = atan2f(playerPosition.y - sprite.getPosition().y, playerPosition.x - sprite.getPosition().x);
-		rot = rot * 180.f / M_PI;
+		rot = rot * 180.f / static_cast<float>(M_PI);
 		rot += 90;
 		sprite.setRotation(rot);
 	}
@@ -243,8 +243,8 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 Vector2f Enemy::getMove()
 {
 	float rotation = sprite.getRotation();
-	float vx = sin((rotation * M_PI) / 180.0f);
-	float vy = -cos((rotation * M_PI) / 180.0f);
+	float vx = sin((rotation * static_cast<float>(M_PI)) / 180.0f);
+	float vy = -cos((rotation * static_cast<float>(M_PI)) / 180.0f);
 
 	return Vector2f(vx * speed, vy * speed);
 }
@@ -262,7 +262,7 @@ void Enemy::stop(bool collision)
 	anim_clock.restart();
 	time.restart();
 	if (collision) rot = rot + 180; /*Reminder - mo¿na zmienic na widelki ale ryzyko zablokowania*/
-	else rot = rand() % 360;
+	else rot = static_cast<float>(rand() % 360);
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
 }
