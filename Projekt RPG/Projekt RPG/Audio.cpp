@@ -2,9 +2,9 @@
 
 Audio::Audio()
 {
-	gunSoundBuffer.loadFromFile("gun.ogg");
+	gunSoundBuffer.loadFromFile("sounds/gun.ogg");
 	gunSound.setBuffer(gunSoundBuffer);
-	meleeSoundBuffer.loadFromFile("melee.ogg");
+	meleeSoundBuffer.loadFromFile("sounds/melee.ogg");
 	meleeSound.setBuffer(meleeSoundBuffer);
 	backgroundMusic.setLoop(true);
 	setSoundsVolume(65.f);

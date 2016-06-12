@@ -3,7 +3,7 @@
 
 Gui::Gui()
 {
-	if (!font.loadFromFile("game_over.ttf")) /*Reminder - do zmiany sciezka, mozna tez zmienic czcionke*/
+	if (!font.loadFromFile("fonts/game_over.ttf")) /*Reminder - do zmiany sciezka, mozna tez zmienic czcionke*/
 	{
 		MessageBox(NULL, "Font not found!", "ERROR", NULL);
 		return;
@@ -16,7 +16,7 @@ Gui::Gui()
 	experience.setCharacterSize(100);
 	potions.setFont(font);
 	potions.setCharacterSize(70);
-	texture.loadFromFile("placeholder.png");
+	texture.loadFromFile("images/tilesheet.png");
 	hpGauge.setTexture(texture);
 	hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
 	expGauge.setTexture(texture);

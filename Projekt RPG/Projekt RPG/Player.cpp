@@ -5,7 +5,7 @@
 
 Player::Player(string _name) : name(_name)
 {
-	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
+	if (!texture.loadFromFile("images/tilesheet.png")) /*Reminder - do zmiany sciezka*/
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/
@@ -30,7 +30,7 @@ Player::Player(string _name) : name(_name)
 
 Player::Player(string _name, fstream &file) : name(_name)
 {
-	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
+	if (!texture.loadFromFile("images/tilesheet.png")) /*Reminder - do zmiany sciezka*/
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/

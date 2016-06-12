@@ -6,7 +6,7 @@
 
 Npc::Npc(Tile::Coord spawnCoord) : spawnCoord(spawnCoord)
 {
-	if (!texture.loadFromFile("placeholder.png")) /*Reminder - do zmiany sciezka*/
+	if (!texture.loadFromFile("images/tilesheet.png")) /*Reminder - do zmiany sciezka*/
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return; /*powinien w ogole jakos te gre wywalic, co najmniej do menu*/

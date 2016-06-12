@@ -6,18 +6,18 @@
 Game::Game()
 {
 	state = END;
-	if (!font.loadFromFile("SharpRetro.ttf")) /*Reminder - do zmiany sciezka, mozna tez zmienic czcionke*/
+	if (!font.loadFromFile("fonts/SharpRetro.ttf"))
 	{
 		MessageBox(NULL, "Font not found!", "ERROR", NULL);
 		return;
 	}
-	if (!texture.loadFromFile("menu.png")) /*Reminder - do zmiany sciezka*/
+	if (!texture.loadFromFile("images/menu.png"))
 	{
 		MessageBox(NULL, "Menu background not found!", "ERROR", NULL);
 		return;
 	}
 	state = MENU;
-	window.create(VideoMode(1280, 720), "Galaxy Guardian Alpha 1.02", Style::Titlebar);
+	window.create(VideoMode(1280, 720), "Galaxy Guardian Alpha 1.03", Style::Titlebar);
 }
 
 Game::~Game()
@@ -31,8 +31,6 @@ void Game::menu()
 	const short numberOfOptions = 3; /*ilosc opcji do klikniecia w menu*/
 	string options[] = { "New game", "Load game", "Quit" };
 	Text text[numberOfOptions];
-	/*Reminder - do dodania na pewno jakies tlo
-	mozna tez zamienic napisy na obrazki */
 	background.setSize(Vector2f(1280, 720));
 	background.setTexture(&texture);
 	title.setStyle(Text::Bold);
@@ -188,7 +186,7 @@ void Game::newGame()
 
 void Game::loadGame()
 {
-	fstream file("SavedGame.sav");
+	fstream file("save/SavedGame.sav");
 	
 	if (!file.is_open())
 	{

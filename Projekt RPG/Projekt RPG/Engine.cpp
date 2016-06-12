@@ -139,9 +139,9 @@ void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 		}
 	}
 	audio.stopBackgroundMusic();
-	if (filePath == "test.level") audio.setBackgroundMusic("background1.ogg");
-	else if (filePath == "test2.level") audio.setBackgroundMusic("background2.ogg");
-	/*Reminder - else if inne levele*/
+	if (filePath == "levels/level1.level") audio.setBackgroundMusic("music/background1.ogg");
+	else if (filePath == "levels/level2.level") audio.setBackgroundMusic("music/background2.ogg");
+	/*else if inne levele*/
 	audio.playBackgroundMusic();
 	updateMap();
 	window.setView(view);
@@ -153,7 +153,7 @@ Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 	view.setCenter(1280 / 2, 720 / 2);
 	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
 	{
-		tileTextures[i].loadFromFile("placeholder.png", IntRect(i * 64, 512, 64, 64));
+		tileTextures[i].loadFromFile("images/tilesheet.png", IntRect(i * 64, 512, 64, 64));
 	}
 	tileCountHeight = (_window.getSize().y / 64) + 3;
 	tileCountWidth = (_window.getSize().x / 64) + 3;
@@ -175,7 +175,7 @@ Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 		player = new Juggernaut(characterName);
 		break;
 	}
-	setMap(_window, "test.level", 0); /*Reminder - do zmiany sciezka*/	
+	setMap(_window, "levels/level1.level", 0);
 	startEngine(_window);	
 }
 
@@ -185,7 +185,7 @@ Engine::Engine(RenderWindow &_window, fstream &file)
 	view.setCenter(1280 / 2, 720 / 2);
 	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
 	{
-		tileTextures[i].loadFromFile("placeholder.png", IntRect(i * 64, 512, 64, 64));
+		tileTextures[i].loadFromFile("images/tilesheet.png", IntRect(i * 64, 512, 64, 64));
 	}
 	tileCountHeight = (_window.getSize().y / 64) + 3;
 	tileCountWidth = (_window.getSize().x / 64) + 3;
@@ -356,7 +356,7 @@ void Engine::saveGame(unsigned short id)
 {
 	fstream file;
 
-	file.open("SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
+	file.open("save/SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
 	file << player->getClassName() << " " << player->getName() << endl;
 	file << level.getLevelPath() << endl;
 	file << id << endl;
@@ -424,7 +424,7 @@ void Engine::startEngine(RenderWindow &window)
 					bool attacked = false;
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L)) /*Reminder - do zmiany na jakies normalne wywolywanie*/
 					{
-						setMap(window, "test2.level", 0);
+						setMap(window, "levels/level2.level", 0);
 					}
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 					{

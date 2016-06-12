@@ -2,7 +2,7 @@
 
 Item::Item()
 {
-	texture.loadFromFile("placeholder.png");
+	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
 }
 
