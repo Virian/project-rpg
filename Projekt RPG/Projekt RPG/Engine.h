@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Gui.h"
 #include "Npc.h"
+#include "Audio.h"
 
 using namespace sf;
 
@@ -12,6 +13,7 @@ private:
 	Gui gui;
 	View view;
 	Level level;
+	Audio audio;
 	vector<Npc*> npcs;
 	enum Attacker { PLAYER, NPC };
 	Texture tileTextures[Tile::COUNT]; /*tablica na tekstury kafli*/

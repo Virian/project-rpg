@@ -138,6 +138,11 @@ void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 			gui.pushHpInfo(hpInfo);
 		}
 	}
+	audio.stopBackgroundMusic();
+	if (filePath == "test.level") audio.setBackgroundMusic("background1.ogg");
+	else if (filePath == "test2.level") audio.setBackgroundMusic("background2.ogg");
+	/*Reminder - else if inne levele*/
+	audio.playBackgroundMusic();
 	updateMap();
 	window.setView(view);
 }
@@ -170,7 +175,7 @@ Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 		player = new Juggernaut(characterName);
 		break;
 	}
-	setMap(_window, "test.level", 0); /*Reminder - do zmiany sciezka*/
+	setMap(_window, "test.level", 0); /*Reminder - do zmiany sciezka*/	
 	startEngine(_window);	
 }
 
@@ -274,6 +279,8 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 			gui.pushDamageInfo(damageInfo);
 		}
 		player->restartAttackInterval();
+		if (player->getEquipment().getActiveWeapon()->isRanged()) audio.playGunSound();
+		else audio.playMeleeSound();
 		break;
 	case NPC:
 		if (enemy->isRanged())
@@ -307,6 +314,8 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 			gui.pushDamageInfo(damageInfo);
 		}
 		enemy->restartAttackInterval();
+		if (enemy->isRanged()) audio.playGunSound();
+		else audio.playMeleeSound();
 		break;
 	}
 	
@@ -396,7 +405,7 @@ void Engine::startEngine(RenderWindow &window)
 	bool attacked = false;
 	short position = -1;
 
-	updateMap();
+		updateMap();
 	window.setView(view);
 	draw(window, pause, equipment, dead, position);
 	while (!quit)

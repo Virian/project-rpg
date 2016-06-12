@@ -2,13 +2,13 @@
 
 Audio::Audio()
 {
-	sf::SoundBuffer buffer;
-	sf::Sound testSound;
-
-	buffer.loadFromFile("test2.ogg");
-	buffers.push_back(buffer);
-	testSound.setBuffer(buffers[0]);
-	sounds.push_back(testSound);
+	gunSoundBuffer.loadFromFile("gun.ogg");
+	gunSound.setBuffer(gunSoundBuffer);
+	meleeSoundBuffer.loadFromFile("melee.ogg");
+	meleeSound.setBuffer(meleeSoundBuffer);
+	backgroundMusic.setLoop(true);
+	setSoundsVolume(65.f);
+	setMusicVolume(45.f);
 }
 
 Audio::~Audio()
@@ -21,7 +21,33 @@ void Audio::setBackgroundMusic(std::string filePath)
 	backgroundMusic.openFromFile(filePath);
 }
 
-void Audio::playTestSound()
+void Audio::playGunSound()
 {
-	sounds[0].play();
+	gunSound.play();
+}
+
+void Audio::playMeleeSound()
+{
+	meleeSound.play();
+}
+
+void Audio::playBackgroundMusic()
+{
+	backgroundMusic.play();
+}
+
+void Audio::stopBackgroundMusic()
+{
+	backgroundMusic.stop();
+}
+
+void Audio::setSoundsVolume(float volume)
+{
+	gunSound.setVolume(volume);
+	meleeSound.setVolume(volume);
+}
+
+void Audio::setMusicVolume(float volume)
+{
+	backgroundMusic.setVolume(volume);
 }
