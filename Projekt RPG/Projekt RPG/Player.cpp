@@ -67,6 +67,7 @@ Player::Player(string _name, fstream &file) : name(_name)
 			else tmp = new Weapon(false);
 			equipment.addItem(tmp);
 			equipment.swapActiveItem(0);
+			equipment.deleteItem(0);
 		}
 	}
 	file >> text;
@@ -81,6 +82,7 @@ Player::Player(string _name, fstream &file) : name(_name)
 			tmp = new Armor(name, stoi(text));
 			equipment.addItem(tmp);
 			equipment.swapActiveItem(0);
+			equipment.deleteItem(0);
 		}
 	}
 	while (!file.eof())

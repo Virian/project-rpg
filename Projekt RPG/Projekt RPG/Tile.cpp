@@ -6,7 +6,7 @@ Tile::Tile()
 
 }
 
-Tile::Tile(short tileCode, bool _wall, bool _interaction) : wall(_wall), interaction(_interaction)
+Tile::Tile(short tileCode, bool _wall) : wall(_wall)
 {
 	type = TileType(tileCode);
 }
@@ -21,20 +21,14 @@ void Tile::setType(short tileCode)
 	type = TileType(tileCode);
 }
 
-void Tile::setProperties(bool _wall, bool _interaction)
+void Tile::setProperties(bool _wall)
 {
 	wall = _wall;
-	interaction = _interaction;
 }
 
 bool Tile::isWall()
 {
 	return wall;
-}
-
-bool Tile::isInteraction()
-{
-	return interaction;
 }
 
 Tile::TileType Tile::getType()
@@ -47,7 +41,7 @@ TrapFountain::TrapFountain()
 
 }
 
-TrapFountain::TrapFountain(short tileCode, bool _wall, bool _interaction, TrapFountain::Character _character) : Tile(tileCode, _wall, _interaction), character(_character)
+TrapFountain::TrapFountain(short tileCode, bool _wall, TrapFountain::Character _character) : Tile(tileCode, _wall), character(_character)
 {
 
 }
@@ -75,14 +69,14 @@ short TrapFountain::getHpChange()
 	else return 0;
 }
 
-LootChest::LootChest(short tileCode, bool _wall, bool _interaction) : Tile(tileCode, _wall, _interaction)
+LootChest::LootChest(short tileCode, bool _wall) : Tile(tileCode, _wall)
 {
 	tileUnder = nullptr;
 	if (rand() % 100 + 1 > 60) content = ITEM;
 	else content = POTION;
 }
 
-LootChest::LootChest(short tileCode, bool _wall, bool _interaction, Tile* _tileUnder) : Tile(tileCode, _wall, _interaction), tileUnder(_tileUnder)
+LootChest::LootChest(short tileCode, bool _wall, Tile* _tileUnder) : Tile(tileCode, _wall), tileUnder(_tileUnder)
 {
 	if (rand() % 100 + 1 > 65) content = ITEM;
 	else content = POTION;
@@ -104,28 +98,19 @@ bool LootChest::containsPotion()
 	else return false;
 }
 
-Teleport::Teleport()
-{
+unsigned short Save::saveCount = 0;
 
+Save::Save(short tileCode, bool _wall) : Tile(tileCode, _wall)
+{
+	id = ++saveCount;
 }
 
-Teleport::Teleport(short tileCode, bool _wall, bool _interaction) : Tile(tileCode, _wall, _interaction)
+Save::~Save()
 {
-
+	--saveCount;
 }
 
-Teleport::~Teleport()
+unsigned short Save::getId()
 {
-
-}
-
-Tile::Coord Teleport::getDestination()
-{
-	return destination;
-}
-
-void Teleport::setDestination(Tile::Coord dest)
-{
-	destination.x = dest.x;
-	destination.y = dest.y;
+	return id;
 }

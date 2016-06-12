@@ -14,7 +14,7 @@ private:
 	unsigned short height;
 	unsigned short width;
 	Tile::Coord playerSpawn;
-	string levelName;
+	string levelPath;
 
 	Tile* getTile(short);
 public:	
@@ -28,5 +28,6 @@ public:
 	vector<vector<Tile*>> getMap();
 	void spawnLootChest(sf::Vector2f);
 	void deleteLootChest(sf::Vector2f);
-	string getLevelName();
+	string getLevelPath();
+	Tile::Coord getSaveCoords(unsigned short);
 };

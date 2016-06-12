@@ -17,7 +17,7 @@ Game::Game()
 		return;
 	}
 	state = MENU;
-	window.create(VideoMode(1280, 720), "Galaxy Guardian Alpha 1.01", Style::Titlebar);
+	window.create(VideoMode(1280, 720), "Galaxy Guardian Alpha 1.02", Style::Titlebar);
 }
 
 Game::~Game()

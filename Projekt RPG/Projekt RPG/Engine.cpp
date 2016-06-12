@@ -102,7 +102,7 @@ void Engine::updateMap()
 	}
 }
 
-void Engine::setMap(RenderWindow &window, string filePath)
+void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 {
 	/*Reminder - przy zmianie mapy upewnic sie ze mapa zostaje wyczyszczona*/
 	if (!level.load(filePath))
@@ -121,7 +121,8 @@ void Engine::setMap(RenderWindow &window, string filePath)
 		--i;
 	}
 	gui.clearHpInfo();
-	player->setPosition(level.getPlayerSpawnCoords());
+	if (_id == 0) player->setPosition(level.getPlayerSpawnCoords());
+	else player->setPosition(level.getSaveCoords(_id));
 	view.setCenter(player->getPosition());
 	for (size_t i = 0; i < level.getNpcCoords().size(); ++i)
 	{
@@ -169,7 +170,7 @@ Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 		player = new Juggernaut(characterName);
 		break;
 	}
-	setMap(_window, "test.level"); /*Reminder - do zmiany sciezka*/
+	setMap(_window, "test.level", 0); /*Reminder - do zmiany sciezka*/
 	startEngine(_window);	
 }
 
@@ -193,15 +194,17 @@ Engine::Engine(RenderWindow &_window, fstream &file)
 	string characterName;
 	string className;
 	string levelPath;
+	unsigned short saveId;
 	file >> className;
 	getline(file, characterName);
 	characterName.erase(0, 1);
 	file >> levelPath;
+	file >> saveId;
 	if (className == "Soldier") player = new Soldier(characterName, file);
 	else if (className == "Sentinel") player = new Sentinel(characterName, file);
 	else player = new Juggernaut(characterName, file);
 	file.close();
-	setMap(_window, levelPath);
+	setMap(_window, levelPath, saveId);
 	startEngine(_window);
 }
 
@@ -340,14 +343,15 @@ void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, s
 	window.display();
 }
 
-void Engine::saveGame()
+void Engine::saveGame(unsigned short id)
 {
 	fstream file;
 
 	file.open("SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
 	file << player->getClassName() << " " << player->getName() << endl;
-	file << level.getLevelName() << endl;
+	file << level.getLevelPath() << endl;
 	/*Reminder - jeszcze miejsce na mapie jesli mialyby byc tylko wyznaczone miejsca do zapisu*/
+	file << id << endl;
 	file << player->getLvl() << " " << player->getExp() << " " << player->getExpForNextLevel() << endl;
 	file << player->getHp() << " " << player->getMaxHp() << endl;
 	file << player->getStr() << " " << player->getInt() << " " << player->getAgi() << " " << player->getPointsToSpend() << endl;
@@ -412,7 +416,7 @@ void Engine::startEngine(RenderWindow &window)
 					bool attacked = false;
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L)) /*Reminder - do zmiany na jakies normalne wywolywanie*/
 					{
-						setMap(window, "test2.level");
+						setMap(window, "test2.level", 0);
 					}
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 					{
@@ -603,8 +607,13 @@ void Engine::startEngine(RenderWindow &window)
 				}
 				if ((gui.getLoadButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
 				{
-					saveGame();
-					MessageBox(NULL, "Successfully saved game!", "SUCCESS", NULL);
+					Save* temp;
+					if (temp = dynamic_cast<Save*>(level.getMap()[player->getPosition().y / 64][player->getPosition().x / 64]))
+					{
+						saveGame(temp->getId());
+						MessageBox(NULL, "Successfully saved game!", "SUCCESS", NULL);
+					}
+					else MessageBox(NULL, "You can only save your game while standing on save tile!", "UNABLE TO SAVE", NULL);
 				}
 			}
 			if (gui.getResumeButton().getGlobalBounds().contains(worldPos)) gui.setResumeHighlight(1);

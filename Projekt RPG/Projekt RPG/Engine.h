@@ -19,10 +19,10 @@ private:
 	unsigned short tileCountHeight; /*ilosc wyswietlanych kafli w pionie*/
 	unsigned short tileCountWidth; /*ilosc wyswietlanych kafli w poziomie*/
 	void draw(RenderWindow&, bool, bool, bool, short);
-	void setMap(RenderWindow&, string);
+	void setMap(RenderWindow&, string, unsigned short);
 	void updateMap();
 	void fight(unsigned, Attacker);
-	void saveGame();
+	void saveGame(unsigned short);
 public:
 	Engine(RenderWindow&, string, int);
 	Engine(RenderWindow&, fstream&);

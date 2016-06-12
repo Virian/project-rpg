@@ -29,34 +29,34 @@ Tile* Level::getTile(short tileCode)
 	switch (Tile::TileType(tileCode))
 	{
 	case Tile::FLOOR1:
-		tile = new Tile(tileCode, false, false);
+		tile = new Tile(tileCode, false);
 		break;
 	case Tile::WALL1:
-		tile = new Tile(tileCode, true, false);
+		tile = new Tile(tileCode, true);
 		break;
 	case Tile::FLOOR2:
-		tile = new Tile(tileCode, false, false);
+		tile = new Tile(tileCode, false);
 		break;
 	case Tile::CHEST1:
-		tile = new Tile(tileCode, true, true);
+		tile = new Tile(tileCode, true);
 		break;
 	case Tile::TRAP1:
-		tile = new TrapFountain(tileCode, false, true, TrapFountain::TRAP);
+		tile = new TrapFountain(tileCode, false, TrapFountain::TRAP);
 		break;
 	case Tile::FOUNTAIN1:
-		tile = new TrapFountain(tileCode, false, true, TrapFountain::FOUNTAIN);
+		tile = new TrapFountain(tileCode, false, TrapFountain::FOUNTAIN);
 		break;
-	case Tile::TELEPORT1:
-		tile = new Tile(tileCode, false, true);
+	case Tile::SAVE1:
+		tile = new Save(tileCode, false);
 		break;
 	case Tile::LOOTCHEST1:
-		tile = new LootChest(tileCode, true, true);
+		tile = new LootChest(tileCode, true);
 		break;
 	/*case Tile::TYPE9:
 		tile = new Tile(tileCode, true, true);
 		break;*/
 	default:
-		tile = new Tile(tileCode, true, true);
+		tile = new Tile(tileCode, true);
 		break;
 	}
 	return tile;
@@ -68,7 +68,7 @@ bool Level::load(string filePath)
 
 	file.open(filePath);
 	if (!file.is_open()) return false;
-	levelName = filePath;
+	levelPath = filePath;
 	npcsCoords.clear();
 	file >> width >> height;
 	if ((height == 0) || (width == 0))
@@ -144,7 +144,7 @@ void Level::spawnLootChest(sf::Vector2f chestPosition)
 	int x = static_cast<int>(chestPosition.x / 64);
 	Tile* tileUnder = map[y][x];
 	
-	Tile* newChest = new LootChest(Tile::LOOTCHEST1, true, true, tileUnder);
+	Tile* newChest = new LootChest(Tile::LOOTCHEST1, true, tileUnder);
 	map[y][x] = newChest;
 }
 
@@ -158,7 +158,31 @@ void Level::deleteLootChest(sf::Vector2f chestPosition)
 	map[y][x] = tileUnder;
 }
 
-string Level::getLevelName()
+string Level::getLevelPath()
 {
-	return levelName;
+	return levelPath;
+}
+
+Tile::Coord Level::getSaveCoords(unsigned short _id)
+{
+	Save* temp;
+	Tile::Coord coord;
+
+	coord = playerSpawn;
+	for (unsigned short y = 0; y < height; ++y)
+	{
+		for (unsigned short x = 0; x < width; ++x)
+		{
+			if (temp = dynamic_cast<Save*>(map[y][x]))
+			{
+				if (temp->getId() == _id)
+				{
+					coord.x = x;
+					coord.y = y;
+					return coord;
+				}
+			}
+		}
+	}
+	return coord;
 }
