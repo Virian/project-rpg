@@ -432,10 +432,12 @@ void Engine::startEngine(RenderWindow &window)
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 					{
 						pause = true;
+						player->pauseTimers();
 					}
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::I))
 					{
 						equipment = true;
+						player->pauseTimers();
 					}
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1))
 					{
@@ -604,6 +606,7 @@ void Engine::startEngine(RenderWindow &window)
 				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 				{
 					pause = false;
+					player->unpauseTimers();
 				}
 				if ((gui.getQuitButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
 				{
@@ -615,6 +618,7 @@ void Engine::startEngine(RenderWindow &window)
 				if ((gui.getResumeButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
 				{
 					pause = false;
+					player->unpauseTimers();
 				}
 				if ((gui.getLoadButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
 				{
@@ -642,6 +646,7 @@ void Engine::startEngine(RenderWindow &window)
 				{
 					equipment = false;
 					position = -1;
+					player->unpauseTimers();
 				}
 				for (short i = 0; i < 3; ++i)
 				{

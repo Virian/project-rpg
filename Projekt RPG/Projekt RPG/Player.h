@@ -48,6 +48,8 @@ public:
 	Clock getAttackInterval();
 	void restartAttackInterval();
 	void increaseExperience(unsigned);
+	void pauseTimers();
+	void unpauseTimers();
 	/*skille*/
 	bool isActiveSkill1();
 	bool isActiveSkill2();

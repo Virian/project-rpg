@@ -452,6 +452,26 @@ void Player::restartAttackInterval()
 	attackInterval.restart();
 }
 
+void Player::pauseTimers()
+{
+	cooldownSkill1.stop();
+	cooldownSkill2.stop();
+	cooldownSkill3.stop();
+	effectSkill1.stop();
+	effectSkill2.stop();
+	effectSkill3.stop();
+}
+
+void Player::unpauseTimers()
+{
+	cooldownSkill1.start();
+	cooldownSkill2.start();
+	cooldownSkill3.start();
+	effectSkill1.start();
+	effectSkill2.start();
+	effectSkill3.start();
+}
+
 bool Player::isActiveSkill1()
 {
 	return activeSkill1;
