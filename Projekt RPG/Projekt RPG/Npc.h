@@ -56,9 +56,10 @@ public:
 	Clock getAttackInterval();
 	void restartAttackInterval();
 	unsigned getExperienceGiven();
-private:
+protected:
 	float speed;
-	unsigned frame;
+	unsigned walkFrame;
+	unsigned walkFrameCount;
 	Clock anim_clock;
 	Clock time;
 	float rot;
@@ -70,11 +71,24 @@ private:
 	short parMaxHp;
 	unsigned short parStr;
 	unsigned short parAgi;
-	unsigned short parInt; /*moze okazac sie niepotrzebny*/
 	unsigned experienceGiven;
 	unsigned short attackValue;
 	unsigned short armorValue;
 	bool ranged;
 	bool alive;
 	Clock attackInterval;
+};
+
+class Gunner : public Enemy
+{
+public:
+	Gunner(Tile::Coord);
+	~Gunner();
+};
+
+class Alien : public Enemy
+{
+public:
+	Alien(Tile::Coord);
+	~Alien();
 };

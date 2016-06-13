@@ -124,9 +124,12 @@ void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 	if (_id == 0) player->setPosition(level.getPlayerSpawnCoords());
 	else player->setPosition(level.getSaveCoords(_id));
 	view.setCenter(player->getPosition());
-	for (size_t i = 0; i < level.getNpcCoords().size(); ++i)
+	for (size_t i = 0; i < level.getNpcCoordsAndTypes().size(); ++i)
 	{
-		Npc* tmp = new Enemy(level.getNpcCoords()[i]);
+		Npc* tmp;
+		if (level.getNpcCoordsAndTypes()[i].enemyType == "[GUNNER]") tmp = new Gunner(level.getNpcCoordsAndTypes()[i].npcCoords);
+		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[ALIEN]") tmp = new Alien(level.getNpcCoordsAndTypes()[i].npcCoords);
+		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[NEUTRAL]") tmp = new Neutral(level.getNpcCoordsAndTypes()[i].npcCoords);
 		npcs.push_back(tmp);
 		Enemy* temp;
 		if (temp = dynamic_cast<Enemy*>(tmp))

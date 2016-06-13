@@ -8,8 +8,14 @@ using namespace std;
 
 class Level
 {
+public:
+	struct CoordAndType
+	{
+		Tile::Coord npcCoords;
+		string enemyType;
+	};
 private:
-	vector<Tile::Coord> npcsCoords;
+	vector<CoordAndType> npcsCoordsAndTypes;
 	vector<vector<Tile*>> map;
 	unsigned short height;
 	unsigned short width;
@@ -24,7 +30,7 @@ public:
 	unsigned short getHeight();
 	unsigned short getWidth();
 	Tile::Coord getPlayerSpawnCoords();
-	vector<Tile::Coord> getNpcCoords();
+	vector<CoordAndType> getNpcCoordsAndTypes();
 	vector<vector<Tile*>> getMap();
 	void spawnLootChest(sf::Vector2f);
 	void deleteLootChest(sf::Vector2f);

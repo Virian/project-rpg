@@ -69,7 +69,7 @@ bool Level::load(string filePath)
 	file.open(filePath);
 	if (!file.is_open()) return false;
 	levelPath = filePath;
-	npcsCoords.clear();
+	npcsCoordsAndTypes.clear();
 	file >> width >> height;
 	if ((height == 0) || (width == 0))
 	{
@@ -100,12 +100,29 @@ bool Level::load(string filePath)
 			playerSpawn.x = x;
 			playerSpawn.y = y;
 		}
-		else if (name == "[ENEMY]")
+		else if (name == "[ALIEN]")
 		{
-			Tile::Coord tmp;
-			tmp.x = x;
-			tmp.y = y;
-			npcsCoords.push_back(tmp);
+			CoordAndType tmp;
+			tmp.npcCoords.x = x;
+			tmp.npcCoords.y = y;
+			tmp.enemyType = "[ALIEN]";
+			npcsCoordsAndTypes.push_back(tmp);
+		}
+		else if (name == "[GUNNER]")
+		{
+			CoordAndType tmp;
+			tmp.npcCoords.x = x;
+			tmp.npcCoords.y = y;
+			tmp.enemyType = "[GUNNER]";
+			npcsCoordsAndTypes.push_back(tmp);
+		}
+		else if (name == "[NEUTRAL]")
+		{
+			CoordAndType tmp;
+			tmp.npcCoords.x = x;
+			tmp.npcCoords.y = y;
+			tmp.enemyType = "[NEUTRAL]";
+			npcsCoordsAndTypes.push_back(tmp);
 		}
 		/* else if reszta specjalnych kafelkow*/
 	}
@@ -128,9 +145,9 @@ Tile::Coord Level::getPlayerSpawnCoords()
 	return playerSpawn;
 }
 
-vector<Tile::Coord> Level::getNpcCoords()
+vector<Level::CoordAndType> Level::getNpcCoordsAndTypes()
 {
-	return npcsCoords;
+	return npcsCoordsAndTypes;
 }
 
 vector<vector<Tile*>> Level::getMap()

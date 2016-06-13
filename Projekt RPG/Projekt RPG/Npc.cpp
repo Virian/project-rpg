@@ -11,10 +11,7 @@ Npc::Npc(Tile::Coord spawnCoord) : spawnCoord(spawnCoord)
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return; /*powinien w ogole jakos te gre wywalic, co najmniej do menu*/
 	}
-	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(0, 640, 64, 64)); /*Reminder - do zmiany, obecnie jest to tekstura playera*/
-	sprite.setOrigin(32, 32);
-	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
+	sprite.setTexture(texture);	
 }
 
 Npc::~Npc()
@@ -56,8 +53,7 @@ Neutral::~Neutral()
 
 Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
-	speed = 4.0f;
-	frame = 0;
+	walkFrame = 0;
 	anim_clock.restart();
 	time.restart();
 	attackInterval.restart();
@@ -67,15 +63,7 @@ Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
 
-	parHp = parMaxHp = parStr = parAgi = parInt = 10;
-	experienceGiven = 20; /*Reminder - do zmiany*/
 	alive = true;
-	attackValue = rand() % 4 + 4;
-	armorValue = rand() % 4 + 4;
-	short random; /*bedzie w konstruktorze*/
-	random = rand() % 2;
-	if (random == 0) ranged = false;
-	else ranged = true;
 }
 
 Enemy::~Enemy()
@@ -91,6 +79,7 @@ Enemy::Status Enemy::getStatus()
 void Enemy::update(Level* level, Vector2f playerPosition)
 {	
 	bool collision = false;
+	IntRect tmpRect;
 	/*ma przestawac atakowac, moze podazac*/
 	if (status == ENGAGED)
 	{
@@ -101,11 +90,13 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 		collision = false;
 		if (anim_clock.getElapsedTime() > seconds(0.04f))
 		{
-			if (frame < 7) /*liczba klatek animacji - 1*/
-				frame++;
+			if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
+				walkFrame++;
 			else
-				frame = 0; /*animacja sie zapetla*/
-			sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
+				walkFrame = 0; /*animacja sie zapetla*/
+			tmpRect = sprite.getTextureRect();
+			tmpRect.left = walkFrame * 64;
+			sprite.setTextureRect(tmpRect);
 			sprite.move(getMove());
 			/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
 			if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
@@ -175,11 +166,13 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 			collision = false;
 			if (anim_clock.getElapsedTime() > seconds(0.04f))
 			{
-				if (frame < 7) /*liczba klatek animacji - 1*/
-					frame++;
+				if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
+					walkFrame++;
 				else
-					frame = 0; /*animacja sie zapetla*/
-				sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
+					walkFrame = 0; /*animacja sie zapetla*/
+				tmpRect = sprite.getTextureRect();
+				tmpRect.left = walkFrame * 64;
+				sprite.setTextureRect(tmpRect);
 				sprite.move(getMove());
 				/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
 				if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
@@ -249,16 +242,15 @@ Vector2f Enemy::getMove()
 	return Vector2f(vx * speed, vy * speed);
 }
 
-//void Enemy::walk()
-//{
-//	status = WALK;
-//}
-
 void Enemy::stop(bool collision)
 {
+	IntRect tmpRect;
+	
 	status = STOP;
-	frame = 0;
-	sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64)); /*Reminder - ustawic odpowiednia teksture*/
+	walkFrame = 0;
+	tmpRect = sprite.getTextureRect();
+	tmpRect.left = walkFrame * 64;
+	sprite.setTextureRect(tmpRect);
 	anim_clock.restart();
 	time.restart();
 	if (collision) rot = rot + 180; /*Reminder - mo¿na zmienic na widelki ale ryzyko zablokowania*/
@@ -348,4 +340,46 @@ void Enemy::restartAttackInterval()
 unsigned Enemy::getExperienceGiven()
 {
 	return experienceGiven;
+}
+
+Gunner::Gunner(Tile::Coord spawnCoord) : Enemy(spawnCoord)
+{
+	sprite.setTextureRect(IntRect(0, 640, 64, 64));
+	sprite.setOrigin(32, 32);
+	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
+	walkFrameCount = 7;
+	speed = 3.2f;
+	ranged = true;
+	parHp = parMaxHp = 10;
+	attackValue = rand() % 5 + 5;
+	armorValue = rand() % 2 + 3;
+	experienceGiven = 10;
+	parStr = 8;
+	parAgi = 10;
+}
+
+Gunner::~Gunner()
+{
+
+}
+
+Alien::Alien(Tile::Coord spawnCoord) : Enemy(spawnCoord)
+{
+	sprite.setTextureRect(IntRect(0, 704, 64, 64));
+	sprite.setOrigin(32, 32);
+	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
+	walkFrameCount = 7;
+	speed = 4.0f;
+	ranged = false;
+	parHp = parMaxHp = 18;
+	attackValue = rand() % 3 + 2;
+	armorValue = rand() % 3 + 4;
+	experienceGiven = 8;
+	parAgi = 6;
+	parStr = 14;
+}
+
+Alien::~Alien()
+{
+
 }
