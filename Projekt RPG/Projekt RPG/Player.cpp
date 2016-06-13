@@ -532,6 +532,21 @@ void Juggernaut::clearEffectSkill3()
 
 }
 
+float Juggernaut::getRatioSkill1()
+{
+	return cooldownSkill1.getRemainingTime().asSeconds() / 120.f;
+}
+
+float Juggernaut::getRatioSkill2()
+{
+	return cooldownSkill2.getRemainingTime().asSeconds() / (10.f - parInt / 50.f);
+}
+
+float Juggernaut::getRatioSkill3()
+{
+	return 0.f; /*Reminder - do zmiany*/
+}
+
 Soldier::Soldier(string _name) : Player(_name)
 {
 	sprite.setColor(Color::Yellow);
@@ -611,6 +626,21 @@ void Soldier::clearEffectSkill3()
 	activeSkill3 = false;
 }
 
+float Soldier::getRatioSkill1()
+{
+	return cooldownSkill1.getRemainingTime().asSeconds() / 40.f;
+}
+
+float Soldier::getRatioSkill2()
+{
+	return cooldownSkill2.getRemainingTime().asSeconds() / 24.f;
+}
+
+float Soldier::getRatioSkill3()
+{
+	return cooldownSkill3.getRemainingTime().asSeconds() / 60.f;
+}
+
 Sentinel::Sentinel(string _name) : Player(_name)
 {
 	sprite.setColor(Color(140, 140, 255));
@@ -674,4 +704,19 @@ void Sentinel::clearEffectSkill2()
 void Sentinel::clearEffectSkill3()
 {
 
+}
+
+float Sentinel::getRatioSkill1()
+{
+	return cooldownSkill1.getRemainingTime().asSeconds() / 40.f;
+}
+
+float Sentinel::getRatioSkill2()
+{
+	return cooldownSkill2.getRemainingTime().asSeconds() / 35.f;
+}
+
+float Sentinel::getRatioSkill3()
+{
+	return 0.f;
 }

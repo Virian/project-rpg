@@ -25,9 +25,15 @@ Gui::Gui()
 	skill2.setSize(Vector2f(64, 64));
 	skill3.setSize(Vector2f(64, 64));
 
-	skill1.setFillColor(Color::Green);
+	/*skill1.setFillColor(Color::Green);
 	skill2.setFillColor(Color::Green);
-	skill3.setFillColor(Color::Green);	
+	skill3.setFillColor(Color::Green);*/
+	skill1.setTexture(&texture);
+	skill2.setTexture(&texture);
+	skill3.setTexture(&texture);
+	fadedSkill1.setTexture(&texture);
+	fadedSkill2.setTexture(&texture);
+	fadedSkill3.setTexture(&texture);
 
 	flash.restart();
 
@@ -109,6 +115,37 @@ Gui::HpBar::HpBar()
 	missingHp.setFillColor(Color(120, 0, 0));
 }
 
+void Gui::setSkillPictures(string className)
+{
+	if (className == "Soldier")
+	{
+		skill1.setTextureRect(IntRect(0, 1152, 64, 64));
+		fadedSkill1.setTextureRect(IntRect(64, 1152, 64, 64));
+		skill2.setTextureRect(IntRect(128, 1152, 64, 64));
+		fadedSkill2.setTextureRect(IntRect(192, 1152, 64, 64));
+		skill3.setTextureRect(IntRect(256, 1152, 64, 64));
+		fadedSkill3.setTextureRect(IntRect(320, 1152, 64, 64));
+	}
+	else if (className == "Sentinel")
+	{
+		skill1.setTextureRect(IntRect(0, 1216, 64, 64));
+		fadedSkill1.setTextureRect(IntRect(64, 1216, 64, 64));
+		skill2.setTextureRect(IntRect(128, 1216, 64, 64));
+		fadedSkill2.setTextureRect(IntRect(192, 1216, 64, 64));
+		skill3.setTextureRect(IntRect(256, 1216, 64, 64));
+		fadedSkill3.setTextureRect(IntRect(320, 1216, 64, 64));
+	}
+	else
+	{
+		skill1.setTextureRect(IntRect(0, 1280, 64, 64));
+		fadedSkill1.setTextureRect(IntRect(64, 1280, 64, 64));
+		skill2.setTextureRect(IntRect(128, 1280, 64, 64));
+		fadedSkill2.setTextureRect(IntRect(192, 1280, 64, 64));
+		skill3.setTextureRect(IntRect(256, 1280, 64, 64));
+		fadedSkill3.setTextureRect(IntRect(320, 1280, 64, 64));
+	}
+}
+
 void Gui::drawScreen(RenderWindow &window, Player* player)
 {
 	short currentHp = player->getHp();
@@ -174,9 +211,9 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 
 	hpGauge.setPosition(window.mapPixelToCoords(Vector2i(36, 570)));
 	expGauge.setPosition(window.mapPixelToCoords(Vector2i(1116, 570)));
-	skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
+	/*skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
 	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
-	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
+	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));*/
 
 	currHp.setString(std::to_string(currentHp));
 	maximHp.setString(std::to_string(maxHp));
@@ -195,6 +232,9 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	window.draw(skill1);
 	window.draw(skill2);
 	window.draw(skill3);
+	window.draw(fadedSkill1);
+	window.draw(fadedSkill2);
+	window.draw(fadedSkill3);
 	currHp.move(Vector2f(2, 2));
 	currHp.setColor(Color::Black);
 	window.draw(currHp);
@@ -442,4 +482,44 @@ size_t Gui::getHpInfoSize()
 void Gui::clearHpInfo()
 {
 	hpInfo.clear();
+}
+
+void Gui::updateSkillCooldowns(RenderWindow &window, float ratioSkill1, float ratioSkill2, float ratioSkill3)
+{
+	IntRect temp;
+	
+	fadedSkill1.setSize(Vector2f(64.f, truncf(ratioSkill1 * 64.f)));
+	fadedSkill2.setSize(Vector2f(64.f, truncf(ratioSkill2 * 64.f)));
+	fadedSkill3.setSize(Vector2f(64.f, truncf(ratioSkill3 * 64.f)));
+	/*skill1.setSize(Vector2f(64.f, truncf((1.f - ratioSkill1) * 64.f)));
+	skill2.setSize(Vector2f(64.f, truncf((1.f - ratioSkill2) * 64.f)));
+	skill3.setSize(Vector2f(64.f, truncf((1.f - ratioSkill3) * 64.f)));*/
+	temp = fadedSkill1.getTextureRect();
+	temp.height = fadedSkill1.getSize().y;
+	fadedSkill1.setTextureRect(temp);
+	temp = fadedSkill2.getTextureRect();
+	temp.height = fadedSkill2.getSize().y;
+	fadedSkill2.setTextureRect(temp);
+	temp = fadedSkill3.getTextureRect();
+	temp.height = fadedSkill3.getSize().y;
+	fadedSkill3.setTextureRect(temp);
+	//skill1.setTextureRect(skill1.getTextureRect());
+	/*temp = skill1.getTextureRect();
+	temp.height = skill1.getSize().y;
+	skill1.setTextureRect(temp);
+	temp = skill2.getTextureRect();
+	temp.height = skill2.getSize().y;
+	skill2.setTextureRect(temp);
+	temp = skill2.getTextureRect();
+	temp.height = skill2.getSize().y;
+	skill2.setTextureRect(temp);*/
+	fadedSkill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
+	fadedSkill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
+	fadedSkill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
+	/*skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636 + static_cast<int>(fadedSkill1.getSize().y))));
+	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636 + static_cast<int>(fadedSkill2.getSize().y))));
+	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636 + static_cast<int>(fadedSkill3.getSize().y))));*/
+	skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
+	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
+	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
 }

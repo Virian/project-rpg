@@ -20,6 +20,7 @@ public:
 	};
 	Gui();
 	~Gui();
+	void setSkillPictures(string);
 	void drawScreen(RenderWindow&, Player*);
 	void drawPauseMenu(RenderWindow&);
 	void drawEquipment(RenderWindow&, Player*, short);
@@ -36,6 +37,7 @@ public:
 	void eraseHpInfo(size_t);
 	size_t getHpInfoSize();
 	void clearHpInfo();
+	void updateSkillCooldowns(RenderWindow&, float, float, float);
 private:
 	virtual void draw(RenderTarget&, RenderStates) const;
 	Texture texture;
@@ -46,9 +48,12 @@ private:
 	Text currHp, maximHp;
 	Text experience;
 	Text potions;
-	RectangleShape skill1;
-	RectangleShape skill2;
-	RectangleShape skill3;
+	RectangleShape skill1, fadedSkill1;
+	RectangleShape skill2, fadedSkill2;
+	RectangleShape skill3, fadedSkill3;
+	/*Sprite skill1, fadedSkill1;
+	Sprite skill2, fadedSkill1;
+	Sprite skill3, fadedSkill1;*/
 	Clock flash; /*miganie hp gdy jest niskie*/
 	vector<TextDamage*> damageInfo;
 	vector<HpBar*> hpInfo;

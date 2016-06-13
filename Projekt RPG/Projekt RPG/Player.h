@@ -58,6 +58,9 @@ public:
 	virtual void clearEffectSkill1() = 0;
 	virtual void clearEffectSkill2() = 0;
 	virtual void clearEffectSkill3() = 0;
+	virtual float getRatioSkill1() = 0;
+	virtual float getRatioSkill2() = 0;
+	virtual float getRatioSkill3() = 0;
 protected:
 	Sprite sprite;
 	Texture texture;
@@ -103,6 +106,9 @@ public:
 	void clearEffectSkill1();
 	void clearEffectSkill2();
 	void clearEffectSkill3();
+	float getRatioSkill1();
+	float getRatioSkill2();
+	float getRatioSkill3();
 };
 
 class Soldier : public Player
@@ -118,6 +124,9 @@ public:
 	void clearEffectSkill1();
 	void clearEffectSkill2();
 	void clearEffectSkill3();
+	float getRatioSkill1();
+	float getRatioSkill2();
+	float getRatioSkill3();
 };
 
 class Sentinel : public Player
@@ -133,4 +142,7 @@ public:
 	void clearEffectSkill1();
 	void clearEffectSkill2();
 	void clearEffectSkill3();
+	float getRatioSkill1();
+	float getRatioSkill2();
+	float getRatioSkill3();
 };

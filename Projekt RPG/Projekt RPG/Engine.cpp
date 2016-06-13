@@ -176,6 +176,7 @@ Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 		break;
 	}
 	setMap(_window, "levels/level1.level", 0);
+	gui.setSkillPictures(player->getClassName());
 	startEngine(_window);	
 }
 
@@ -210,6 +211,7 @@ Engine::Engine(RenderWindow &_window, fstream &file)
 	else player = new Juggernaut(characterName, file);
 	file.close();
 	setMap(_window, levelPath, saveId);
+	gui.setSkillPictures(player->getClassName());
 	startEngine(_window);
 }
 
@@ -324,6 +326,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, short position)
 {
 	window.clear();
+	gui.updateSkillCooldowns(window, player->getRatioSkill1(), player->getRatioSkill2(), player->getRatioSkill3());
 	for (unsigned short y = 0; y < tileCountHeight; y++)
 	{
 		for (unsigned short x = 0; x < tileCountWidth; x++)
