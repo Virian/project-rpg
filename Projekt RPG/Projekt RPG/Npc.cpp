@@ -54,7 +54,9 @@ Neutral::~Neutral()
 Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
 	walkFrame = 0;
+	attackFrame = 0;
 	walkAnimationClock.restart();
+	attackAnimationClock.restart();
 	time.restart();
 	attackInterval.restart();
 	status = STOP;
@@ -156,6 +158,17 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 		rot = rot * 180.f / static_cast<float>(M_PI);
 		rot += 90;
 		sprite.setRotation(rot);
+		if (((attackFrameCount > 0)) && (attackAnimationClock.getElapsedTime() > seconds(0.1f)))
+		{
+			if (attackFrame < attackFrameCount) /*liczba klatek animacji - 1*/
+				++attackFrame;
+			else
+				attackFrame = 0; /*animacja sie zapetla*/
+			tmpRect = sprite.getTextureRect();
+			tmpRect.left = (attackFrame + walkFrameCount + 1) * 64;
+			sprite.setTextureRect(tmpRect);
+			attackAnimationClock.restart();
+		}
 	}
 	else if (time.getElapsedTime() > milliseconds(idleT))
 	{		
@@ -248,6 +261,7 @@ void Enemy::stop(bool collision)
 	
 	status = STOP;
 	walkFrame = 0;
+	attackFrame = 0;
 	tmpRect = sprite.getTextureRect();
 	tmpRect.left = walkFrame * 64;
 	sprite.setTextureRect(tmpRect);
@@ -348,6 +362,7 @@ Gunner::Gunner(Tile::Coord spawnCoord) : Enemy(spawnCoord)
 	sprite.setOrigin(32, 32);
 	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 	walkFrameCount = 7;
+	attackFrameCount = 0;
 	speed = 3.2f;
 	ranged = true;
 	parHp = parMaxHp = 10;
@@ -369,6 +384,7 @@ Alien::Alien(Tile::Coord spawnCoord) : Enemy(spawnCoord)
 	sprite.setOrigin(32, 32);
 	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 	walkFrameCount = 7;
+	attackFrameCount = 4;
 	speed = 4.0f;
 	ranged = false;
 	parHp = parMaxHp = 18;

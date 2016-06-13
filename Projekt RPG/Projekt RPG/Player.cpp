@@ -15,8 +15,12 @@ Player::Player(string _name) : name(_name)
 	sprite.setOrigin(32, 32);
 
 	speed = 5.5f;
-	frame = 0;
-	anim_clock.restart();
+	walkFrame = 0;
+	walkFrameCount = 7;
+	attackFrame = 0;
+	attackFrameCount = 0;
+	walkAnimationClock.restart();
+	attackAnimationClock.restart();
 	activeSkill1 = false;
 	activeSkill2 = false;
 	activeSkill3 = false;
@@ -24,7 +28,6 @@ Player::Player(string _name) : name(_name)
 	parPointsToSpend = 0;
 	parExp = 0;	
 	parExpForNextLevel = 83;
-	parMaxHp = parHp = 100;
 	attackInterval.restart();
 }
 
@@ -40,8 +43,8 @@ Player::Player(string _name, fstream &file) : name(_name)
 	sprite.setOrigin(32, 32);
 
 	speed = 5.5f;
-	frame = 0;
-	anim_clock.restart();
+	walkFrame = 0;
+	walkAnimationClock.restart();
 	activeSkill1 = false;
 	activeSkill2 = false;
 	activeSkill3 = false;
@@ -129,6 +132,8 @@ short Player::update(Vector2f mouse, Level *level)
 	rot += 90;
 	sprite.setRotation(rot);
 
+	parMaxHp = 100 + parStr;
+
 	if (temp1 = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp1->getHpChange();
 	if (parHp > parMaxHp) parHp = parMaxHp;
 
@@ -136,137 +141,155 @@ short Player::update(Vector2f mouse, Level *level)
 	if (effectSkill2.isExpired() && activeSkill2) clearEffectSkill2();
 	if (effectSkill3.isExpired() && activeSkill3) clearEffectSkill3();
 	
-	if (anim_clock.getElapsedTime() > seconds(0.04f))
+	if (status == WALK)
 	{
-		if (status != WALK) return result;
-		if (frame < 7) /*liczba klatek animacji - 1*/
-			frame++;
-		else
-			frame = 0; /*animacja sie zapetla*/
-		sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
-		sprite.move(getMove());
-		/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
-		if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
+		if (walkAnimationClock.getElapsedTime() > seconds(0.04f))
 		{
-			sprite.move(-getMove());
-			stop();
-		}
-		if (sprite.getGlobalBounds().top + 15 < 0) /*gorna krawedz poziomu*/
-		{
-			sprite.move(-getMove());
-			stop();
-		}
-		if (sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15 > level->getWidth() * 64) /*prawa krawedz poziomu*/
-		{
-			sprite.move(-getMove());
-			stop();
-		}
-		if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15 > level->getHeight() * 64) /*dolna krawedz poziomu*/
-		{
-			sprite.move(-getMove());
-			stop();
-		}
-		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]->isWall()) /*kolizja z kaflem po lewej*/
-		{
-			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]))
+			//if (status != WALK) return result;
+			if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
+				walkFrame++;
+			else
+				walkFrame = 0; /*animacja sie zapetla*/
+			sprite.setTextureRect(IntRect(walkFrame * 64, 640, 64, 64));
+			sprite.move(getMove());
+			/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
+			if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
 			{
-				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				sprite.move(-getMove());
+				stop();
+			}
+			if (sprite.getGlobalBounds().top + 15 < 0) /*gorna krawedz poziomu*/
+			{
+				sprite.move(-getMove());
+				stop();
+			}
+			if (sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15 > level->getWidth() * 64) /*prawa krawedz poziomu*/
+			{
+				sprite.move(-getMove());
+				stop();
+			}
+			if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15 > level->getHeight() * 64) /*dolna krawedz poziomu*/
+			{
+				sprite.move(-getMove());
+				stop();
+			}
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]->isWall()) /*kolizja z kaflem po lewej*/
+			{
+				if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]))
 				{
-					if (temp2->containsPotion()) equipment.addPotion();
-					else
+					if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
 					{
-						Item* item;
-						if (rand() % 2 == 0) item = new Armor();
+						if (temp2->containsPotion()) equipment.addPotion();
 						else
 						{
-							if (rand() % 2 == 0) item = new Weapon(false);
-							else item = new Weapon(true);
+							Item* item;
+							if (rand() % 2 == 0) item = new Armor();
+							else
+							{
+								if (rand() % 2 == 0) item = new Weapon(false);
+								else item = new Weapon(true);
+							}
+							equipment.addItem(item);
 						}
-						equipment.addItem(item);
+						level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + 15, getPosition().y));
+						result = 1;
 					}
-					level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + 15, getPosition().y));
-					result = 1;
 				}
+				sprite.move(-getMove());
+				stop();
 			}
-			sprite.move(-getMove());
-			stop();
-		}
-		if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]->isWall()) /*kolizja z kaflem po prawej*/
-		{
-			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]))
+			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]->isWall()) /*kolizja z kaflem po prawej*/
 			{
-				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15) / 64)]))
 				{
-					if (temp2->containsPotion()) equipment.addPotion();
-					else
+					if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
 					{
-						Item* item;
-						if (rand() % 2 == 0) item = new Armor();
+						if (temp2->containsPotion()) equipment.addPotion();
 						else
 						{
-							if (rand() % 2 == 0) item = new Weapon(false);
-							else item = new Weapon(true);
+							Item* item;
+							if (rand() % 2 == 0) item = new Armor();
+							else
+							{
+								if (rand() % 2 == 0) item = new Weapon(false);
+								else item = new Weapon(true);
+							}
+							equipment.addItem(item);
 						}
-						equipment.addItem(item);
+						level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15, getPosition().y));
+						result = 1;
 					}
-					level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15, getPosition().y));
-					result = 1;
 				}
+				sprite.move(-getMove());
+				stop();
 			}
-			sprite.move(-getMove());
-			stop();
-		}
-		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z gory*/
-		{
-			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]))
+			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z gory*/
 			{
-				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + 15) / 64)][static_cast<int>(getPosition().x / 64)]))
 				{
-					if (temp2->containsPotion()) equipment.addPotion();
-					else
+					if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
 					{
-						Item* item;
-						if (rand() % 2 == 0) item = new Armor();
+						if (temp2->containsPotion()) equipment.addPotion();
 						else
 						{
-							if (rand() % 2 == 0) item = new Weapon(false);
-							else item = new Weapon(true);
+							Item* item;
+							if (rand() % 2 == 0) item = new Armor();
+							else
+							{
+								if (rand() % 2 == 0) item = new Weapon(false);
+								else item = new Weapon(true);
+							}
+							equipment.addItem(item);
 						}
-						equipment.addItem(item);
+						level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + 15));
+						result = 1;
 					}
-					level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + 15));
-					result = 1;
 				}
+				sprite.move(-getMove());
+				stop();
 			}
-			sprite.move(-getMove());
-			stop();
-		}
-		if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z dolu*/
-		{
-			if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]))
+			if (level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]->isWall()) /*kolizja z kaflem z dolu*/
 			{
-				if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+				if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15) / 64)][static_cast<int>(getPosition().x / 64)]))
 				{
-					if (temp2->containsPotion()) equipment.addPotion();
-					else
+					if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
 					{
-						Item* item;
-						if (rand() % 2 == 0) item = new Armor();
+						if (temp2->containsPotion()) equipment.addPotion();
 						else
 						{
-							if (rand() % 2 == 0) item = new Weapon(false);
-							else item = new Weapon(true);
+							Item* item;
+							if (rand() % 2 == 0) item = new Armor();
+							else
+							{
+								if (rand() % 2 == 0) item = new Weapon(false);
+								else item = new Weapon(true);
+							}
+							equipment.addItem(item);
 						}
-						equipment.addItem(item);
+						level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15));
+						result = 1;
 					}
-					level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15));
-					result = 1;
 				}
+				sprite.move(-getMove());
+				stop();
 			}
-			sprite.move(-getMove());
-			stop();
+			walkAnimationClock.restart();
 		}
-		anim_clock.restart();		
+	}
+	else if (status == ATTACK)
+	{
+		if ((attackFrameCount > 0) && (attackAnimationClock.getElapsedTime() > seconds(1.f)))
+		{
+			IntRect tmpRect;
+			if (attackFrame < attackFrameCount) /*liczba klatek animacji - 1*/
+				++attackFrame;
+			else
+				attackFrame = 0; /*animacja sie zapetla*/
+			tmpRect = sprite.getTextureRect();
+			tmpRect.left = (attackFrame + walkFrameCount + 1) * 64;
+			sprite.setTextureRect(tmpRect);
+			attackAnimationClock.restart();
+		}
 	}
 	return result;
 }
@@ -279,9 +302,10 @@ void Player::walk()
 void Player::stop()
 {
 	status = STOP;
-	frame = 0;
-	sprite.setTextureRect(IntRect(frame * 64, 640, 64, 64));
-	anim_clock.restart();
+	walkFrame = 0;
+	attackFrame = 0;
+	sprite.setTextureRect(IntRect(walkFrame * 64, 640, 64, 64));
+	walkAnimationClock.restart();
 }
 
 void Player::attack()
@@ -503,6 +527,7 @@ Juggernaut::Juggernaut(string _name) : Player(_name)
 	parStr = 18;
 	parAgi = 6;
 	parInt = 6;
+	parHp = parMaxHp = 100 + parStr;
 }
 
 Juggernaut::Juggernaut(string _name, fstream &file) : Player(_name, file)
@@ -583,7 +608,7 @@ Soldier::Soldier(string _name) : Player(_name)
 	parAgi = 16;
 	parStr = 6;
 	parInt = 8;
-
+	parHp = parMaxHp = 100 + parStr;
 }
 
 Soldier::Soldier(string _name, fstream &file) : Player(_name, file)
@@ -677,6 +702,7 @@ Sentinel::Sentinel(string _name) : Player(_name)
 	parInt = 19;
 	parStr = 5;
 	parAgi = 6;
+	parHp = parMaxHp = 100 + parStr;
 }
 
 Sentinel::Sentinel(string _name, fstream &file) : Player(_name, file)

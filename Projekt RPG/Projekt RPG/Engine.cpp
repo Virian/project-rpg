@@ -570,7 +570,7 @@ void Engine::startEngine(RenderWindow &window)
 									enemy->attack();
 									fight(i, NPC);
 								}
-								else if (!player->isActiveSkill3() && player->getClassName() != "Soldier") enemy->engage();
+								else if (!player->isActiveSkill3() || player->getClassName() != "Soldier") enemy->engage();
 							}
 						}
 						else

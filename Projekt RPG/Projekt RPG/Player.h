@@ -69,8 +69,12 @@ protected:
 	Texture texture;
 	Status status;
 	float speed;
-	unsigned frame;
-	Clock anim_clock;
+	unsigned walkFrame;
+	unsigned attackFrame;
+	unsigned walkFrameCount;
+	unsigned attackFrameCount;
+	Clock walkAnimationClock;
+	Clock attackAnimationClock;
 	virtual void draw(RenderTarget&, RenderStates) const;
 	//Statystyki
 	std::string name;
