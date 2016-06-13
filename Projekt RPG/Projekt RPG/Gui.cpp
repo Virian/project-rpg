@@ -25,9 +25,6 @@ Gui::Gui()
 	skill2.setSize(Vector2f(64, 64));
 	skill3.setSize(Vector2f(64, 64));
 
-	/*skill1.setFillColor(Color::Green);
-	skill2.setFillColor(Color::Green);
-	skill3.setFillColor(Color::Green);*/
 	skill1.setTexture(&texture);
 	skill2.setTexture(&texture);
 	skill3.setTexture(&texture);
@@ -95,6 +92,33 @@ Gui::Gui()
 
 	plus.setSize(Vector2f(20, 20));
 	plus.setFillColor(Color::Green);
+
+	levelMenu.setSize(Vector2f(350, 550));
+	levelMenu.setFillColor(Color::Black);
+	levelMenu.setOutlineThickness(-2.f);
+	levelMenu.setOutlineColor(Color::White);
+	Text header;
+	Text information;
+	Text option1, option2, option3, option4, option5;
+	header.setString("Choose level:");
+	information.setString("Press ESC to go back.");
+	option1.setString("1 - Level1");
+	option2.setString("2 - Level2");
+	option3.setString("3 - Level3");
+	option4.setString("4 - Level4");
+	option5.setString("5 - Level5");
+	levelOptions.push_back(header);
+	levelOptions.push_back(option1);
+	levelOptions.push_back(option2);
+	levelOptions.push_back(option3);
+	levelOptions.push_back(option4);
+	levelOptions.push_back(option5);
+	levelOptions.push_back(information);
+	for (size_t i = 0; i < levelOptions.size(); ++i)
+	{
+		levelOptions[i].setFont(font);
+		levelOptions[i].setCharacterSize(70);
+	}
 }
 
 Gui::~Gui()
@@ -211,9 +235,6 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 
 	hpGauge.setPosition(window.mapPixelToCoords(Vector2i(36, 570)));
 	expGauge.setPosition(window.mapPixelToCoords(Vector2i(1116, 570)));
-	/*skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
-	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
-	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));*/
 
 	currHp.setString(std::to_string(currentHp));
 	maximHp.setString(std::to_string(maxHp));
@@ -401,6 +422,17 @@ void Gui::drawDeathScreen(RenderWindow& window)
 	info2.setColor(Color::White);
 	info2.move(Vector2f(-4, -4));
 	window.draw(info2);
+}
+
+void Gui::drawLevelMenu(RenderWindow &window)
+{
+	pauseMenu.setPosition(window.mapPixelToCoords(Vector2i(465, 85)));
+	window.draw(pauseMenu);
+	for (size_t i = 0; i < levelOptions.size(); ++i)
+	{
+		levelOptions[i].setPosition(window.mapPixelToCoords(Vector2i(480, 60 + i * 45)));
+		window.draw(levelOptions[i]);
+	}	
 }
 
 void Gui::draw(RenderTarget &target, RenderStates states) const

@@ -20,7 +20,7 @@ private:
 	vector<vector<Sprite>> tileSprites; /*kontener sprite'ow kafli*/
 	unsigned short tileCountHeight; /*ilosc wyswietlanych kafli w pionie*/
 	unsigned short tileCountWidth; /*ilosc wyswietlanych kafli w poziomie*/
-	void draw(RenderWindow&, bool, bool, bool, short);
+	void draw(RenderWindow&, bool, bool, bool, bool, short);
 	void setMap(RenderWindow&, string, unsigned short);
 	void updateMap();
 	void fight(size_t, Attacker);

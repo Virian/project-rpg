@@ -50,6 +50,7 @@ public:
 	void increaseExperience(unsigned);
 	void pauseTimers();
 	void unpauseTimers();
+	void resetTimers();
 	/*skille*/
 	bool isActiveSkill1();
 	bool isActiveSkill2();
@@ -62,7 +63,7 @@ public:
 	virtual void clearEffectSkill3() = 0;
 	virtual float getRatioSkill1() = 0;
 	virtual float getRatioSkill2() = 0;
-	virtual float getRatioSkill3() = 0;
+	virtual float getRatioSkill3() = 0;	
 protected:
 	Sprite sprite;
 	Texture texture;

@@ -326,7 +326,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 	
 }
 
-void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, short position)
+void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, bool levelMenu, short position)
 {
 	window.clear();
 	gui.updateSkillCooldowns(window, player->getRatioSkill1(), player->getRatioSkill2(), player->getRatioSkill3());
@@ -354,6 +354,10 @@ void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, s
 	if (dead)
 	{
 		gui.drawDeathScreen(window);
+	}
+	if (levelMenu)
+	{
+		gui.drawLevelMenu(window);
 	}
 	window.display();
 }
@@ -408,19 +412,20 @@ void Engine::startEngine(RenderWindow &window)
 	bool pause = false;
 	bool equipment = false;
 	bool dead = false;
+	bool levelMenu = false;
 	bool attacked = false;
 	short position = -1;
 
 		updateMap();
 	window.setView(view);
-	draw(window, pause, equipment, dead, position);
+	draw(window, pause, equipment, dead, levelMenu, position);
 	while (!quit)
 	{
 		Event event;
 		Vector2f mouse(Mouse::getPosition(window));
 		Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
 
-		if (!pause && !equipment && !dead)
+		if (!pause && !equipment && !dead && !levelMenu)
 		{
 			short tempHp = player->getHp();
 			if (tempHp > 0)
@@ -430,7 +435,13 @@ void Engine::startEngine(RenderWindow &window)
 					bool attacked = false;
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L)) /*Reminder - do zmiany na jakies normalne wywolywanie*/
 					{
-						setMap(window, "levels/level2.level", 0);
+						Save* temp;
+						if (temp = dynamic_cast<Save*>(level.getMap()[static_cast<unsigned __int64>(player->getPosition().y / 64)][static_cast<unsigned __int64>(player->getPosition().x / 64)]))
+						{
+							levelMenu = true;
+							player->pauseTimers();
+						}
+						else MessageBox(NULL, "You can only change your level while standing on save tile!", "UNABLE TO CHANGE LEVEL", NULL);						
 					}
 					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
 					{
@@ -734,6 +745,41 @@ void Engine::startEngine(RenderWindow &window)
 				}
 			}
 		}
-		draw(window, pause, equipment, dead, position);
+		if (levelMenu)
+		{
+			while (window.pollEvent(event))
+			{
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+				{
+					levelMenu = false;
+					player->unpauseTimers();
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1))
+				{
+					player->resetTimers();
+					levelMenu = false;
+					setMap(window, "levels/level1.level", 0);					
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num2))
+				{
+					player->resetTimers();
+					levelMenu = false;
+					setMap(window, "levels/level2.level", 0);
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num3))
+				{
+					MessageBox(NULL, "This level is yet to be designed!", "ERROR", NULL);
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num4))
+				{
+					MessageBox(NULL, "This level is yet to be designed!", "ERROR", NULL);
+				}
+				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num5))
+				{
+					MessageBox(NULL, "This level is yet to be designed!", "ERROR", NULL);
+				}
+			}
+		}
+		draw(window, pause, equipment, dead, levelMenu, position);
 	}
 }

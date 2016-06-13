@@ -472,6 +472,16 @@ void Player::unpauseTimers()
 	effectSkill3.start();
 }
 
+void Player::resetTimers()
+{
+	cooldownSkill1.restart(microseconds(1));
+	cooldownSkill2.restart(microseconds(1));
+	cooldownSkill3.restart(microseconds(1));
+	effectSkill1.restart(microseconds(1));
+	effectSkill2.restart(microseconds(1));
+	effectSkill3.restart(microseconds(1));
+}
+
 bool Player::isActiveSkill1()
 {
 	return activeSkill1;

@@ -54,7 +54,7 @@ Neutral::~Neutral()
 Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
 	walkFrame = 0;
-	anim_clock.restart();
+	walkAnimationClock.restart();
 	time.restart();
 	attackInterval.restart();
 	status = STOP;
@@ -88,7 +88,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 		rot += 90;
 		sprite.setRotation(rot);
 		collision = false;
-		if (anim_clock.getElapsedTime() > seconds(0.04f))
+		if (walkAnimationClock.getElapsedTime() > seconds(0.04f))
 		{
 			if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
 				walkFrame++;
@@ -147,7 +147,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 				collision = true;
 				stop(collision);
 			}
-			anim_clock.restart();
+			walkAnimationClock.restart();
 		}
 	}
 	else if (status == ATTACK)
@@ -164,7 +164,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 		{
 			status = WALK;
 			collision = false;
-			if (anim_clock.getElapsedTime() > seconds(0.04f))
+			if (walkAnimationClock.getElapsedTime() > seconds(0.04f))
 			{
 				if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
 					walkFrame++;
@@ -223,7 +223,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 					collision = true;
 					stop(collision);
 				}
-				anim_clock.restart();
+				walkAnimationClock.restart();
 			}			
 		}
 		else
@@ -251,7 +251,7 @@ void Enemy::stop(bool collision)
 	tmpRect = sprite.getTextureRect();
 	tmpRect.left = walkFrame * 64;
 	sprite.setTextureRect(tmpRect);
-	anim_clock.restart();
+	walkAnimationClock.restart();
 	time.restart();
 	if (collision) rot = rot + 180; /*Reminder - mo¿na zmienic na widelki ale ryzyko zablokowania*/
 	else rot = static_cast<float>(rand() % 360);

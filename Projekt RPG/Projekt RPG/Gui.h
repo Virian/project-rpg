@@ -25,6 +25,7 @@ public:
 	void drawPauseMenu(RenderWindow&);
 	void drawEquipment(RenderWindow&, Player*, short);
 	void drawDeathScreen(RenderWindow&);
+	void drawLevelMenu(RenderWindow&);
 	RectangleShape getResumeButton();
 	RectangleShape getLoadButton();
 	RectangleShape getQuitButton();
@@ -51,9 +52,6 @@ private:
 	RectangleShape skill1, fadedSkill1;
 	RectangleShape skill2, fadedSkill2;
 	RectangleShape skill3, fadedSkill3;
-	/*Sprite skill1, fadedSkill1;
-	Sprite skill2, fadedSkill1;
-	Sprite skill3, fadedSkill1;*/
 	Clock flash; /*miganie hp gdy jest niskie*/
 	vector<TextDamage*> damageInfo;
 	vector<HpBar*> hpInfo;
@@ -73,4 +71,7 @@ private:
 	Text playerStats;
 	Text itemStats;
 	Text activeEquipmentInfo;
+	/*zmiana poziomu*/
+	RectangleShape levelMenu;
+	vector<Text> levelOptions;
 };

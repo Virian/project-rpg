@@ -60,7 +60,7 @@ protected:
 	float speed;
 	unsigned walkFrame;
 	unsigned walkFrameCount;
-	Clock anim_clock;
+	Clock walkAnimationClock;
 	Clock time;
 	float rot;
 	int idleT;
