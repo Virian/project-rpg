@@ -54,7 +54,7 @@ Player::Player(string _name, fstream &file) : name(_name)
 	activeSkill3 = false;
 
 	string text, name;
-	short value;
+	short value, which;
 	file >> parLvl >> parExp >> parExpForNextLevel;
 	file >> parHp >> parMaxHp;
 	file >> parStr >> parInt >> parAgi >> parPointsToSpend;
@@ -68,10 +68,11 @@ Player::Player(string _name, fstream &file) : name(_name)
 		{
 			Item* tmp;
 			file >> value;
+			file >> which;
 			getline(file, name);
 			name.erase(0, 1);
-			if (text == "[RANGED]") tmp = new Weapon(name, value, true);
-			else tmp = new Weapon(false);
+			if (text == "[RANGED]") tmp = new Weapon(name, value, true, which);
+			else tmp = new Weapon(name, value, false, which);
 			equipment.addItem(tmp);
 			equipment.swapActiveItem(0);
 			equipment.deleteItem(0);
@@ -84,9 +85,10 @@ Player::Player(string _name, fstream &file) : name(_name)
 		if (text != "[NULL]")
 		{
 			Item* tmp;
+			file >> which;
 			getline(file, name);
 			name.erase(0, 1);
-			tmp = new Armor(name, stoi(text));
+			tmp = new Armor(name, stoi(text), which);
 			equipment.addItem(tmp);
 			equipment.swapActiveItem(0);
 			equipment.deleteItem(0);
@@ -99,9 +101,10 @@ Player::Player(string _name, fstream &file) : name(_name)
 		{
 			Item* tmp;
 			file >> value;
+			file >> which;
 			getline(file, name);
 			name.erase(0, 1);
-			tmp = new Armor(name, value);
+			tmp = new Armor(name, value, which);
 			equipment.addItem(tmp);
 		}
 		else if (text == "[WEAPON]")
@@ -109,10 +112,11 @@ Player::Player(string _name, fstream &file) : name(_name)
 			Item* tmp;
 			file >> text;
 			file >> value;
+			file >> which;
 			getline(file, name);
 			name.erase(0, 1);
-			if (text == "[RANGED]") tmp = new Weapon(name, value, true);
-			else tmp = new Weapon(name, value, false);
+			if (text == "[RANGED]") tmp = new Weapon(name, value, true, which);
+			else tmp = new Weapon(name, value, false, which);
 			equipment.addItem(tmp);
 		}
 	}
@@ -187,11 +191,11 @@ short Player::update(Vector2f mouse, Level *level)
 						else
 						{
 							Item* item;
-							if (rand() % 2 == 0) item = new Armor();
+							if (rand() % 2 == 0) item = new Armor(parLvl);
 							else
 							{
-								if (rand() % 2 == 0) item = new Weapon(false);
-								else item = new Weapon(true);
+								if (rand() % 2 == 0) item = new Weapon(false, parLvl);
+								else item = new Weapon(true, parLvl);
 							}
 							equipment.addItem(item);
 						}
@@ -212,11 +216,11 @@ short Player::update(Vector2f mouse, Level *level)
 						else
 						{
 							Item* item;
-							if (rand() % 2 == 0) item = new Armor();
+							if (rand() % 2 == 0) item = new Armor(parLvl);
 							else
 							{
-								if (rand() % 2 == 0) item = new Weapon(false);
-								else item = new Weapon(true);
+								if (rand() % 2 == 0) item = new Weapon(false, parLvl);
+								else item = new Weapon(true, parLvl);
 							}
 							equipment.addItem(item);
 						}
@@ -237,11 +241,11 @@ short Player::update(Vector2f mouse, Level *level)
 						else
 						{
 							Item* item;
-							if (rand() % 2 == 0) item = new Armor();
+							if (rand() % 2 == 0) item = new Armor(parLvl);
 							else
 							{
-								if (rand() % 2 == 0) item = new Weapon(false);
-								else item = new Weapon(true);
+								if (rand() % 2 == 0) item = new Weapon(false, parLvl);
+								else item = new Weapon(true, parLvl);
 							}
 							equipment.addItem(item);
 						}
@@ -262,11 +266,11 @@ short Player::update(Vector2f mouse, Level *level)
 						else
 						{
 							Item* item;
-							if (rand() % 2 == 0) item = new Armor();
+							if (rand() % 2 == 0) item = new Armor(parLvl);
 							else
 							{
-								if (rand() % 2 == 0) item = new Weapon(false);
-								else item = new Weapon(true);
+								if (rand() % 2 == 0) item = new Weapon(false, parLvl);
+								else item = new Weapon(true, parLvl);
 							}
 							equipment.addItem(item);
 						}

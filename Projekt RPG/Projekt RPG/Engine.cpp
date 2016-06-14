@@ -22,14 +22,12 @@ void Engine::updateMap()
 	else if (leftBorder > 0 && rightBorder - 1 < level.getWidth() - 1)
 	{
 		min.x -= 64;
-		//view.move(-64, 0);
 
 		leftBorder = min.x / 64;
 	}
 
 	else if (rightBorder - 1 >= level.getWidth() - 1)
 	{
-		// MAGIC!
 		float difference = view.getCenter().x + view.getSize().x / 2 - (level.getWidth() - 1) * 64;
 
 		difference = -difference - 64;
@@ -61,35 +59,21 @@ void Engine::updateMap()
 	else if (upBorder > 0 && bottomBorder - 1 + 1.0 / 4.0 < level.getHeight() - 1)
 	{
 		min.y -= 64;
-		//view.move(0, -64);
 		
 		upBorder = min.y / 64;
 	}
 	else if (bottomBorder - 1 + 1.0 / 4.0 >= level.getHeight() - 1)
 	{
-		/*float difference = view.getCenter().y + view.getSize().y / 2 - (level.getHeight() - 1) * 64;
-
-		difference = -difference - 64;
-		min.y += difference;
-		//min.y -= 64;
-
-		upBorder = (min.y) / 64;
-
-		view.setCenter(view.getCenter().x, (upBorder + (tileCountHeight) / 2) * 64 + 64);*/
 		float difference = level.getHeight() * 64 - bottomBorder * 64;
 		min.y += difference;
 		view.move(0, difference - 64/4);
 		min.y -= 64;
 		upBorder = min.y / 64;
-
-		//if (bottomBorder - 1 == level.getHeight() - 1)			// !!!
-		//	view.move(0, -64 / 2);
 	}
 	else if (upBorder == 0)
 		view.move(0, -64 / 2);
 
 	// ustawienie kafli na scenie
-	//for (int y = 0, h = (int)upBorder; y < tileCountHeight; y++)
 	for (int y = 0, h = static_cast<int>(upBorder); y < tileCountHeight && h < level.getHeight(); y++)
 	{																											// h - horizontal
 		for (int x = 0, v = static_cast<int>(leftBorder); x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
@@ -104,7 +88,6 @@ void Engine::updateMap()
 
 void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 {
-	/*Reminder - przy zmianie mapy upewnic sie ze mapa zostaje wyczyszczona*/
 	level.clearMap();
 	if (!level.load(filePath))
 	{
@@ -382,13 +365,13 @@ void Engine::saveGame(unsigned short id)
 	{
 		if (player->getEquipment().getActiveWeapon()->isRanged()) file << "[RANGED] ";
 		else file << "[MELEE] ";
-		file << player->getEquipment().getActiveWeapon()->getAttackValue() << " " << player->getEquipment().getActiveWeapon()->getName() << endl; /*Reminder - bedzie sie krzaczyc na dluzszych nazwach*/
+		file << player->getEquipment().getActiveWeapon()->getAttackValue() << " " << player->getEquipment().getActiveWeapon()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveWeapon()->getName() << endl; /*Reminder - bedzie sie krzaczyc na dluzszych nazwach*/
 	}
 	file << "[ACTIVEARMOR] ";
 	if (player->getEquipment().getActiveArmor() == NULL) file << "[NULL]" << endl;
 	else
 	{
-		file << player->getEquipment().getActiveArmor()->getArmorValue() << " " << player->getEquipment().getActiveArmor()->getName() << endl;
+		file << player->getEquipment().getActiveArmor()->getArmorValue() << " " << player->getEquipment().getActiveArmor()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveArmor()->getName() << endl;
 	}
 	for (size_t i = 0; i < player->getEquipment().getBackpack().size(); ++i)
 	{
@@ -397,12 +380,12 @@ void Engine::saveGame(unsigned short id)
 
 		if (tempArmor = dynamic_cast<Armor*>(player->getEquipment().getBackpack()[i]))
 		{
-			file << "[ARMOR] " << tempArmor->getArmorValue() << " " << tempArmor->getName() << endl;
+			file << "[ARMOR] " << tempArmor->getArmorValue() << " " << tempArmor->getTextureRect().left / 128 << " " << tempArmor->getName() << endl;
 		}
 		else if (tempWeapon = dynamic_cast<Weapon*>(player->getEquipment().getBackpack()[i]))
 		{
-			if (tempWeapon->isRanged()) file << "[WEAPON] [RANGED] " << tempWeapon->getAttackValue() << " " << tempWeapon->getName() << endl;
-			else file << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getName() << endl;
+			if (tempWeapon->isRanged()) file << "[WEAPON] [RANGED] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName() << endl;
+			else file << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName() << endl;
 		}
 	}
 	file.close();

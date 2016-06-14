@@ -6,8 +6,8 @@ Equipment::Equipment()
 	activeArmor = NULL;
 	activeWeapon = NULL;
 
-	activeArmor = new Armor();
-	activeWeapon = new Weapon(true);
+	activeArmor = new Armor(1);
+	activeWeapon = new Weapon(true, 1); /*Reminder - moze random?*/
 }
 
 Equipment::~Equipment()

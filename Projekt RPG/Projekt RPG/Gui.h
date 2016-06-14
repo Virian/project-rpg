@@ -67,6 +67,7 @@ private:
 	RectangleShape itemInfo;
 	RectangleShape plus; /*Reminder - do zamiany na obrazek plusa*/
 	Sprite backpackSlot;
+	Sprite activeBackpackSlot;
 	Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
 	Text playerStats;
 	Text itemStats;

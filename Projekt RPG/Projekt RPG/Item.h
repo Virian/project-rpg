@@ -10,14 +10,13 @@ protected:
 	Sprite sprite;
 	Texture texture;
 	std::string name;
-	short id;
 	virtual void draw(RenderTarget&, RenderStates) const;
 public:
 	Item();
 	virtual ~Item();
 	void setPosition(Vector2f);
 	std::string getName();
-	short getId();
+	IntRect getTextureRect();
 };
 
 class Weapon : public Item
@@ -26,8 +25,8 @@ private:
 	unsigned short attackValue;
 	bool ranged;
 public:
-	Weapon(bool);
-	Weapon(std::string, unsigned short, bool);
+	Weapon(bool, unsigned short);
+	Weapon(std::string, unsigned short, bool, short);
 	~Weapon();
 	unsigned short getAttackValue();
 	bool isRanged();
@@ -38,8 +37,8 @@ class Armor : public Item
 private:
 	unsigned short armorValue;
 public:
-	Armor();
-	Armor(std::string, unsigned short);
+	Armor(unsigned short);
+	Armor(std::string, unsigned short, short);
 	~Armor();
 	unsigned short getArmorValue();
 };

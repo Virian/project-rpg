@@ -27,24 +27,69 @@ std::string Item::getName()
 	return name;
 }
 
-short Item::getId()
+IntRect Item::getTextureRect()
 {
-	return id;
+	return sprite.getTextureRect();
 }
 
-Weapon::Weapon(bool _ranged) : ranged(_ranged)
+Weapon::Weapon(bool _ranged, unsigned short playerLvl) : ranged(_ranged)
 {
-	sprite.setTextureRect(IntRect(0, 128, 128, 128));
-	name = "weapon";
-	attackValue = rand() % 4 + 4;
-	/*short range = rand() % 2;
-	if (range == 0) ranged = false;
-	else ranged = true;*/
+	short which, nameRand;
+
+	nameRand = rand() % 4;
+	switch (nameRand)
+	{
+	case 0:
+		name = "Super ";
+		break;
+	case 1:
+		name = "Tested ";
+		break;
+	case 2:
+		name = "Worn-out ";
+		break;
+	case 3:
+		name = "Quick ";
+		break;
+	}
+	nameRand = rand() % 4;
+	switch (nameRand)
+	{
+	case 0:
+		name += "Accurate ";
+		break;
+	case 1:
+		name += "Powerful ";
+		break;
+	case 2:
+		name += "Vengeful ";
+		break;
+	case 3:
+		name += "Plasma ";
+		break;
+	}
+	if (_ranged)
+	{
+		which = rand() % 6;
+		sprite.setTextureRect(IntRect(0 + which * 128, 128, 128, 128));
+		if (which < 2) name += "Rifle";
+		else if (which < 4) name += "Shotgun";
+		else name += "Pistol";
+	}
+	else
+	{
+		which = rand() % 4;
+		sprite.setTextureRect(IntRect(0 + which * 128, 0, 128, 128));
+		if (which < 3) name += "Sword";
+		else name += "Axe";
+	}
+	attackValue = rand() % static_cast<int>(4 + playerLvl / 4.0) + 4 + playerLvl;;
 }
 
-Weapon::Weapon(std::string _name, unsigned short _attackValue, bool _ranged) : attackValue(_attackValue), ranged(_ranged)
+Weapon::Weapon(std::string _name, unsigned short _attackValue, bool _ranged, short which) : attackValue(_attackValue), ranged(_ranged)
 {
-	sprite.setTextureRect(IntRect(0, 128, 128, 128));
+	if (_ranged) sprite.setTextureRect(IntRect(0 + which * 128, 128, 128, 128));
+	else sprite.setTextureRect(IntRect(0 + which * 128, 0, 128, 128));
 	name = _name;
 }
 
@@ -63,11 +108,13 @@ bool Weapon::isRanged()
 	return ranged;
 }
 
-Armor::Armor()
+Armor::Armor(unsigned short playerLvl)
 {
-	sprite.setTextureRect(IntRect(0, 256, 128, 128));
-	//name = "armor";
-	armorValue = rand() % 4 + 4;
+	short which;
+
+	which = rand() % 5;
+	sprite.setTextureRect(IntRect(0 + which * 128, 256, 128, 128));
+	armorValue = rand() % static_cast<int>(4 + playerLvl / 4.0) + 4 + playerLvl;
 	short nameRand = rand() % 5;
 	switch (nameRand)
 	{
@@ -103,9 +150,9 @@ Armor::Armor()
 	name += "Armor";
 }
 
-Armor::Armor(std::string _name, unsigned short _armorValue) : armorValue(_armorValue)
+Armor::Armor(std::string _name, unsigned short _armorValue, short which) : armorValue(_armorValue)
 {
-	sprite.setTextureRect(IntRect(0, 256, 128, 128));
+	sprite.setTextureRect(IntRect(0 + which * 128, 256, 128, 128));
 	name = _name;
 }
 

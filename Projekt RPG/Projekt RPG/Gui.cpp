@@ -56,6 +56,8 @@ Gui::Gui()
 
 	backpackSlot.setTexture(texture);
 	backpackSlot.setTextureRect(IntRect(0, 768, 128, 128));
+	activeBackpackSlot.setTexture(texture);
+	activeBackpackSlot.setTextureRect(IntRect(128, 768, 128, 128));
 
 	backpackBackground.setFillColor(Color::Black);
 	backpackBackground.setOutlineThickness(-2);
@@ -381,6 +383,16 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	backpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 520)));
 	window.draw(backpackSlot);
 	window.draw(activeEquipmentInfo);
+	if (position >= 0 && position < backpack.size())
+	{
+		short i, j;
+		i = position / 5;
+		j = position - i;
+		activeBackpackSlot.setPosition(window.mapPixelToCoords(Vector2i(140 + j * 128, 418 + i * 128)));
+	}
+	else if (position == -2 && activeWeapon != NULL) activeBackpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 340)));
+	else if (position == -3 && activeArmor != NULL) activeBackpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 520)));
+	if (position != -1) window.draw(activeBackpackSlot);
 	
 	for (size_t i = 0, j = 0; i < backpack.size(); ++i)
 	{
@@ -430,7 +442,7 @@ void Gui::drawLevelMenu(RenderWindow &window)
 	window.draw(pauseMenu);
 	for (size_t i = 0; i < levelOptions.size(); ++i)
 	{
-		levelOptions[i].setPosition(window.mapPixelToCoords(Vector2i(480, 60 + i * 45)));
+		levelOptions[i].setPosition(window.mapPixelToCoords(Vector2i(480, 60 + static_cast<int>(i) * 45)));
 		window.draw(levelOptions[i]);
 	}	
 }

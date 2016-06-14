@@ -78,7 +78,7 @@ LootChest::LootChest(short tileCode, bool _wall) : Tile(tileCode, _wall)
 
 LootChest::LootChest(short tileCode, bool _wall, Tile* _tileUnder) : Tile(tileCode, _wall), tileUnder(_tileUnder)
 {
-	if (rand() % 100 + 1 > 65) content = ITEM;
+	if (rand() % 100 + 1 > 60) content = ITEM;
 	else content = POTION;
 }
 
@@ -102,7 +102,7 @@ unsigned short Save::saveCount = 0;
 
 Save::Save(short tileCode, bool _wall) : Tile(tileCode, _wall)
 {
-	id = ++saveCount;
+	id = ++saveCount;	
 }
 
 Save::~Save()
