@@ -44,7 +44,11 @@ Player::Player(string _name, fstream &file) : name(_name)
 
 	speed = 5.5f;
 	walkFrame = 0;
+	attackFrame = 0;
+	walkFrameCount = 7;
+	attackFrameCount = 0;
 	walkAnimationClock.restart();
+	attackAnimationClock.restart();
 	activeSkill1 = false;
 	activeSkill2 = false;
 	activeSkill3 = false;
@@ -132,7 +136,7 @@ short Player::update(Vector2f mouse, Level *level)
 	rot += 90;
 	sprite.setRotation(rot);
 
-	parMaxHp = 100 + parStr;
+	if (!activeSkill3 || getClassName() != "Juggernaut") parMaxHp = 100 + parStr;
 
 	if (temp1 = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp1->getHpChange();
 	if (parHp > parMaxHp) parHp = parMaxHp;
@@ -568,7 +572,14 @@ void Juggernaut::useSkill2() /*mocniejszy atak o 50%*/
 
 void Juggernaut::useSkill3()
 {
-
+	/*czasowo wiecej max hp*/
+	if (cooldownSkill3.isExpired())
+	{
+		parMaxHp += static_cast<short>(0.2 * parMaxHp);
+		cooldownSkill3.restart(seconds(35.f));
+		effectSkill3.restart(seconds(5.f + parInt / 50.f));
+		activeSkill3 = true;
+	}
 }
 
 void Juggernaut::clearEffectSkill1()
@@ -584,7 +595,8 @@ void Juggernaut::clearEffectSkill2()
 
 void Juggernaut::clearEffectSkill3()
 {
-
+	parMaxHp = static_cast<short>(parMaxHp / 1.2);
+	activeSkill3 = false;
 }
 
 float Juggernaut::getRatioSkill1()
@@ -599,7 +611,7 @@ float Juggernaut::getRatioSkill2()
 
 float Juggernaut::getRatioSkill3()
 {
-	return 0.f; /*Reminder - do zmiany*/
+	return cooldownSkill3.getRemainingTime().asSeconds() / 35.f;
 }
 
 Soldier::Soldier(string _name) : Player(_name)
@@ -743,7 +755,13 @@ void Sentinel::useSkill2() /*zwiekszenie szansy na dodge*/
 
 void Sentinel::useSkill3()
 {
-	
+	/*zwiekszenie celnosci*/
+	if (cooldownSkill3.isExpired())
+	{
+		cooldownSkill3.restart(seconds(25.f));
+		effectSkill3.restart(seconds(1.f + parInt / 100.f));
+		activeSkill3 = true;
+	}
 }
 
 void Sentinel::clearEffectSkill1()
@@ -759,7 +777,7 @@ void Sentinel::clearEffectSkill2()
 
 void Sentinel::clearEffectSkill3()
 {
-
+	activeSkill3 = false;
 }
 
 float Sentinel::getRatioSkill1()
@@ -774,5 +792,5 @@ float Sentinel::getRatioSkill2()
 
 float Sentinel::getRatioSkill3()
 {
-	return 0.f;
+	return cooldownSkill3.getRemainingTime().asSeconds() / 25.f;
 }

@@ -26,6 +26,7 @@ private:
 public:	
 	Level();
 	~Level();
+	void clearMap();
 	bool load(string); /*bool - false jesli sie nie udalo wczytac*/
 	unsigned short getHeight();
 	unsigned short getWidth();

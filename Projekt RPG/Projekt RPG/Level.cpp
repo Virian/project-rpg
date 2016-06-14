@@ -22,6 +22,19 @@ Level::~Level()
 	map.clear();
 }
 
+void Level::clearMap()
+{
+	for (size_t i = 0; i < map.size(); ++i)
+	{
+		for (size_t j = 0; j < map[i].size(); ++j)
+		{
+			delete map[i][j];
+		}
+		map[i].clear();
+	}
+	map.clear();
+}
+
 Tile* Level::getTile(short tileCode)
 {
 	Tile* tile;

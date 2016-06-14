@@ -105,6 +105,7 @@ void Engine::updateMap()
 void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 {
 	/*Reminder - przy zmianie mapy upewnic sie ze mapa zostaje wyczyszczona*/
+	level.clearMap();
 	if (!level.load(filePath))
 	{
 		MessageBox(NULL, "Level file not found!", "ERROR", NULL);
@@ -253,6 +254,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 			if (player->getAttackInterval().getElapsedTime().asSeconds() < 0.7) return;
 			hitChance = rand() % 20 + 1 + player->getStr() + 3;
 		}
+		if (player->isActiveSkill3() && player->getClassName() == "Sentinel") hitChance = static_cast<unsigned>(hitChance * 2.5);
 
 		dodgeChance = 10 + enemy->getAgi() + enemy->getArmorValue();
 
