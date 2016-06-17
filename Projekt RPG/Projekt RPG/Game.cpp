@@ -16,8 +16,16 @@ Game::Game()
 		MessageBox(NULL, "Menu background not found!", "ERROR", NULL);
 		return;
 	}
+	if (!cursorTexture.loadFromFile("images/cursors.png"))
+	{
+		MessageBox(NULL, "Cursor files not found!", "ERROR", NULL);
+		return;
+	}
+	cursor.setTexture(cursorTexture);
+	cursor.setTextureRect(IntRect(0, 0, 26, 32));
 	state = MENU;
 	window.create(VideoMode(1280, 720), "Galaxy Guardian Alpha 1.04", Style::Titlebar);
+	window.setMouseCursorVisible(false);
 }
 
 Game::~Game()
@@ -59,6 +67,7 @@ void Game::menu()
 			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = END;
 		}
 
+		cursor.setPosition(mouse);
 		window.clear();
 		window.draw(background);
 		title.move(Vector2f(4, 4));
@@ -77,6 +86,7 @@ void Game::menu()
 			else text[i].setColor(Color::White);
 			window.draw(text[i]);
 		}
+		window.draw(cursor);
 		window.display();
 	}
 }
@@ -131,6 +141,7 @@ void Game::newGame()
 				if ((event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left) && (classes[i].getGlobalBounds().contains(mouse))) checked = i + 1;
 			}
 		}
+		cursor.setPosition(mouse);
 		window.clear();
 		window.draw(background);
 		header.move(Vector2f(4, 4));
@@ -176,10 +187,11 @@ void Game::newGame()
 			else classes[i].setColor(Color::White);
 			window.draw(classes[i]);
 		}
+		window.draw(cursor);
 		window.display();
 	}
 	
-	Engine engine(window, characterName, checked);
+	Engine engine(window, cursor, characterName, checked);
 
 	state = MENU;
 }
@@ -194,7 +206,7 @@ void Game::loadGame()
 		state = MENU;
 		return;
 	}
-	Engine engine(window, file);
+	Engine engine(window, cursor, file);
 
 	state = MENU;
 }

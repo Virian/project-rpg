@@ -131,7 +131,7 @@ void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 	window.setView(view);
 }
 
-Engine::Engine(RenderWindow &_window, string characterName, int classCode)
+Engine::Engine(RenderWindow &_window, Sprite& cursor, string characterName, int classCode)
 {
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
@@ -161,10 +161,10 @@ Engine::Engine(RenderWindow &_window, string characterName, int classCode)
 	}
 	setMap(_window, "levels/level1.level", 0);
 	gui.setSkillPictures(player->getClassName());
-	startEngine(_window);	
+	startEngine(_window, cursor);	
 }
 
-Engine::Engine(RenderWindow &_window, fstream &file)
+Engine::Engine(RenderWindow &_window, Sprite& cursor, fstream &file)
 {
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
@@ -196,7 +196,7 @@ Engine::Engine(RenderWindow &_window, fstream &file)
 	file.close();
 	setMap(_window, levelPath, saveId);
 	gui.setSkillPictures(player->getClassName());
-	startEngine(_window);
+	startEngine(_window, cursor);
 }
 
 Engine::~Engine()
@@ -309,7 +309,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 	
 }
 
-void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, bool levelMenu, short position)
+void Engine::draw(RenderWindow &window, Sprite& cursor, bool pause, bool equipment, bool dead, bool levelMenu, short position)
 {
 	window.clear();
 	gui.updateSkillCooldowns(window, player->getRatioSkill1(), player->getRatioSkill2(), player->getRatioSkill3());
@@ -342,6 +342,9 @@ void Engine::draw(RenderWindow &window, bool pause, bool equipment, bool dead, b
 	{
 		gui.drawLevelMenu(window);
 	}
+	if (checkCursor()) cursor.setTextureRect(IntRect(26, 0, 26, 32));
+	else cursor.setTextureRect(IntRect(0, 0, 26, 32));
+	window.draw(cursor);
 	window.display();
 }
 
@@ -389,7 +392,20 @@ void Engine::saveGame(unsigned short id)
 	file.close();
 }
 
-void Engine::startEngine(RenderWindow &window)
+bool Engine::checkCursor()
+{
+	Enemy* enemy;
+	for (size_t i = 0; i < npcs.size(); ++i)
+	{
+		if (enemy = dynamic_cast<Enemy*>(npcs[i]))
+		{
+			if (enemy->hasCursor()) return true;
+		}
+	}
+	return false;
+}
+
+void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 {
 	bool quit = false;
 	bool pause = false;
@@ -399,14 +415,16 @@ void Engine::startEngine(RenderWindow &window)
 	bool attacked = false;
 	short position = -1;
 
-		updateMap();
+	updateMap();
 	window.setView(view);
-	draw(window, pause, equipment, dead, levelMenu, position);
+	draw(window, cursor, pause, equipment, dead, levelMenu, position);
 	while (!quit)
 	{
 		Event event;
 		Vector2f mouse(Mouse::getPosition(window));
 		Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
+
+		cursor.setPosition(worldPos);
 
 		if (!pause && !equipment && !dead && !levelMenu)
 		{
@@ -508,6 +526,10 @@ void Engine::startEngine(RenderWindow &window)
 						float distance, distanceTemp;
 						float sinus;
 						float cosinus;
+
+						if (enemy->getBoundingBox().contains(worldPos))	enemy->acquireCursor();
+						else enemy->loseCursor();
+
 						line[0].position = player->getPosition();
 						line[1].position = npcs[i]->getPosition();
 						distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
@@ -763,6 +785,6 @@ void Engine::startEngine(RenderWindow &window)
 				}
 			}
 		}
-		draw(window, pause, equipment, dead, levelMenu, position);
+		draw(window, cursor, pause, equipment, dead, levelMenu, position);
 	}
 }

@@ -12,6 +12,8 @@ private:
 	Font font;
 	RectangleShape background;
 	Texture texture;
+	Texture cursorTexture;
+	Sprite cursor;
 	void menu();
 	void newGame();
 	void loadGame();

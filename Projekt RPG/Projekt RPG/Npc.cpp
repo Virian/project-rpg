@@ -39,7 +39,10 @@ void Npc::setPosition(Tile::Coord coord)
 
 Neutral::Neutral(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
-	/*Reminder - dodac jakiegos npc...*/
+	short npcLook = rand() % 2; /*losowy wyglad npc, obecnie dostepne sa 2*/
+	sprite.setTextureRect(IntRect(0 + npcLook * 64, 1344, 64, 64));
+	sprite.setOrigin(32, 32);
+	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 }
 
 Neutral::~Neutral()
@@ -49,6 +52,7 @@ Neutral::~Neutral()
 
 Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
+	cursor = false;
 	walkFrame = 0;
 	attackFrame = 0;
 	walkAnimationClock.restart();
@@ -59,7 +63,7 @@ Enemy::Enemy(Tile::Coord spawnCoord) : Npc(spawnCoord)
 	rot = static_cast<float>(rand() % 360);
 	sprite.setRotation(rot);
 	walkT = rand() % 500 + 1000;
-	idleT = rand() % 5000 + 7000;
+	idleT = rand() % 5000 + 4000;
 
 	alive = true;
 }
@@ -350,6 +354,21 @@ void Enemy::restartAttackInterval()
 unsigned Enemy::getExperienceGiven()
 {
 	return experienceGiven;
+}
+
+bool Enemy::hasCursor()
+{
+	return cursor;
+}
+
+void Enemy::acquireCursor()
+{
+	cursor = true;
+}
+
+void Enemy::loseCursor()
+{
+	cursor = false;
 }
 
 Gunner::Gunner(Tile::Coord spawnCoord) : Enemy(spawnCoord)

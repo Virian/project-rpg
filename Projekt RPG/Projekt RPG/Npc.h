@@ -52,7 +52,11 @@ public:
 	Clock getAttackInterval();
 	void restartAttackInterval();
 	unsigned getExperienceGiven();
+	bool hasCursor();
+	void acquireCursor();
+	void loseCursor();
 protected:
+	bool cursor;
 	float speed;
 	unsigned walkFrame;
 	unsigned walkFrameCount;
