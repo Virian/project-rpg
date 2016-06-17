@@ -3,7 +3,7 @@
 
 Gui::Gui()
 {
-	if (!font.loadFromFile("fonts/game_over.ttf")) /*Reminder - do zmiany sciezka, mozna tez zmienic czcionke*/
+	if (!font.loadFromFile("fonts/game_over.ttf"))
 	{
 		MessageBox(NULL, "Font not found!", "ERROR", NULL);
 		return;
@@ -254,7 +254,7 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	experience.setString(std::to_string(static_cast<int>(expPercent)) + "%");
 	potions.setString("Potions: " + std::to_string(player->getEquipment().getPotionCount()));
 	
-	if (currentHp > 99) currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 550))); /*Reminder - fajnie by bylo dodac zeby pozycja zalezala od ilosci cyfr*/
+	if (currentHp > 99) currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 550)));
 	else if (currentHp <= 99 && currentHp > 9) currHp.setPosition(window.mapPixelToCoords(Vector2i(78, 550)));
 	else currHp.setPosition(window.mapPixelToCoords(Vector2i(86, 550)));
 	maximHp.setPosition(window.mapPixelToCoords(Vector2i(85, 610)));

@@ -7,7 +7,6 @@ using namespace sf;
 class Npc : public Drawable, public Transformable
 {
 public:
-	/*Npc(unsigned short, unsigned short);*/
 	Npc(Tile::Coord);
 	virtual ~Npc();
 	FloatRect getBoundingBox();
@@ -16,8 +15,6 @@ public:
 protected:
 	Sprite sprite;
 	Texture texture;
-	/*unsigned short spawnCoordX;
-	unsigned short spawnCoordY;*/
 	Tile::Coord spawnCoord;
 	virtual void draw(RenderTarget&, RenderStates) const;
 };
@@ -32,13 +29,12 @@ public:
 class Enemy : public Npc
 {
 public:
-	Enemy(Tile::Coord); /*Reminder - trzeba bedzie dodac np parametr speed, str, int itp.*/
+	Enemy(Tile::Coord);
 	~Enemy();
 	enum Status { STOP, WALK, ENGAGED, ATTACK };
 	Status getStatus();
 	void update(Level*, Vector2f);
 	Vector2f getMove();
-	//void walk();
 	void stop(bool);
 	void engage();
 	void attack();

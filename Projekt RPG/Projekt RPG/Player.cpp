@@ -5,7 +5,7 @@
 
 Player::Player(string _name) : name(_name)
 {
-	if (!texture.loadFromFile("images/tilesheet.png")) /*Reminder - do zmiany sciezka*/
+	if (!texture.loadFromFile("images/tilesheet.png"))
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/
@@ -33,7 +33,7 @@ Player::Player(string _name) : name(_name)
 
 Player::Player(string _name, fstream &file) : name(_name)
 {
-	if (!texture.loadFromFile("images/tilesheet.png")) /*Reminder - do zmiany sciezka*/
+	if (!texture.loadFromFile("images/tilesheet.png"))
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/
@@ -557,7 +557,6 @@ void Juggernaut::useSkill1() /*nietykalnosc*/
 {
 	if (cooldownSkill1.isExpired())
 	{
-		parAgi += 20000;
 		cooldownSkill1.restart(seconds(120.f));
 		effectSkill1.restart(seconds(1.7f + parInt / 100.f)); /*+0.1s za kazde 10 int*/
 		activeSkill1 = true;
@@ -588,7 +587,6 @@ void Juggernaut::useSkill3()
 
 void Juggernaut::clearEffectSkill1()
 {
-	parAgi -= 20000;
 	activeSkill1 = false;
 }
 
@@ -775,7 +773,7 @@ void Sentinel::clearEffectSkill1()
 
 void Sentinel::clearEffectSkill2()
 {
-	parAgi = static_cast<unsigned short>(100.f * parAgi / (133.f + parInt / 10.f)); /*Reminder - na razie dziala, ale nie wiem czy dla wszystkich wartosci bedzie poprawnie wracac*/
+	parAgi = static_cast<unsigned short>(100.f * parAgi / (133.f + parInt / 10.f));
 	activeSkill2 = false;
 }
 

@@ -286,6 +286,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 		}
 
 		dodgeChance = 10 + player->getAgi() + player->getEquipment().getActiveArmor()->getArmorValue();
+		if (player->isActiveSkill1() && player->getClassName() == "Juggernaut") dodgeChance += 10000;
 
 		if (hitChance > dodgeChance)
 		{
@@ -366,13 +367,13 @@ void Engine::saveGame(unsigned short id)
 	{
 		if (player->getEquipment().getActiveWeapon()->isRanged()) file << "[RANGED] ";
 		else file << "[MELEE] ";
-		file << player->getEquipment().getActiveWeapon()->getAttackValue() << " " << player->getEquipment().getActiveWeapon()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveWeapon()->getName() << endl; /*Reminder - bedzie sie krzaczyc na dluzszych nazwach*/
+		file << player->getEquipment().getActiveWeapon()->getAttackValue() << " " << player->getEquipment().getActiveWeapon()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveWeapon()->getName() << endl;
 	}
 	file << "[ACTIVEARMOR] ";
-	if (player->getEquipment().getActiveArmor() == NULL) file << "[NULL]" << endl;
+	if (player->getEquipment().getActiveArmor() == NULL) file << "[NULL]";
 	else
 	{
-		file << player->getEquipment().getActiveArmor()->getArmorValue() << " " << player->getEquipment().getActiveArmor()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveArmor()->getName() << endl;
+		file << player->getEquipment().getActiveArmor()->getArmorValue() << " " << player->getEquipment().getActiveArmor()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveArmor()->getName();
 	}
 	for (size_t i = 0; i < player->getEquipment().getBackpack().size(); ++i)
 	{
@@ -381,12 +382,12 @@ void Engine::saveGame(unsigned short id)
 
 		if (tempArmor = dynamic_cast<Armor*>(player->getEquipment().getBackpack()[i]))
 		{
-			file << "[ARMOR] " << tempArmor->getArmorValue() << " " << tempArmor->getTextureRect().left / 128 << " " << tempArmor->getName() << endl;
+			file << endl << "[ARMOR] " << tempArmor->getArmorValue() << " " << tempArmor->getTextureRect().left / 128 << " " << tempArmor->getName();
 		}
 		else if (tempWeapon = dynamic_cast<Weapon*>(player->getEquipment().getBackpack()[i]))
 		{
-			if (tempWeapon->isRanged()) file << "[WEAPON] [RANGED] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName() << endl;
-			else file << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName() << endl;
+			if (tempWeapon->isRanged()) file << endl << "[WEAPON] [RANGED] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName();
+			else file << endl << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName();
 		}
 	}
 	file.close();
@@ -419,7 +420,7 @@ void Engine::startEngine(RenderWindow &window)
 				while (window.pollEvent(event))
 				{
 					bool attacked = false;
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L)) /*Reminder - do zmiany na jakies normalne wywolywanie*/
+					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L))
 					{
 						Save* temp;
 						if (temp = dynamic_cast<Save*>(level.getMap()[static_cast<unsigned __int64>(player->getPosition().y / 64)][static_cast<unsigned __int64>(player->getPosition().x / 64)]))
@@ -475,7 +476,7 @@ void Engine::startEngine(RenderWindow &window)
 								distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
 								if ((!player->getEquipment().getActiveWeapon()->isRanged()) && (distance > 70))
 								{
-									attacked = false; /*Reminder - ustawic zeby zaatakowal jak podejdzie*/
+									attacked = false;
 									player->stop();
 									break;
 								}
@@ -517,7 +518,7 @@ void Engine::startEngine(RenderWindow &window)
 						distanceTemp = distance;
 						if (distance > 450)
 						{
-							if ((enemy->getStatus() != Enemy::STOP) && ((enemy->getStatus() != Enemy::WALK))) enemy->stop(false);
+							if ((enemy->getStatus() != Enemy::STOP) && (enemy->getStatus() != Enemy::WALK) && (enemy->getStatus() != Enemy::ENGAGED)) enemy->stop(false);
 						}
 						else
 						{

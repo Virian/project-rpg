@@ -6,7 +6,7 @@
 
 Npc::Npc(Tile::Coord spawnCoord) : spawnCoord(spawnCoord)
 {
-	if (!texture.loadFromFile("images/tilesheet.png")) /*Reminder - do zmiany sciezka*/
+	if (!texture.loadFromFile("images/tilesheet.png"))
 	{
 		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
 		return; /*powinien w ogole jakos te gre wywalic, co najmniej do menu*/
@@ -43,7 +43,7 @@ void Npc::setPosition(Tile::Coord coord)
 
 Neutral::Neutral(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
-
+	/*Reminder - dodac jakiegos npc...*/
 }
 
 Neutral::~Neutral()
@@ -267,7 +267,7 @@ void Enemy::stop(bool collision)
 	sprite.setTextureRect(tmpRect);
 	walkAnimationClock.restart();
 	time.restart();
-	if (collision) rot = rot + 180; /*Reminder - mo¿na zmienic na widelki ale ryzyko zablokowania*/
+	if (collision) rot = rot + 180;
 	else rot = static_cast<float>(rand() % 360);
 	walkT = rand() % 500 + 1000;
 	idleT = rand() % 5000 + 7000;
