@@ -27,10 +27,10 @@ public:
 	void drawDeathScreen(RenderWindow&);
 	void drawLevelMenu(RenderWindow&);
 	RectangleShape getResumeButton();
-	RectangleShape getLoadButton();
+	RectangleShape getSaveButton();
 	RectangleShape getQuitButton();
 	void setResumeHighlight(short);
-	void setLoadHighlight(short);
+	void setSaveHighlight(short);
 	void setQuitHighlight(short);
 	void pushDamageInfo(TextDamage*);
 	void pushHpInfo(HpBar*);
@@ -58,7 +58,7 @@ private:
 	/*pauza*/
 	RectangleShape pauseMenu;
 	RectangleShape resumeButton;
-	RectangleShape loadButton;
+	RectangleShape saveButton;
 	RectangleShape quitButton;
 	/*ekwipunek*/
 	RectangleShape backpackBackground;

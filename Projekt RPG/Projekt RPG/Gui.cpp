@@ -36,18 +36,18 @@ Gui::Gui()
 
 	pauseMenu.setSize(Vector2f(350, 450));
 	resumeButton.setSize(Vector2f(320, 100));
-	loadButton.setSize(Vector2f(320, 100));
+	saveButton.setSize(Vector2f(320, 100));
 	quitButton.setSize(Vector2f(320, 100));
 	
 	pauseMenu.setFillColor(Color::Black);
 	pauseMenu.setOutlineThickness(-2);
 	pauseMenu.setOutlineColor(Color::White);
-	resumeButton.setFillColor(Color::Cyan);
-	resumeButton.setOutlineColor(Color::Red);
-	loadButton.setFillColor(Color::Magenta);
-	loadButton.setOutlineColor(Color::Red);
-	quitButton.setFillColor(Color::White);
-	quitButton.setOutlineColor(Color::Red);
+	resumeButton.setTexture(&texture);
+	resumeButton.setTextureRect(IntRect(0, 384, 320, 100));
+	saveButton.setTexture(&texture);
+	saveButton.setTextureRect(IntRect(0, 384, 320, 100));
+	quitButton.setTexture(&texture);
+	quitButton.setTextureRect(IntRect(0, 384, 320, 100));
 
 	backpackBackground.setSize(Vector2f(680, 296));
 	activeEquipment.setSize(Vector2f(300, 440));
@@ -93,7 +93,8 @@ Gui::Gui()
 	activeEquipmentInfo.setCharacterSize(65);
 
 	plus.setSize(Vector2f(20, 20));
-	plus.setFillColor(Color::Green);
+	plus.setTexture(&texture);
+	plus.setTextureRect(IntRect(0, 484, 20, 20));
 
 	levelMenu.setSize(Vector2f(350, 550));
 	levelMenu.setFillColor(Color::Black);
@@ -288,12 +289,12 @@ void Gui::drawPauseMenu(RenderWindow &window)
 {
 	pauseMenu.setPosition(window.mapPixelToCoords(Vector2i(465, 135)));
 	resumeButton.setPosition(window.mapPixelToCoords(Vector2i(480, 172)));
-	loadButton.setPosition(window.mapPixelToCoords(Vector2i(480, 310)));
+	saveButton.setPosition(window.mapPixelToCoords(Vector2i(480, 310)));
 	quitButton.setPosition(window.mapPixelToCoords(Vector2i(480, 447)));
 	
 	window.draw(pauseMenu);
 	window.draw(resumeButton);
-	window.draw(loadButton);
+	window.draw(saveButton);
 	window.draw(quitButton);
 }
 
@@ -462,9 +463,9 @@ RectangleShape Gui::getResumeButton()
 	return resumeButton;
 }
 
-RectangleShape Gui::getLoadButton()
+RectangleShape Gui::getSaveButton()
 {
-	return loadButton;
+	return saveButton;
 }
 
 RectangleShape Gui::getQuitButton()
@@ -474,20 +475,20 @@ RectangleShape Gui::getQuitButton()
 
 void Gui::setResumeHighlight(short swtch)
 {
-	if (swtch == 0) resumeButton.setOutlineThickness(0);
-	else resumeButton.setOutlineThickness(-4);
+	if (swtch == 0) resumeButton.setTextureRect(IntRect(0, 384, 320, 100));
+	else resumeButton.setTextureRect(IntRect(320, 384, 320, 100));
 }
 
-void Gui::setLoadHighlight(short swtch)
+void Gui::setSaveHighlight(short swtch)
 {
-	if (swtch == 0) loadButton.setOutlineThickness(0);
-	else loadButton.setOutlineThickness(-4);
+	if (swtch == 0) saveButton.setTextureRect(IntRect(0, 384, 320, 100));
+	else saveButton.setTextureRect(IntRect(320, 384, 320, 100));
 }
 
 void Gui::setQuitHighlight(short swtch)
 {
-	if (swtch == 0) quitButton.setOutlineThickness(0);
-	else quitButton.setOutlineThickness(-4);
+	if (swtch == 0) quitButton.setTextureRect(IntRect(0, 384, 320, 100));
+	else quitButton.setTextureRect(IntRect(320, 384, 320, 100));
 }
 
 void Gui::pushDamageInfo(TextDamage* newText)

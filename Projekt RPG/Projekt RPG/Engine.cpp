@@ -619,7 +619,7 @@ void Engine::startEngine(RenderWindow &window)
 					pause = false;
 					player->unpauseTimers();
 				}
-				if ((gui.getLoadButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((gui.getSaveButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
 				{
 					Save* temp;
 					if (temp = dynamic_cast<Save*>(level.getMap()[static_cast<unsigned __int64>(player->getPosition().y / 64)][static_cast<unsigned __int64>(player->getPosition().x / 64)]))
@@ -632,8 +632,8 @@ void Engine::startEngine(RenderWindow &window)
 			}
 			if (gui.getResumeButton().getGlobalBounds().contains(worldPos)) gui.setResumeHighlight(1);
 			else gui.setResumeHighlight(0);
-			if (gui.getLoadButton().getGlobalBounds().contains(worldPos)) gui.setLoadHighlight(1);
-			else gui.setLoadHighlight(0);
+			if (gui.getSaveButton().getGlobalBounds().contains(worldPos)) gui.setSaveHighlight(1);
+			else gui.setSaveHighlight(0);
 			if (gui.getQuitButton().getGlobalBounds().contains(worldPos)) gui.setQuitHighlight(1);
 			else gui.setQuitHighlight(0);
 		}
