@@ -49,6 +49,16 @@ Gui::Gui()
 	quitButton.setTexture(&texture);
 	quitButton.setTextureRect(IntRect(0, 384, 320, 100));
 
+	resume.setFont(font);
+	resume.setCharacterSize(90);
+	resume.setString("RESUME");
+	save.setFont(font);
+	save.setCharacterSize(90);
+	save.setString("SAVE GAME");
+	quit.setFont(font);
+	quit.setCharacterSize(90);
+	quit.setString("QUIT");
+
 	backpackBackground.setSize(Vector2f(680, 296));
 	activeEquipment.setSize(Vector2f(300, 440));
 	characterInfo.setSize(Vector2f(680, 360));
@@ -291,11 +301,18 @@ void Gui::drawPauseMenu(RenderWindow &window)
 	resumeButton.setPosition(window.mapPixelToCoords(Vector2i(480, 172)));
 	saveButton.setPosition(window.mapPixelToCoords(Vector2i(480, 310)));
 	quitButton.setPosition(window.mapPixelToCoords(Vector2i(480, 447)));
+
+	resume.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - resume.getGlobalBounds().width / 2), 145)));
+	save.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - save.getGlobalBounds().width / 2), 283)));
+	quit.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - quit.getGlobalBounds().width / 2), 420)));
 	
 	window.draw(pauseMenu);
 	window.draw(resumeButton);
 	window.draw(saveButton);
 	window.draw(quitButton);
+	window.draw(resume);
+	window.draw(save);
+	window.draw(quit);
 }
 
 void Gui::drawEquipment(RenderWindow &window, Player* player, short position)

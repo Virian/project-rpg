@@ -399,3 +399,25 @@ Alien::~Alien()
 {
 
 }
+
+Cannon::Cannon(Tile::Coord spawnCoord) : Enemy(spawnCoord)
+{
+	sprite.setTextureRect(IntRect(0, 576, 64, 64));
+	sprite.setOrigin(32, 52);
+	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
+	walkFrameCount = 0;
+	attackFrameCount = 3;
+	speed = .0f;
+	ranged = true;
+	parHp = parMaxHp = 28;
+	attackValue = rand() % 7 + 8;
+	armorValue = rand() % 5 + 6;
+	experienceGiven = 24;
+	parAgi = 8;
+	parStr = 12;
+}
+
+Cannon::~Cannon()
+{
+
+}

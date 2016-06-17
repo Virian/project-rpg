@@ -60,6 +60,7 @@ private:
 	RectangleShape resumeButton;
 	RectangleShape saveButton;
 	RectangleShape quitButton;
+	Text resume, save, quit;
 	/*ekwipunek*/
 	RectangleShape backpackBackground;
 	RectangleShape activeEquipment;

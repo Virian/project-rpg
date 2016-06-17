@@ -95,3 +95,10 @@ public:
 	Alien(Tile::Coord);
 	~Alien();
 };
+
+class Cannon : public Enemy
+{
+public:
+	Cannon(Tile::Coord);
+	~Cannon();
+};

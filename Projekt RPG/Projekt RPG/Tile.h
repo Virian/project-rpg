@@ -9,7 +9,7 @@ public:
 		unsigned short x;
 		unsigned short y;
 	};
-	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TRAP1, FOUNTAIN1, SAVE1, LOOTCHEST1, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
+	enum TileType { FLOOR1, WALL1, FLOOR2, CHEST1, TRAP1, FOUNTAIN1, SAVE1, LOOTCHEST1, FLOOR3, COUNT }; /*Reminder - do zmiany na jakies normalne nazwy*/
 	Tile();
 	Tile(short, bool);
 	virtual ~Tile();

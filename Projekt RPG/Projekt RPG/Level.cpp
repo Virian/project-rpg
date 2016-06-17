@@ -65,9 +65,9 @@ Tile* Level::getTile(short tileCode)
 	case Tile::LOOTCHEST1:
 		tile = new LootChest(tileCode, true);
 		break;
-	/*case Tile::TYPE9:
-		tile = new Tile(tileCode, true, true);
-		break;*/
+	case Tile::FLOOR3:
+		tile = new Tile(tileCode, false);
+		break;
 	default:
 		tile = new Tile(tileCode, true);
 		break;
@@ -137,7 +137,15 @@ bool Level::load(string filePath)
 			tmp.enemyType = "[NEUTRAL]";
 			npcsCoordsAndTypes.push_back(tmp);
 		}
-		/* else if reszta specjalnych kafelkow*/
+		else if (name == "[CANNON]")
+		{
+			CoordAndType tmp;
+			tmp.npcCoords.x = x;
+			tmp.npcCoords.y = y;
+			tmp.enemyType = "[CANNON]";
+			npcsCoordsAndTypes.push_back(tmp);
+		}
+		/* else if reszta typow przeciwnikow*/
 	}
 	file.close();
 	return true;

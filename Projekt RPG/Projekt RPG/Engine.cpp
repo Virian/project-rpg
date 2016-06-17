@@ -114,6 +114,7 @@ void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 		if (level.getNpcCoordsAndTypes()[i].enemyType == "[GUNNER]") tmp = new Gunner(level.getNpcCoordsAndTypes()[i].npcCoords);
 		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[ALIEN]") tmp = new Alien(level.getNpcCoordsAndTypes()[i].npcCoords);
 		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[NEUTRAL]") tmp = new Neutral(level.getNpcCoordsAndTypes()[i].npcCoords);
+		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[CANNON]") tmp = new Cannon(level.getNpcCoordsAndTypes()[i].npcCoords);
 		npcs.push_back(tmp);
 		Enemy* temp;
 		if (temp = dynamic_cast<Enemy*>(tmp))
