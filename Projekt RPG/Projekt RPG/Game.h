@@ -21,5 +21,6 @@ protected:
 public:
 	Game();
 	~Game();
+	bool checkFiles();
 	void start();
 };

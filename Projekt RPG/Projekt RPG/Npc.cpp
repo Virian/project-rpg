@@ -6,11 +6,7 @@
 
 Npc::Npc(Tile::Coord spawnCoord) : spawnCoord(spawnCoord)
 {
-	if (!texture.loadFromFile("images/tilesheet.png"))
-	{
-		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
-		return; /*powinien w ogole jakos te gre wywalic, co najmniej do menu*/
-	}
+	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);	
 }
 

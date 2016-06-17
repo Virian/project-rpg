@@ -89,11 +89,7 @@ void Engine::updateMap()
 void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 {
 	level.clearMap();
-	if (!level.load(filePath))
-	{
-		MessageBox(NULL, "Level file not found!", "ERROR", NULL);
-		return;
-	}
+	level.load(filePath);
 	for (size_t i = 0; i < npcs.size(); ++i)
 	{
 		delete npcs[i];

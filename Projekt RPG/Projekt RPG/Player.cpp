@@ -5,11 +5,7 @@
 
 Player::Player(string _name) : name(_name)
 {
-	if (!texture.loadFromFile("images/tilesheet.png"))
-	{
-		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
-		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/
-	}
+	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
@@ -33,11 +29,7 @@ Player::Player(string _name) : name(_name)
 
 Player::Player(string _name, fstream &file) : name(_name)
 {
-	if (!texture.loadFromFile("images/tilesheet.png"))
-	{
-		MessageBox(NULL, "Textures not found!", "ERROR", NULL);
-		return; /*Remider - powinien w ogole jakos te gre wywalic, co najmniej do menu*/
-	}
+	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
@@ -153,7 +145,6 @@ short Player::update(Vector2f mouse, Level *level)
 	{
 		if (walkAnimationClock.getElapsedTime() > seconds(0.04f))
 		{
-			//if (status != WALK) return result;
 			if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
 				walkFrame++;
 			else

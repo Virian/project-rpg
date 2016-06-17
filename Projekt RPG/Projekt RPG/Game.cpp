@@ -199,6 +199,30 @@ void Game::loadGame()
 	state = MENU;
 }
 
+bool Game::checkFiles()
+{
+	Texture tempTexture;
+	Font tempFont;
+	Music tempMusic;
+	SoundBuffer tempSoundBuffer;
+	fstream tempFile;
+
+	if (!tempTexture.loadFromFile("images/tilesheet.png")) return false;
+	if (!tempFont.loadFromFile("fonts/game_over.ttf")) return false;
+	tempFile.open("levels/level1.level");
+	if (!tempFile.is_open()) return false;
+	else tempFile.close();
+	tempFile.open("levels/level2.level");
+	if (!tempFile.is_open()) return false;
+	else tempFile.close();
+	if (!tempMusic.openFromFile("music/background1.ogg")) return false;
+	if (!tempMusic.openFromFile("music/background2.ogg")) return false;
+	if (!tempSoundBuffer.loadFromFile("sounds/gun.ogg")) return false;
+	if (!tempSoundBuffer.loadFromFile("sounds/melee.ogg")) return false;
+
+	return true;
+}
+
 void Game::start()
 {
 	while (state != END)

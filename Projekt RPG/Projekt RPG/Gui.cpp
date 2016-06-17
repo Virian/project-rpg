@@ -3,11 +3,7 @@
 
 Gui::Gui()
 {
-	if (!font.loadFromFile("fonts/game_over.ttf"))
-	{
-		MessageBox(NULL, "Font not found!", "ERROR", NULL);
-		return;
-	}
+	font.loadFromFile("fonts/game_over.ttf");
 	currHp.setFont(font);
 	currHp.setCharacterSize(90);
 	maximHp.setFont(font);

@@ -7,7 +7,9 @@ Equipment::Equipment()
 	activeWeapon = NULL;
 
 	activeArmor = new Armor(1);
-	activeWeapon = new Weapon(true, 1); /*Reminder - moze random?*/
+	short randomWeapon = rand() % 2;
+	if (randomWeapon == 0) activeWeapon = new Weapon(false, 1); /*bron melee*/
+	else activeWeapon = new Weapon(true, 1); /*bron dystansowa*/
 }
 
 Equipment::~Equipment()
