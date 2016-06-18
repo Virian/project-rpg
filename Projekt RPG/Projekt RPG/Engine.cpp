@@ -3,17 +3,18 @@
 
 void Engine::updateMap()
 {
-	// wyliczamy pozycjê minimalnych granic kamery
+	/*rysowane maja byc tylko te kafle, ktore sa widoczne w granicach kamery*/
+	/*wyliczamy pozycjê minimalnych granic kamery*/
 	sf::Vector2f min = sf::Vector2f(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
 
-	// ustawienie kamery w poziomie
+	/*ustawienie kamery w poziomie*/
 	float leftBorder = min.x / 64;
 	float rightBorder = leftBorder + tileCountWidth - 3;
 
-	// je¿eli jest za daleko na lewo
+	/*gdy jest za daleko na lewo*/
 	if (min.x < 0)
 	{
-		float difference = abs(min.x);		// ró¿nica pomiêdzy 0, a lew¹ krawêdzi¹
+		float difference = abs(min.x); /*roznica pomiêdzy 0 a lewa krawedzia*/
 		min.x += difference;
 		view.move(difference, 0);
 
@@ -42,11 +43,11 @@ void Engine::updateMap()
 
 
 
-	// ustawienie kamery w pionie
+	/*ustawienie kamery w pionie*/
 	float upBorder = min.y / 64;
 	float bottomBorder = upBorder + tileCountHeight - 3;
 
-	// analogicznie: je¿eli jest za bardzo wysuniêta do góry
+	/*analogicznie, gdy jest za bardzo wysunieta do gory*/
 	if (min.y < 0)
 	{
 		float difference = abs(min.y);
@@ -73,10 +74,10 @@ void Engine::updateMap()
 	else if (upBorder == 0)
 		view.move(0, -64 / 2);
 
-	// ustawienie kafli na scenie
+	/*ustawienie kafli ktore maja zostac narysowane*/
 	for (int y = 0, h = static_cast<int>(upBorder); y < tileCountHeight && h < level.getHeight(); y++)
-	{																											// h - horizontal
-		for (int x = 0, v = static_cast<int>(leftBorder); x < tileCountWidth && v < level.getWidth(); x++)		// v - vertical
+	{
+		for (int x = 0, v = static_cast<int>(leftBorder); x < tileCountWidth && v < level.getWidth(); x++)
 		{
 			tileSprites[y][x].setPosition(v * 64.f, h * 64.f);
 			tileSprites[y][x].setTexture(tileTextures[level.getMap()[h][v]->getType()]);
@@ -88,8 +89,8 @@ void Engine::updateMap()
 
 void Engine::setMap(sf::RenderWindow &window, std::string filePath, unsigned short _id)
 {
+	/*wyczyszcznie mapy i wszystkich kontenerow z nia zwiaznych*/
 	level.clearMap();
-	level.load(filePath);
 	for (size_t i = 0; i < npcs.size(); ++i)
 	{
 		delete npcs[i];
@@ -101,9 +102,12 @@ void Engine::setMap(sf::RenderWindow &window, std::string filePath, unsigned sho
 		--i;
 	}
 	gui.clearHpInfo();
+	level.load(filePath); /*wczytanie poziomu*/
+	/*ustawienie gracza w zaelznosci czy wczytujemy gre czy nie*/
 	if (_id == 0) player->setPosition(level.getPlayerSpawnCoords());
 	else player->setPosition(level.getSaveCoords(_id));
-	view.setCenter(player->getPosition());
+	view.setCenter(player->getPosition()); /*ustawienie kamery na gracza*/
+	/*wczytanie wszystkich npc*/
 	for (size_t i = 0; i < level.getNpcCoordsAndTypes().size(); ++i)
 	{
 		Npc* tmp;
@@ -111,8 +115,10 @@ void Engine::setMap(sf::RenderWindow &window, std::string filePath, unsigned sho
 		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[ALIEN]") tmp = new Alien(level.getNpcCoordsAndTypes()[i].npcCoords);
 		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[NEUTRAL]") tmp = new Neutral(level.getNpcCoordsAndTypes()[i].npcCoords);
 		else if (level.getNpcCoordsAndTypes()[i].enemyType == "[CANNON]") tmp = new Cannon(level.getNpcCoordsAndTypes()[i].npcCoords);
+		/*else if inne typy przeciwnikow*/
 		npcs.push_back(tmp);
 		Enemy* temp;
+		/*jesli nowy npc jest przeciwnikiem, dodany tez bedzie skojarzony z nim pasek hp*/
 		if (temp = dynamic_cast<Enemy*>(tmp))
 		{
 			Gui::HpBar* hpInfo = new Gui::HpBar();
@@ -122,6 +128,7 @@ void Engine::setMap(sf::RenderWindow &window, std::string filePath, unsigned sho
 			gui.pushHpInfo(hpInfo);
 		}
 	}
+	/*wczytanie nowej muzyki*/
 	audio.stopBackgroundMusic();
 	if (filePath == "levels/level1.level") audio.setBackgroundMusic("music/background1.ogg");
 	else if (filePath == "levels/level2.level") audio.setBackgroundMusic("music/background2.ogg");
@@ -133,20 +140,23 @@ void Engine::setMap(sf::RenderWindow &window, std::string filePath, unsigned sho
 
 Engine::Engine(sf::RenderWindow &_window, sf::Sprite& cursor, std::string characterName, int classCode)
 {
+	/*ustawienie widoku*/
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
 	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
 	{
-		tileTextures[i].loadFromFile("images/tilesheet.png", sf::IntRect(i * 64, 512, 64, 64));
+		tileTextures[i].loadFromFile("images/tilesheet.png", sf::IntRect(i * 64, 512, 64, 64)); /*wczytanie wszystkich kafli do tablicy*/
 	}
-	tileCountHeight = (_window.getSize().y / 64) + 3;
-	tileCountWidth = (_window.getSize().x / 64) + 3;
-	sf::Sprite standard(tileTextures[0]);
+	tileCountHeight = (_window.getSize().y / 64) + 3; /*ilosc rysowanych kafli w pionie*/
+	tileCountWidth = (_window.getSize().x / 64) + 3; /*ilosc rysowanych kafli w poziomie*/
+	sf::Sprite standard(tileTextures[0]); /*sprite kafla domyslnego*/
+	/*ustawienie rozmiaru kontenera kafli do rysowania i wypelnienie go kaflem domyslnym*/
 	tileSprites.resize(tileCountHeight);
 	for (unsigned short y = 0; y < tileCountHeight; y++)
 	{
 		tileSprites[y].resize(tileCountWidth, standard);
 	}
+	/*utworzenie gracza odpowiedniej klasy*/
 	switch (classCode)
 	{
 	case 1:
@@ -159,22 +169,24 @@ Engine::Engine(sf::RenderWindow &_window, sf::Sprite& cursor, std::string charac
 		player = new Juggernaut(characterName);
 		break;
 	}
-	setMap(_window, "levels/level1.level", 0);
-	gui.setSkillPictures(player->getClassName());
-	startEngine(_window, cursor);	
+	setMap(_window, "levels/level1.level", 0); /*ustawienie poziomu startowego*/
+	gui.setSkillPictures(player->getClassName()); /*ustawienie odpowiednich obrazkow umiejetnosci*/
+	startEngine(_window, cursor); /*uruchomienie silnika*/
 }
 
 Engine::Engine(sf::RenderWindow &_window, sf::Sprite& cursor, std::fstream &file)
 {
+	/*ustawienie widoku*/
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
 	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
 	{
-		tileTextures[i].loadFromFile("images/tilesheet.png", sf::IntRect(i * 64, 512, 64, 64));
+		tileTextures[i].loadFromFile("images/tilesheet.png", sf::IntRect(i * 64, 512, 64, 64)); /*wczytanie wszystkich kafli do tablicy*/
 	}
-	tileCountHeight = (_window.getSize().y / 64) + 3;
-	tileCountWidth = (_window.getSize().x / 64) + 3;
-	sf::Sprite standard(tileTextures[0]);
+	tileCountHeight = (_window.getSize().y / 64) + 3; /*ilosc rysowanych kafli w pionie*/
+	tileCountWidth = (_window.getSize().x / 64) + 3;/*ilosc rysowanych kafli w poziomie*/
+	sf::Sprite standard(tileTextures[0]); /*sprite kafla domyslnego*/
+	/*ustawienie rozmiaru kontenera kafli do rysowania i wypelnienie go kaflem domyslnym*/
 	tileSprites.resize(tileCountHeight);
 	for (unsigned short y = 0; y < tileCountHeight; y++)
 	{
@@ -190,17 +202,19 @@ Engine::Engine(sf::RenderWindow &_window, sf::Sprite& cursor, std::fstream &file
 	characterName.erase(0, 1);
 	file >> levelPath;
 	file >> saveId;
+	/*utworzenie gracza odpowiedniej klasy*/
 	if (className == "Soldier") player = new Soldier(characterName, file);
 	else if (className == "Sentinel") player = new Sentinel(characterName, file);
 	else player = new Juggernaut(characterName, file);
-	file.close();
-	setMap(_window, levelPath, saveId);
-	gui.setSkillPictures(player->getClassName());
-	startEngine(_window, cursor);
+	file.close(); /*zamkniecie pliku po wczytaniu wszystkiego*/
+	setMap(_window, levelPath, saveId); /*ustawienie mapy*/
+	gui.setSkillPictures(player->getClassName()); /*ustawienie odpowiednich obrazkow umiejetnosci*/
+	startEngine(_window, cursor); /*uruchomienie silnika*/
 }
 
 Engine::~Engine()
 {
+	/*pozbycie sie dynamicznie zaalokowanej pamieci*/
 	delete player;
 	for (size_t i = 0; i < npcs.size(); ++i)
 	{
@@ -214,22 +228,22 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 	unsigned hitChance, dodgeChance;
 	Enemy* enemy;
 	unsigned damage;
-	Gui::TextDamage* damageInfo = new Gui::TextDamage();
+	Gui::TextDamage* damageInfo = new Gui::TextDamage(); /*tworzymy nowa informacje o obrazeniach*/
 
 	enemy = dynamic_cast<Enemy*>(npcs[enemyIndex]);
 
 	switch (attacker)
 	{
-	case PLAYER:
-		if (player->getEquipment()->getActiveWeapon()->isRanged())
+	case PLAYER: /*przypadek gdy gracz atakuje npc*/
+		if (player->getEquipment()->getActiveWeapon()->isRanged()) /*atak z broni dystansowej*/
 		{
 			double interval;
-			if (player->isActiveSkill1() && player->getClassName() == "Soldier") interval = 0.3;
+			if (player->isActiveSkill1() && player->getClassName() == "Soldier") interval = 0.3; /*Soldier moze wtedy atakowac szybciej*/
 			else interval = 0.5;
 			if (player->getAttackInterval().getElapsedTime().asSeconds() < interval) return;
 			hitChance = rand() % 20 + 1 + player->getAgi() + 3;
 		}
-		else
+		else /*atak z broni melee*/
 		{
 			if (player->getAttackInterval().getElapsedTime().asSeconds() < 0.7) return;
 			hitChance = rand() % 20 + 1 + player->getStr() + 3;
