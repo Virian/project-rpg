@@ -6,6 +6,7 @@
 Game::Game()
 {
 	state = END;
+	/*sprawdzenie plikow potrzebnych do wlaczenia menu*/
 	if (!font.loadFromFile("fonts/SharpRetro.ttf"))
 	{
 		MessageBox(NULL, "Font not found!", "ERROR", NULL);
@@ -21,11 +22,11 @@ Game::Game()
 		MessageBox(NULL, "Cursor files not found!", "ERROR", NULL);
 		return;
 	}
-	cursor.setTexture(cursorTexture);
-	cursor.setTextureRect(sf::IntRect(0, 0, 26, 32));
 	state = MENU;
-	window.create(sf::VideoMode(1280, 720), "Galaxy Guardian Alpha 1.04", sf::Style::Titlebar);
-	window.setMouseCursorVisible(false);
+	cursor.setTexture(cursorTexture);
+	cursor.setTextureRect(sf::IntRect(0, 0, 26, 32));	
+	window.create(sf::VideoMode(1280, 720), "Galaxy Guardian Alpha 1.04", sf::Style::Titlebar); /*stworzenie okna*/
+	window.setMouseCursorVisible(false); /*wylaczenie kursora*/
 }
 
 Game::~Game()
@@ -82,7 +83,7 @@ void Game::menu()
 			text[i].setColor(sf::Color::Black);
 			window.draw(text[i]);
 			text[i].move(sf::Vector2f(-3, -3));
-			if (text[i].getGlobalBounds().contains(mouse)) text[i].setColor(sf::Color::Green);
+			if (text[i].getGlobalBounds().contains(mouse)) text[i].setColor(sf::Color::Green); /*podswietlenie napisu w przypadku najechania na niego kursorem*/
 			else text[i].setColor(sf::Color::White);
 			window.draw(text[i]);
 		}
@@ -104,7 +105,7 @@ void Game::newGame()
 	sf::Text name;
 	short checked = 0;
 	bool created = false;
-
+	/*ustawienie wszystkich napisow*/
 	header.setStyle(sf::Text::Bold);
 	header.setPosition(1280 / 2 - header.getGlobalBounds().width / 2, 0.f);
 	ok.setStyle(sf::Text::Bold);
@@ -121,26 +122,31 @@ void Game::newGame()
 		classes[i].setPosition(200.f + i * 300.f, 270.f);
 	}
 
-	while (!created)
+	while (!created) /*wyswietlanie tak dlugo, dopoki postac nie zostanie stworzona*/
 	{
 		sf::Vector2f mouse(sf::Mouse::getPosition(window)); /*window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu*/
 		sf::Event event;
 
 		while (window.pollEvent(event))
 		{
+			/*nacisniecie "OK" lub entera*/
 			if (((ok.getGlobalBounds().contains(mouse)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left)) || ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Return)))
 			{				
-				if (checked == 0) MessageBox(NULL, "Select a class for your character!", "ERROR", NULL);
-				else if (characterName.size() == 0) MessageBox(NULL, "Enter a name for your character!", "ERROR", NULL);
+				if (checked == 0) MessageBox(NULL, "Select a class for your character!", "ERROR", NULL); /*gdy nie zostala wybrana zadna klasa*/
+				else if (characterName.size() == 0) MessageBox(NULL, "Enter a name for your character!", "ERROR", NULL); /*gdy nie zostalo wpisane imie postaci*/
 				else created = true;
 			}
+			/*kasowanie wpisanych znakow*/
 			else if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::BackSpace) && (characterName.size() > 0)) characterName.pop_back();
+			/*wpisywanie imienia postaci*/
 			else if ((event.type == sf::Event::TextEntered) && (characterName.size() < 20) && ((event.text.unicode > 96) && (event.text.unicode < 123)) || ((event.text.unicode > 64) && (event.text.unicode < 91)) || (event.text.unicode == 32)) characterName.push_back(event.text.unicode);
+			/*zaznaczanie konkretnej klasy*/
 			for (short i = 0; i < numberOfClasses; ++i)
 			{
 				if ((event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left) && (classes[i].getGlobalBounds().contains(mouse))) checked = i + 1;
 			}
 		}
+		/*rysowanie na ekranie*/
 		cursor.setPosition(mouse);
 		window.clear();
 		window.draw(background);
@@ -190,25 +196,25 @@ void Game::newGame()
 		window.draw(cursor);
 		window.display();
 	}
-	
+	/*uruchomienie silnika, ktore jest rownoznaczne z rozpoczeciem wlasciwej gry*/
 	Engine engine(window, cursor, characterName, checked);
-
+	/*gdy gracz wyjdzie z wlasciwej czesci gry, wracamy do menu*/
 	state = MENU;
 }
 
 void Game::loadGame()
 {
-	std::fstream file("save/SavedGame.sav");
+	std::fstream file("save/SavedGame.sav"); /*proba otwarcia pliku z zapisem*/
 	
 	if (!file.is_open())
 	{
-		MessageBox(NULL, "Couldn't find a save file!", "ERROR", NULL);
+		MessageBox(NULL, "Couldn't find a save file!", "ERROR", NULL); /*gdy plik z zapisem nie istnieje*/
 		state = MENU;
 		return;
 	}
-	Engine engine(window, cursor, file);
+	Engine engine(window, cursor, file); /*rozpoczecie gry*/
 
-	state = MENU;
+	state = MENU; /*po zakonczeniu, powrot do menu*/
 }
 
 bool Game::checkFiles()
@@ -219,6 +225,7 @@ bool Game::checkFiles()
 	sf::SoundBuffer tempSoundBuffer;
 	std::fstream tempFile;
 
+	/*proba zaladowania/otwarcia wszystkich potrzebnych plikow*/
 	if (!tempTexture.loadFromFile("images/tilesheet.png")) return false;
 	if (!tempFont.loadFromFile("fonts/game_over.ttf")) return false;
 	tempFile.open("levels/level1.level");
@@ -237,6 +244,8 @@ bool Game::checkFiles()
 
 void Game::start()
 {
+	/*gra dziala tak dlugo dopoki jej stan nie zmieni sie na END*/
+	/*w zaleznosci od jej stanu uruchamiane sa rozne metody*/
 	while (state != END)
 	{
 		switch (state)

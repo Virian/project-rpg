@@ -2,11 +2,13 @@
 
 Audio::Audio()
 {
+	/*zaladowanie dzwiekow do buforow*/
 	gunSoundBuffer.loadFromFile("sounds/gun.ogg");
 	gunSound.setBuffer(gunSoundBuffer);
 	meleeSoundBuffer.loadFromFile("sounds/melee.ogg");
 	meleeSound.setBuffer(meleeSoundBuffer);
-	backgroundMusic.setLoop(true);
+	backgroundMusic.setLoop(true); /*odtwarzanie muzyki w petli*/
+	/*ustawienie poziomow glosnosci*/
 	setSoundsVolume(65.f);
 	setMusicVolume(45.f);
 }
@@ -43,6 +45,7 @@ void Audio::stopBackgroundMusic()
 
 void Audio::setSoundsVolume(float volume)
 {
+	/*ustawienie dla wszystkich dzwiekow naraz*/
 	gunSound.setVolume(volume);
 	meleeSound.setVolume(volume);
 }

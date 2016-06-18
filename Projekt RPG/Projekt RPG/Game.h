@@ -5,21 +5,21 @@
 class Game
 {
 private:
-	sf::RenderWindow window;
-	sf::Font font;
-	sf::RectangleShape background;
-	sf::Texture texture;
-	sf::Texture cursorTexture;
-	sf::Sprite cursor;
-	void menu();
-	void newGame();
-	void loadGame();
+	sf::RenderWindow window;							/*okno gry*/
+	sf::Font font;										/*czcionka w menu glownym*/
+	sf::RectangleShape background;						/*tlo w menu*/
+	sf::Texture texture;								/*tekstura tla w menu*/
+	sf::Texture cursorTexture;							/*tekstura kursora*/
+	sf::Sprite cursor;									/*kursor*/
+	void menu();										/*menu*/
+	void newGame();										/*rozpoczecie nowej gry*/
+	void loadGame();									/*wczytanie stanu gry*/
 protected:
-	enum GameState {MENU, NEW_GAME, LOAD_GAME, END};
+	enum GameState {MENU, NEW_GAME, LOAD_GAME, END};	/*stan gry*/
 	GameState state;
 public:
 	Game();
 	~Game();
-	bool checkFiles();
-	void start();
+	bool checkFiles();									/*sprawdzenie czy sa wszystkie potrzebne pliki*/
+	void start();										/*uruchomienie gry*/
 };

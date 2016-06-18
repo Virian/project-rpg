@@ -2,6 +2,7 @@
 
 Item::Item()
 {
+	/*wczytanie tekstury*/
 	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
 }
@@ -35,7 +36,7 @@ sf::IntRect Item::getTextureRect()
 Weapon::Weapon(bool _ranged, unsigned short playerLvl) : ranged(_ranged)
 {
 	short which, nameRand;
-
+	/*generator losowej nazwy broni*/
 	nameRand = rand() % 4;
 	switch (nameRand)
 	{
@@ -71,7 +72,8 @@ Weapon::Weapon(bool _ranged, unsigned short playerLvl) : ranged(_ranged)
 	if (_ranged)
 	{
 		which = rand() % 6;
-		sprite.setTextureRect(sf::IntRect(0 + which * 128, 128, 128, 128));
+		sprite.setTextureRect(sf::IntRect(0 + which * 128, 128, 128, 128)); /*ustawienie losowego obrazka broni*/
+		/*ostatni czlon nazwy zalezy od wylosowanego obrazka*/
 		if (which < 2) name += "Rifle";
 		else if (which < 4) name += "Shotgun";
 		else name += "Pistol";
@@ -79,15 +81,17 @@ Weapon::Weapon(bool _ranged, unsigned short playerLvl) : ranged(_ranged)
 	else
 	{
 		which = rand() % 4;
-		sprite.setTextureRect(sf::IntRect(0 + which * 128, 0, 128, 128));
+		sprite.setTextureRect(sf::IntRect(0 + which * 128, 0, 128, 128)); /*ustawienie losowego obrazka broni*/
+		/*ostatni czlon nazwy zalezy od wylosowanego obrazka*/
 		if (which < 3) name += "Sword";
 		else name += "Axe";
 	}
-	attackValue = rand() % static_cast<int>(4 + playerLvl / 4.0) + 4 + playerLvl;;
+	attackValue = rand() % static_cast<int>(4 + playerLvl / 4.0) + 4 + playerLvl; /*losowanie wartosci ataku, zaleznej rowniez od poziomu gracza*/
 }
 
 Weapon::Weapon(std::string _name, unsigned short _attackValue, bool _ranged, short which) : attackValue(_attackValue), ranged(_ranged)
 {
+	/*ustawienie wszystkich wartosci oraz sprite'a na podstawie wartosci wczytanych z pliku*/
 	if (_ranged) sprite.setTextureRect(sf::IntRect(0 + which * 128, 128, 128, 128));
 	else sprite.setTextureRect(sf::IntRect(0 + which * 128, 0, 128, 128));
 	name = _name;
@@ -113,8 +117,9 @@ Armor::Armor(unsigned short playerLvl)
 	short which;
 
 	which = rand() % 5;
-	sprite.setTextureRect(sf::IntRect(0 + which * 128, 256, 128, 128));
-	armorValue = rand() % static_cast<int>(4 + playerLvl / 4.0) + 4 + playerLvl;
+	sprite.setTextureRect(sf::IntRect(0 + which * 128, 256, 128, 128)); /*ustawienie losowego obrazka zbroi*/
+	armorValue = rand() % static_cast<int>(4 + playerLvl / 4.0) + 4 + playerLvl; /*losowanie wartosci obrony, zaleznej rowniez od poziomu gracza*/
+	/*generator losowej nazwy*/
 	short nameRand = rand() % 5;
 	switch (nameRand)
 	{
@@ -152,6 +157,7 @@ Armor::Armor(unsigned short playerLvl)
 
 Armor::Armor(std::string _name, unsigned short _armorValue, short which) : armorValue(_armorValue)
 {
+	/*ustawienie wszystkich wartosci oraz sprite'a na podstawie wartosci wczytanych z pliku*/
 	sprite.setTextureRect(sf::IntRect(0 + which * 128, 256, 128, 128));
 	name = _name;
 }

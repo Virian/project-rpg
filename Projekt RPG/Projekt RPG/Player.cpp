@@ -5,120 +5,131 @@
 
 Player::Player(std::string _name) : name(_name)
 {
+	/*ustawienie sprite'a*/
 	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
 
-	speed = 5.5f;
-	walkFrame = 0;
+	speed = 5.5f; /*ustawienie predkosci*/
+	walkFrame = 0;	/*ustawienie obecnej klatki chodzenia*/
 	walkFrameCount = 7;
-	attackFrame = 0;
+	attackFrame = 0; /*ustawienie obecnej klatki ataku*/
 	attackFrameCount = 0;
+	/*rozpoczecie clockow*/
 	walkAnimationClock.restart();
 	attackAnimationClock.restart();
+	attackInterval.restart();
+	/*na poczatku umiejetnosci sa niekatywne*/
 	activeSkill1 = false;
 	activeSkill2 = false;
 	activeSkill3 = false;
+	/*statystyki poczatkowe*/
 	parLvl = 1;
 	parPointsToSpend = 0;
 	parExp = 0;	
-	parExpForNextLevel = 83;
-	attackInterval.restart();
+	parExpForNextLevel = 83;	
 }
 
 Player::Player(std::string _name, std::fstream &file) : name(_name)
 {
+	/*ustawienie sprite'a*/
 	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
 
-	speed = 5.5f;
-	walkFrame = 0;
-	attackFrame = 0;
+	speed = 5.5f; /*ustawienie predkosci*/
+	walkFrame = 0; /*ustawienie obecnej klatki chodzenia*/
+	attackFrame = 0; /*ustawienie obecnej klatki ataku*/
 	walkFrameCount = 7;
 	attackFrameCount = 0;
+	/*rozpoczecie clockow*/
 	walkAnimationClock.restart();
 	attackAnimationClock.restart();
+	attackInterval.restart();
+	/*na poczatku umiejetnosci sa niekatywne*/
 	activeSkill1 = false;
 	activeSkill2 = false;
 	activeSkill3 = false;
 
 	std::string text, name;
 	short value, which;
+	/*wczytanie statystyk z pliku*/
 	file >> parLvl >> parExp >> parExpForNextLevel;
 	file >> parHp >> parMaxHp;
 	file >> parStr >> parInt >> parAgi >> parPointsToSpend;
 	file >> value;
+	/*ustawienie ilosci mikstur*/
 	equipment.setPotionCount(value);
+	/*wczytanie aktywnej broni*/
 	file >> text;
 	if (text == "[ACTIVEWEAPON]")
 	{
 		file >> text;
-		if (text != "[NULL]")
+		if (text != "[NULL]") /*jesli ta bron faktycznie jest*/
 		{
 			Item* tmp;
-			file >> value;
-			file >> which;
-			getline(file, name);
-			name.erase(0, 1);
-			if (text == "[RANGED]") tmp = new Weapon(name, value, true, which);
-			else tmp = new Weapon(name, value, false, which);
-			equipment.addItem(tmp);
-			equipment.swapActiveItem(0);
-			equipment.deleteItem(0);
+			file >> value; /*wczytanie wartosci ataku*/
+			file >> which; /*wczytanie ktory obrazek w pliku tilesheet.png jej odpowiada*/
+			getline(file, name); /*wczytanie nazwy przedmiotu*/
+			name.erase(0, 1); /*usuniecie spacji z poczatku*/
+			if (text == "[RANGED]") tmp = new Weapon(name, value, true, which); /*stworzenie broni dystansowej*/
+			else tmp = new Weapon(name, value, false, which); /*stworzenie broni melee*/
+			equipment.addItem(tmp); /*dodanie jej do ekwipunku*/
+			equipment.swapActiveItem(0); /*ustawienie jako aktywnej*/
+			equipment.deleteItem(0); /*usuniecie domyslnie tworzonej losowej broni*/
 		}
 	}
+	/*wczytanie aktywnej zbroi*/
 	file >> text;
 	if (text == "[ACTIVEARMOR]")
 	{
 		file >> text;
-		if (text != "[NULL]")
+		if (text != "[NULL]") /*jesli ta zbroja faktycznie jest*/
 		{
 			Item* tmp;
-			file >> which;
-			getline(file, name);
-			name.erase(0, 1);
-			tmp = new Armor(name, stoi(text), which);
-			equipment.addItem(tmp);
-			equipment.swapActiveItem(0);
-			equipment.deleteItem(0);
+			/*jesli text nie byl [NULL] to do zmiennej text zostala wczytana wartosc defensywna zbroi*/
+			file >> which; /*wczytanie ktory obrazek w pliku tilesheet.png jej odpowiada*/
+			getline(file, name); /*wczytanie nazwy przedmiotu*/
+			name.erase(0, 1); /*usuniecie spacji z poczatku*/
+			tmp = new Armor(name, stoi(text), which); /*stworzenie zbroi*/
+			equipment.addItem(tmp); /*dodanie jej do ekwipunku*/
+			equipment.swapActiveItem(0); /*ustawienie jako aktywnej*/
+			equipment.deleteItem(0); /*usuniecie domyslnie tworzonej losowej broni*/
 		}
 	}
-	while (!file.eof())
+	while (!file.eof()) /*wczytywanie reszty przedmiotow*/
 	{
 		file >> text;
-		if (text == "[ARMOR]")
+		if (text == "[ARMOR]") /*zbroja*/
 		{
 			Item* tmp;
-			file >> value;
-			file >> which;
-			getline(file, name);
-			name.erase(0, 1);
-			tmp = new Armor(name, value, which);
-			equipment.addItem(tmp);
+			file >> value; /*wczytanie wartosci obrony*/
+			file >> which; /*wczytanie ktory obrazek w pliku tilesheet.png jej odpowiada*/
+			getline(file, name); /*wczytanie nazwy przedmiotu*/
+			name.erase(0, 1); /*usuniecie spacji z poczatku*/
+			tmp = new Armor(name, value, which); /*stworzenie zbroi*/
+			equipment.addItem(tmp); /*dodanie jej do ekwipunku*/
 		}
-		else if (text == "[WEAPON]")
+		else if (text == "[WEAPON]") /*bron*/
 		{
 			Item* tmp;
-			file >> text;
-			file >> value;
-			file >> which;
-			getline(file, name);
-			name.erase(0, 1);
-			if (text == "[RANGED]") tmp = new Weapon(name, value, true, which);
-			else tmp = new Weapon(name, value, false, which);
-			equipment.addItem(tmp);
+			file >> text; /*wczytanie czy bedzie to bron dystansowa czy melee*/
+			file >> value; /*wczytanie wartosci ataku*/
+			file >> which; /*wczytanie ktory obrazek w pliku tilesheet.png jej odpowiada*/
+			getline(file, name); /*wczytanie nazwy przedmiotu*/
+			name.erase(0, 1); /*usuniecie spacji z poczatku*/
+			if (text == "[RANGED]") tmp = new Weapon(name, value, true, which); /*stworzenie broni dystansowej*/
+			else tmp = new Weapon(name, value, false, which); /*stworzenie broni melee*/
+			equipment.addItem(tmp); /*dodanie jej do ekwipunku*/
 		}
-	}
-
-	attackInterval.restart();
+	}	
 }
 
 Player::~Player()
 {
-	equipment.clearBackpack();
+	equipment.clearBackpack(); /*wyczyszczenie ekwipunku*/
 }
 
 short Player::update(sf::Vector2f mouse, Level *level)
@@ -126,32 +137,35 @@ short Player::update(sf::Vector2f mouse, Level *level)
 	short result = 0;
 	TrapFountain* temp1;
 	LootChest* temp2;
-	sf::Vector2f norm = mouse - sprite.getPosition();
-	float rot = atan2(norm.y, norm.x); /*gdy przod playera jest na gorze tekstury, gdyby byl na dole to zamienic x z y*/
+	sf::Vector2f norm = mouse - sprite.getPosition(); /*wektor miedzy kursorem a graczem*/
+	/*obliczenie rotacji tak, aby gracz byl zawsze zwrocony w kierunku kursora*/
+	float rot = atan2(norm.y, norm.x); /*zalozenie ze przod sprite'a jest na gorze*/
 	rot = rot * 180.f / static_cast<float>(M_PI);
 	rot += 90;
 	sprite.setRotation(rot);
 
-	if (!activeSkill3 || getClassName() != "Juggernaut") parMaxHp = 100 + parStr;
+	if (!activeSkill3 || getClassName() != "Juggernaut") parMaxHp = 100 + parStr; /*maksymalne zdrowie zalezy od wartosci bazowej oraz wartosci sily, chyba ze jest aktywna umiejetnosc trzecia Juggernauta (czasowe zwiekszenie maksymalnego hp)*/
 
-	if (temp1 = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp1->getHpChange();
-	if (parHp > parMaxHp) parHp = parMaxHp;
-
+	if (temp1 = dynamic_cast<TrapFountain*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>(getPosition().x / 64)])) parHp += temp1->getHpChange(); /*jesli gracz stoi na pulapce lub fontannie*/
+	if (parHp > parMaxHp) parHp = parMaxHp; /*gdyby hp mialo przekroczyc maksymalna mozliwa wartosc*/
+	/*gdyby skonczyl sie czas trwania efektu umiejetnosci oraz byl on wciaz aktywny, nalezy usunac ten efekt*/
 	if (effectSkill1.isExpired() && activeSkill1) clearEffectSkill1();
 	if (effectSkill2.isExpired() && activeSkill2) clearEffectSkill2();
 	if (effectSkill3.isExpired() && activeSkill3) clearEffectSkill3();
-	
+	/*gdy gracz sie porusza*/
 	if (status == WALK)
 	{
+		/*gracz moze sie poruszyc jedynie co okreslona ilosc czasu*/
 		if (walkAnimationClock.getElapsedTime() > sf::seconds(0.04f))
 		{
 			if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
 				walkFrame++;
 			else
 				walkFrame = 0; /*animacja sie zapetla*/
-			sprite.setTextureRect(sf::IntRect(walkFrame * 64, 640, 64, 64));
-			sprite.move(getMove());
+			sprite.setTextureRect(sf::IntRect(walkFrame * 64, 640, 64, 64)); /*ustawienie odpowiedniej klatki*/
+			sprite.move(getMove()); /*przesuniecie postaci*/
 			/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
+			/*jesli gracz mialby wejsc na sciane/wyjsc poza granice poziomu, ruch zostaje cofniety, a postac sie zatrzymuje*/
 			if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
 			{
 				sprite.move(-getMove());
@@ -172,25 +186,28 @@ short Player::update(sf::Vector2f mouse, Level *level)
 				sprite.move(-getMove());
 				stop();
 			}
+			/*w przypadku kolizji z kaflami zostaje sprawdzone czy nie jest to kolizja ze skrzynia zawierajaca przedmioty - jesli tak to skrzynka znika a przedmiot zostaje dodany do ekwipunku*/
 			if (level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]->isWall()) /*kolizja z kaflem po lewej*/
 			{
 				if (temp2 = dynamic_cast<LootChest*>(level->getMap()[static_cast<int>(getPosition().y / 64)][static_cast<int>((sprite.getGlobalBounds().left + 15) / 64)]))
 				{
-					if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize))
+					if ((temp2->containsPotion()) || (equipment.getBackpack().size() < Equipment::backpackSize)) /*miksture mozna dodac zawsze, przedmiot tylko jesli jest na niego miejsce w plecaku*/
 					{
-						if (temp2->containsPotion()) equipment.addPotion();
-						else
+						if (temp2->containsPotion()) equipment.addPotion(); /*dodanie mikstury*/
+						else /*dodanie przedmiotu*/
 						{
 							Item* item;
+							/*losowanie czy bron czy zbroja*/
 							if (rand() % 2 == 0) item = new Armor(parLvl);
 							else
 							{
+								/*jesli bron, losowanie czy dystansowa czy melee*/
 								if (rand() % 2 == 0) item = new Weapon(false, parLvl);
 								else item = new Weapon(true, parLvl);
 							}
-							equipment.addItem(item);
+							equipment.addItem(item); /*dodanie do ekwipunku*/
 						}
-						level->deleteLootChest(sf::Vector2f(sprite.getGlobalBounds().left + 15, getPosition().y));
+						level->deleteLootChest(sf::Vector2f(sprite.getGlobalBounds().left + 15, getPosition().y)); /*usuniecie skrzynki i zastapienie jej kaflem ktory byl tam wczesniej*/
 						result = 1;
 					}
 				}
@@ -272,22 +289,25 @@ short Player::update(sf::Vector2f mouse, Level *level)
 				sprite.move(-getMove());
 				stop();
 			}
-			walkAnimationClock.restart();
+			walkAnimationClock.restart(); /*reset clocka animacji*/
 		}
 	}
+	/*gdy gracz atakuje*/
 	else if (status == ATTACK)
 	{
-		if ((attackFrameCount > 0) && (attackAnimationClock.getElapsedTime() > sf::seconds(1.f)))
+		/*animacja wystepuje tylko jesli sa dostepne jakies klatki animacji oraz zmiana klatki moze nastapic tylko co okreslony okres czasu*/
+		if ((attackFrameCount > 0) && (attackAnimationClock.getElapsedTime() > sf::seconds(.1f)))
 		{
 			sf::IntRect tmpRect;
 			if (attackFrame < attackFrameCount) /*liczba klatek animacji - 1*/
 				++attackFrame;
 			else
 				attackFrame = 0; /*animacja sie zapetla*/
+			/*ustawianie kolejnych klatek animacji ataku*/
 			tmpRect = sprite.getTextureRect();
 			tmpRect.left = (attackFrame + walkFrameCount + 1) * 64;
-			sprite.setTextureRect(tmpRect);
-			attackAnimationClock.restart();
+			sprite.setTextureRect(tmpRect);			
+			attackAnimationClock.restart(); /*reset clocka animacji*/
 		}
 	}
 	return result;
@@ -301,6 +321,7 @@ void Player::walk()
 void Player::stop()
 {
 	status = STOP;
+	/*gdy gracz sie zatrzymuje zostaje ustawiona pierwsza klatka animacji chodzenia*/
 	walkFrame = 0;
 	attackFrame = 0;
 	sprite.setTextureRect(sf::IntRect(walkFrame * 64, 640, 64, 64));
@@ -332,8 +353,8 @@ sf::FloatRect Player::getBoundingBox()
 sf::Vector2f Player::getMove()
 {
 	float rotation = sprite.getRotation();
-	float vx = sin((rotation * static_cast<float>(M_PI)) / 180.0f);
-	float vy = -cos((rotation * static_cast<float>(M_PI)) / 180.0f);
+	float vx = sin((rotation * static_cast<float>(M_PI)) / 180.0f); /*wyliczenie przemieszczenia na osi x*/
+	float vy = -cos((rotation * static_cast<float>(M_PI)) / 180.0f); /*wyliczenie przemieszczenia na osi y*/
 
 	return sf::Vector2f(vx * speed, vy * speed);
 }
@@ -345,7 +366,7 @@ sf::Vector2f Player::getPosition()
 
 void Player::setPosition(Tile::Coord coord)
 {
-	sprite.setPosition(coord.x * 64.f + 32.f, coord.y * 64.f + 32.f);
+	sprite.setPosition(coord.x * 64.f + 32.f, coord.y * 64.f + 32.f); /*ustawienie pozycji jako koordynaty * szerokosc kafla + polowa szerokosci kafla - zeby ustawic idealnie na srodku*/
 }
 
 std::string Player::getName()
@@ -427,6 +448,7 @@ void Player::levelUp()
 
 	parExp -= parExpForNextLevel;
 	++parLvl;
+	/*wyliczenie doswiadczenia na podstawie formuly z Runescape*/
 	for (double i = 1.0; i < parLvl + 1; ++i)
 	{
 		sum += floor(i + 300.0 * pow(2.0, i/7.0));
@@ -452,7 +474,7 @@ void Player::swapActiveItem(short position)
 
 void Player::usePotion()
 {
-	if (equipment.usePotion() == 0) parHp += static_cast<short>(0.6 * parMaxHp);
+	if (equipment.usePotion() == 0) parHp += static_cast<short>(0.6 * parMaxHp); /*gracz jest leczony o 60% maksymalnego hp jesli ma dostepne mikstury*/
 }
 
 void Player::increaseExperience(unsigned experience)
@@ -477,6 +499,7 @@ void Player::restartAttackInterval()
 
 void Player::pauseTimers()
 {
+	/*zatrzymanie wszystkich timerow*/
 	cooldownSkill1.stop();
 	cooldownSkill2.stop();
 	cooldownSkill3.stop();
@@ -487,6 +510,7 @@ void Player::pauseTimers()
 
 void Player::unpauseTimers()
 {
+	/*wznowienie dzialania wszystkich timerow*/
 	cooldownSkill1.start();
 	cooldownSkill2.start();
 	cooldownSkill3.start();
@@ -497,6 +521,7 @@ void Player::unpauseTimers()
 
 void Player::resetTimers()
 {
+	/*zresetowanie timerow, przechodza w stan expired niemal od razu*/
 	cooldownSkill1.restart(sf::microseconds(1));
 	cooldownSkill2.restart(sf::microseconds(1));
 	cooldownSkill3.restart(sf::microseconds(1));
@@ -522,7 +547,8 @@ bool Player::isActiveSkill3()
 
 Juggernaut::Juggernaut(std::string _name) : Player(_name)
 {
-	sprite.setColor(sf::Color(255, 140, 140));
+	sprite.setColor(sf::Color(255, 140, 140)); /*kolor czerwony*/
+	/*statystyki nastawione na sile*/
 	parStr = 18;
 	parAgi = 6;
 	parInt = 6;
@@ -566,12 +592,12 @@ void Juggernaut::useSkill2() /*mocniejszy atak o 50%*/
 
 void Juggernaut::useSkill3()
 {
-	/*czasowo wiecej max hp*/
+	/*czasowo wiecej max hp o 20%*/
 	if (cooldownSkill3.isExpired())
 	{
 		parMaxHp += static_cast<short>(0.2 * parMaxHp);
 		cooldownSkill3.restart(sf::seconds(35.f));
-		effectSkill3.restart(sf::seconds(5.f + parInt / 50.f));
+		effectSkill3.restart(sf::seconds(5.f + parInt / 50.f)); /*+0.1s za kazde 5 int*/
 		activeSkill3 = true;
 	}
 }
@@ -610,6 +636,7 @@ float Juggernaut::getRatioSkill3()
 Soldier::Soldier(std::string _name) : Player(_name)
 {
 	sprite.setColor(sf::Color::Yellow);
+	/*statystyki nastawione na zrecznosc*/
 	parAgi = 16;
 	parStr = 6;
 	parInt = 8;
@@ -659,7 +686,7 @@ void Soldier::useSkill3()
 	{
 		/*niewidzialnosc*/
 		sf::Color color = sprite.getColor();
-		color.a -= 130;
+		color.a -= 130; /*zmniejszenie alfy, daje efekt lekkiej przezroczystosci*/
 		sprite.setColor(color);
 		cooldownSkill3.restart(sf::seconds(60.f));
 		effectSkill3.restart(sf::seconds(4.f));
@@ -674,7 +701,7 @@ void Soldier::clearEffectSkill1()
 
 void Soldier::clearEffectSkill2()
 {
-	speed -= 3.3f;
+	speed -= 3.f + parInt / 100.f;
 	activeSkill2 = false;
 }
 
@@ -703,7 +730,8 @@ float Soldier::getRatioSkill3()
 
 Sentinel::Sentinel(std::string _name) : Player(_name)
 {
-	sprite.setColor(sf::Color(140, 140, 255));
+	sprite.setColor(sf::Color(140, 140, 255)); /*kolor niebieski*/
+	/*statystyki nastawione na inteligencje*/
 	parInt = 19;
 	parStr = 5;
 	parAgi = 6;
@@ -735,11 +763,11 @@ void Sentinel::useSkill1() /*heal*/
 	}
 }
 
-void Sentinel::useSkill2() /*zwiekszenie szansy na dodge*/
+void Sentinel::useSkill2() /*zwiekszenie szansy na dodge oraz trafienie z broni dystansowej*/
 {
 	if (cooldownSkill2.isExpired())
 	{
-		parAgi += static_cast<unsigned short>((0.33f + parInt / 100.f) * parAgi);
+		parAgi += static_cast<unsigned short>((0.33f + parInt / 100.f) * parAgi); /*zwieksza zrecznosc o 33% + 1% za kazdy 1 int*/
 		cooldownSkill2.restart(sf::seconds(35.f));
 		effectSkill2.restart(sf::seconds(7.f));
 		activeSkill2 = true;
