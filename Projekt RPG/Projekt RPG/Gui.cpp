@@ -14,12 +14,12 @@ Gui::Gui()
 	potions.setCharacterSize(70);
 	texture.loadFromFile("images/tilesheet.png");
 	hpGauge.setTexture(texture);
-	hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
+	hpGauge.setTextureRect(sf::IntRect(0, 1024, 128, 128));
 	expGauge.setTexture(texture);
-	expGauge.setTextureRect(IntRect(0, 896, 128, 128));
-	skill1.setSize(Vector2f(64, 64));
-	skill2.setSize(Vector2f(64, 64));
-	skill3.setSize(Vector2f(64, 64));
+	expGauge.setTextureRect(sf::IntRect(0, 896, 128, 128));
+	skill1.setSize(sf::Vector2f(64, 64));
+	skill2.setSize(sf::Vector2f(64, 64));
+	skill3.setSize(sf::Vector2f(64, 64));
 
 	skill1.setTexture(&texture);
 	skill2.setTexture(&texture);
@@ -30,20 +30,20 @@ Gui::Gui()
 
 	flash.restart();
 
-	pauseMenu.setSize(Vector2f(350, 450));
-	resumeButton.setSize(Vector2f(320, 100));
-	saveButton.setSize(Vector2f(320, 100));
-	quitButton.setSize(Vector2f(320, 100));
+	pauseMenu.setSize(sf::Vector2f(350, 450));
+	resumeButton.setSize(sf::Vector2f(320, 100));
+	saveButton.setSize(sf::Vector2f(320, 100));
+	quitButton.setSize(sf::Vector2f(320, 100));
 	
-	pauseMenu.setFillColor(Color::Black);
+	pauseMenu.setFillColor(sf::Color::Black);
 	pauseMenu.setOutlineThickness(-2);
-	pauseMenu.setOutlineColor(Color::White);
+	pauseMenu.setOutlineColor(sf::Color::White);
 	resumeButton.setTexture(&texture);
-	resumeButton.setTextureRect(IntRect(0, 384, 320, 100));
+	resumeButton.setTextureRect(sf::IntRect(0, 384, 320, 100));
 	saveButton.setTexture(&texture);
-	saveButton.setTextureRect(IntRect(0, 384, 320, 100));
+	saveButton.setTextureRect(sf::IntRect(0, 384, 320, 100));
 	quitButton.setTexture(&texture);
-	quitButton.setTextureRect(IntRect(0, 384, 320, 100));
+	quitButton.setTextureRect(sf::IntRect(0, 384, 320, 100));
 
 	resume.setFont(font);
 	resume.setCharacterSize(90);
@@ -55,40 +55,40 @@ Gui::Gui()
 	quit.setCharacterSize(90);
 	quit.setString("QUIT");
 
-	backpackBackground.setSize(Vector2f(680, 296));
-	activeEquipment.setSize(Vector2f(300, 440));
-	characterInfo.setSize(Vector2f(680, 360));
-	itemInfo.setSize(Vector2f(300, 216));
+	backpackBackground.setSize(sf::Vector2f(680, 296));
+	activeEquipment.setSize(sf::Vector2f(300, 440));
+	characterInfo.setSize(sf::Vector2f(680, 360));
+	itemInfo.setSize(sf::Vector2f(300, 216));
 
 	backpackSlot.setTexture(texture);
-	backpackSlot.setTextureRect(IntRect(0, 768, 128, 128));
+	backpackSlot.setTextureRect(sf::IntRect(0, 768, 128, 128));
 	activeBackpackSlot.setTexture(texture);
-	activeBackpackSlot.setTextureRect(IntRect(128, 768, 128, 128));
+	activeBackpackSlot.setTextureRect(sf::IntRect(128, 768, 128, 128));
 
-	backpackBackground.setFillColor(Color::Black);
+	backpackBackground.setFillColor(sf::Color::Black);
 	backpackBackground.setOutlineThickness(-2);
-	backpackBackground.setOutlineColor(Color::White);
-	activeEquipment.setFillColor(Color::Black);
+	backpackBackground.setOutlineColor(sf::Color::White);
+	activeEquipment.setFillColor(sf::Color::Black);
 	activeEquipment.setOutlineThickness(-2);
-	activeEquipment.setOutlineColor(Color::White);
-	characterInfo.setFillColor(Color::Black);
+	activeEquipment.setOutlineColor(sf::Color::White);
+	characterInfo.setFillColor(sf::Color::Black);
 	characterInfo.setOutlineThickness(-2);
-	characterInfo.setOutlineColor(Color::White);
-	itemInfo.setFillColor(Color::Black);
+	characterInfo.setOutlineColor(sf::Color::White);
+	itemInfo.setFillColor(sf::Color::Black);
 	itemInfo.setOutlineThickness(-2);
-	itemInfo.setOutlineColor(Color::White);
+	itemInfo.setOutlineColor(sf::Color::White);
 
 	activeEquipmentHeader.setFont(font);
 	activeEquipmentHeader.setCharacterSize(80);
-	activeEquipmentHeader.setStyle(Text::Bold);
+	activeEquipmentHeader.setStyle(sf::Text::Bold);
 	activeEquipmentHeader.setString("Active equipment");
 	characterInfoHeader.setFont(font);
 	characterInfoHeader.setCharacterSize(80);
-	characterInfoHeader.setStyle(Text::Bold);
+	characterInfoHeader.setStyle(sf::Text::Bold);
 	characterInfoHeader.setString("Character information");
 	itemInfoHeader.setFont(font);
 	itemInfoHeader.setCharacterSize(80);
-	itemInfoHeader.setStyle(Text::Bold);
+	itemInfoHeader.setStyle(sf::Text::Bold);
 	itemInfoHeader.setString("Item information");
 
 	playerStats.setFont(font);
@@ -98,17 +98,17 @@ Gui::Gui()
 	activeEquipmentInfo.setFont(font);
 	activeEquipmentInfo.setCharacterSize(65);
 
-	plus.setSize(Vector2f(20, 20));
+	plus.setSize(sf::Vector2f(20, 20));
 	plus.setTexture(&texture);
-	plus.setTextureRect(IntRect(0, 484, 20, 20));
+	plus.setTextureRect(sf::IntRect(0, 484, 20, 20));
 
-	levelMenu.setSize(Vector2f(350, 550));
-	levelMenu.setFillColor(Color::Black);
+	levelMenu.setSize(sf::Vector2f(350, 550));
+	levelMenu.setFillColor(sf::Color::Black);
 	levelMenu.setOutlineThickness(-2.f);
-	levelMenu.setOutlineColor(Color::White);
-	Text header;
-	Text information;
-	Text option1, option2, option3, option4, option5;
+	levelMenu.setOutlineColor(sf::Color::White);
+	sf::Text header;
+	sf::Text information;
+	sf::Text option1, option2, option3, option4, option5;
 	header.setString("Choose level:");
 	information.setString("Press ESC to go back.");
 	option1.setString("1 - Level1");
@@ -136,50 +136,52 @@ Gui::~Gui()
 	{
 		delete damageInfo[i];
 	}
+	damageInfo.clear();
 	for (size_t i = 0; i < hpInfo.size(); ++i)
 	{
 		delete hpInfo[i];
 	}
+	hpInfo.clear();
 }
 
 Gui::HpBar::HpBar()
 {
-	currentHp.setFillColor(Color::Red);
-	missingHp.setFillColor(Color(120, 0, 0));
+	currentHp.setFillColor(sf::Color::Red);
+	missingHp.setFillColor(sf::Color(120, 0, 0));
 }
 
-void Gui::setSkillPictures(string className)
+void Gui::setSkillPictures(std::string className)
 {
 	if (className == "Soldier")
 	{
-		skill1.setTextureRect(IntRect(0, 1152, 64, 64));
-		fadedSkill1.setTextureRect(IntRect(64, 1152, 64, 64));
-		skill2.setTextureRect(IntRect(128, 1152, 64, 64));
-		fadedSkill2.setTextureRect(IntRect(192, 1152, 64, 64));
-		skill3.setTextureRect(IntRect(256, 1152, 64, 64));
-		fadedSkill3.setTextureRect(IntRect(320, 1152, 64, 64));
+		skill1.setTextureRect(sf::IntRect(0, 1152, 64, 64));
+		fadedSkill1.setTextureRect(sf::IntRect(64, 1152, 64, 64));
+		skill2.setTextureRect(sf::IntRect(128, 1152, 64, 64));
+		fadedSkill2.setTextureRect(sf::IntRect(192, 1152, 64, 64));
+		skill3.setTextureRect(sf::IntRect(256, 1152, 64, 64));
+		fadedSkill3.setTextureRect(sf::IntRect(320, 1152, 64, 64));
 	}
 	else if (className == "Sentinel")
 	{
-		skill1.setTextureRect(IntRect(0, 1216, 64, 64));
-		fadedSkill1.setTextureRect(IntRect(64, 1216, 64, 64));
-		skill2.setTextureRect(IntRect(128, 1216, 64, 64));
-		fadedSkill2.setTextureRect(IntRect(192, 1216, 64, 64));
-		skill3.setTextureRect(IntRect(256, 1216, 64, 64));
-		fadedSkill3.setTextureRect(IntRect(320, 1216, 64, 64));
+		skill1.setTextureRect(sf::IntRect(0, 1216, 64, 64));
+		fadedSkill1.setTextureRect(sf::IntRect(64, 1216, 64, 64));
+		skill2.setTextureRect(sf::IntRect(128, 1216, 64, 64));
+		fadedSkill2.setTextureRect(sf::IntRect(192, 1216, 64, 64));
+		skill3.setTextureRect(sf::IntRect(256, 1216, 64, 64));
+		fadedSkill3.setTextureRect(sf::IntRect(320, 1216, 64, 64));
 	}
 	else
 	{
-		skill1.setTextureRect(IntRect(0, 1280, 64, 64));
-		fadedSkill1.setTextureRect(IntRect(64, 1280, 64, 64));
-		skill2.setTextureRect(IntRect(128, 1280, 64, 64));
-		fadedSkill2.setTextureRect(IntRect(192, 1280, 64, 64));
-		skill3.setTextureRect(IntRect(256, 1280, 64, 64));
-		fadedSkill3.setTextureRect(IntRect(320, 1280, 64, 64));
+		skill1.setTextureRect(sf::IntRect(0, 1280, 64, 64));
+		fadedSkill1.setTextureRect(sf::IntRect(64, 1280, 64, 64));
+		skill2.setTextureRect(sf::IntRect(128, 1280, 64, 64));
+		fadedSkill2.setTextureRect(sf::IntRect(192, 1280, 64, 64));
+		skill3.setTextureRect(sf::IntRect(256, 1280, 64, 64));
+		fadedSkill3.setTextureRect(sf::IntRect(320, 1280, 64, 64));
 	}
 }
 
-void Gui::drawScreen(RenderWindow &window, Player* player)
+void Gui::drawScreen(sf::RenderWindow &window, Player* player)
 {
 	short currentHp = player->getHp();
 	short maxHp = player->getMaxHp();
@@ -188,7 +190,7 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	
 	for (size_t i = 0; i < damageInfo.size(); ++i)
 	{
-		if (damageInfo[i]->lifeTime.getElapsedTime() > seconds(0.6f))
+		if (damageInfo[i]->lifeTime.getElapsedTime() > sf::seconds(0.6f))
 		{
 			delete damageInfo[i];
 			damageInfo.erase(damageInfo.begin() + i);
@@ -196,9 +198,9 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 		else
 		{
 			window.draw(damageInfo[i]->text);
-			if (damageInfo[i]->tick.getElapsedTime() > milliseconds(10))
+			if (damageInfo[i]->tick.getElapsedTime() > sf::milliseconds(10))
 			{
-				Color tempColor;
+				sf::Color tempColor;
 
 				damageInfo[i]->text.move(0.0f, -1.0f);
 				tempColor = damageInfo[i]->text.getColor();
@@ -211,51 +213,51 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 
 	for (size_t i = 0; i < hpInfo.size(); ++i)
 	{
-		hpInfo[i]->currentHp.setPosition(Vector2f(hpInfo[i]->characterPosition.x - 32, hpInfo[i]->characterPosition.y - 24));
-		hpInfo[i]->missingHp.setPosition(Vector2f(hpInfo[i]->characterPosition.x - 32 + hpInfo[i]->currentHp.getGlobalBounds().width, hpInfo[i]->characterPosition.y - 24));
+		hpInfo[i]->currentHp.setPosition(sf::Vector2f(hpInfo[i]->characterPosition.x - 32, hpInfo[i]->characterPosition.y - 24));
+		hpInfo[i]->missingHp.setPosition(sf::Vector2f(hpInfo[i]->characterPosition.x - 32 + hpInfo[i]->currentHp.getGlobalBounds().width, hpInfo[i]->characterPosition.y - 24));
 		window.draw(hpInfo[i]->currentHp);
 		window.draw(hpInfo[i]->missingHp);
 	}
 
 	float hpPercent = (static_cast<float>(currentHp) / static_cast<float>(maxHp)) * 100.0f;
-	if ((hpPercent <= 100) && (hpPercent > 500.0f/6.0f)) hpGauge.setTextureRect(IntRect(0, 1024, 128, 128));
-	else if ((hpPercent <= 500.0f / 6.0f) && (hpPercent > 400.0f / 6.0f)) hpGauge.setTextureRect(IntRect(128, 1024, 128, 128));
-	else if ((hpPercent <= 400.0f / 6.0f) && (hpPercent > 50)) hpGauge.setTextureRect(IntRect(256, 1024, 128, 128));
-	else if ((hpPercent <= 50) && (hpPercent > 200.0f / 6.0f)) hpGauge.setTextureRect(IntRect(384, 1024, 128, 128));
-	else if ((hpPercent <= 200.0f / 6.0f) && (hpPercent > 100.0f / 6.0f)) hpGauge.setTextureRect(IntRect(512, 1024, 128, 128));
+	if ((hpPercent <= 100) && (hpPercent > 500.0f/6.0f)) hpGauge.setTextureRect(sf::IntRect(0, 1024, 128, 128));
+	else if ((hpPercent <= 500.0f / 6.0f) && (hpPercent > 400.0f / 6.0f)) hpGauge.setTextureRect(sf::IntRect(128, 1024, 128, 128));
+	else if ((hpPercent <= 400.0f / 6.0f) && (hpPercent > 50)) hpGauge.setTextureRect(sf::IntRect(256, 1024, 128, 128));
+	else if ((hpPercent <= 50) && (hpPercent > 200.0f / 6.0f)) hpGauge.setTextureRect(sf::IntRect(384, 1024, 128, 128));
+	else if ((hpPercent <= 200.0f / 6.0f) && (hpPercent > 100.0f / 6.0f)) hpGauge.setTextureRect(sf::IntRect(512, 1024, 128, 128));
 	else if ((hpPercent <= 100.0f / 6.0f) && (hpPercent > 0))
 	{
 		if (flash.getElapsedTime().asSeconds() > 0.5 && flash.getElapsedTime().asSeconds() <= 1)
-			hpGauge.setTextureRect(IntRect(768, 1024, 128, 128));
+			hpGauge.setTextureRect(sf::IntRect(768, 1024, 128, 128));
 		else if (flash.getElapsedTime().asSeconds() > 1)
 		{
-			hpGauge.setTextureRect(IntRect(640, 1024, 128, 128));
+			hpGauge.setTextureRect(sf::IntRect(640, 1024, 128, 128));
 			flash.restart();
 		}
 	}
 
 	float expPercent = (static_cast<float>(exp) / static_cast<float>(expForNextLevel)) * 100.0f;
-	if ((expPercent <= 100) && (expPercent > 500.0f / 6.0f)) expGauge.setTextureRect(IntRect(0, 896, 128, 128));
-	else if ((expPercent <= 500.0f / 6.0f) && (expPercent > 400.0f / 6.0f)) expGauge.setTextureRect(IntRect(128, 896, 128, 128));
-	else if ((expPercent <= 400.0f / 6.0f) && (expPercent > 50)) expGauge.setTextureRect(IntRect(256, 896, 128, 128));
-	else if ((expPercent <= 50) && (expPercent > 200.0f / 6.0f)) expGauge.setTextureRect(IntRect(384, 896, 128, 128));
-	else if ((expPercent <= 200.0f / 6.0f) && (expPercent > 100.0f / 6.0f)) expGauge.setTextureRect(IntRect(512, 896, 128, 128));
-	else if ((expPercent <= 100.0f / 6.0f) && (expPercent >= 0)) expGauge.setTextureRect(IntRect(640, 896, 128, 128));
+	if ((expPercent <= 100) && (expPercent > 500.0f / 6.0f)) expGauge.setTextureRect(sf::IntRect(0, 896, 128, 128));
+	else if ((expPercent <= 500.0f / 6.0f) && (expPercent > 400.0f / 6.0f)) expGauge.setTextureRect(sf::IntRect(128, 896, 128, 128));
+	else if ((expPercent <= 400.0f / 6.0f) && (expPercent > 50)) expGauge.setTextureRect(sf::IntRect(256, 896, 128, 128));
+	else if ((expPercent <= 50) && (expPercent > 200.0f / 6.0f)) expGauge.setTextureRect(sf::IntRect(384, 896, 128, 128));
+	else if ((expPercent <= 200.0f / 6.0f) && (expPercent > 100.0f / 6.0f)) expGauge.setTextureRect(sf::IntRect(512, 896, 128, 128));
+	else if ((expPercent <= 100.0f / 6.0f) && (expPercent >= 0)) expGauge.setTextureRect(sf::IntRect(640, 896, 128, 128));
 
-	hpGauge.setPosition(window.mapPixelToCoords(Vector2i(36, 570)));
-	expGauge.setPosition(window.mapPixelToCoords(Vector2i(1116, 570)));
+	hpGauge.setPosition(window.mapPixelToCoords(sf::Vector2i(36, 570)));
+	expGauge.setPosition(window.mapPixelToCoords(sf::Vector2i(1116, 570)));
 
 	currHp.setString(std::to_string(currentHp));
 	maximHp.setString(std::to_string(maxHp));
 	experience.setString(std::to_string(static_cast<int>(expPercent)) + "%");
-	potions.setString("Potions: " + std::to_string(player->getEquipment().getPotionCount()));
+	potions.setString("Potions: " + std::to_string(player->getEquipment()->getPotionCount()));
 	
-	if (currentHp > 99) currHp.setPosition(window.mapPixelToCoords(Vector2i(70, 550)));
-	else if (currentHp <= 99 && currentHp > 9) currHp.setPosition(window.mapPixelToCoords(Vector2i(78, 550)));
-	else currHp.setPosition(window.mapPixelToCoords(Vector2i(86, 550)));
-	maximHp.setPosition(window.mapPixelToCoords(Vector2i(85, 610)));
-	experience.setPosition(window.mapPixelToCoords(Vector2i(1142, 546)));
-	potions.setPosition(window.mapPixelToCoords(Vector2i(170, 625)));
+	if (currentHp > 99) currHp.setPosition(window.mapPixelToCoords(sf::Vector2i(70, 550)));
+	else if (currentHp <= 99 && currentHp > 9) currHp.setPosition(window.mapPixelToCoords(sf::Vector2i(78, 550)));
+	else currHp.setPosition(window.mapPixelToCoords(sf::Vector2i(86, 550)));
+	maximHp.setPosition(window.mapPixelToCoords(sf::Vector2i(85, 610)));
+	experience.setPosition(window.mapPixelToCoords(sf::Vector2i(1142, 546)));
+	potions.setPosition(window.mapPixelToCoords(sf::Vector2i(170, 625)));
 
 	window.draw(hpGauge);
 	window.draw(expGauge);
@@ -265,42 +267,42 @@ void Gui::drawScreen(RenderWindow &window, Player* player)
 	window.draw(fadedSkill1);
 	window.draw(fadedSkill2);
 	window.draw(fadedSkill3);
-	currHp.move(Vector2f(2, 2));
-	currHp.setColor(Color::Black);
+	currHp.move(sf::Vector2f(2, 2));
+	currHp.setColor(sf::Color::Black);
 	window.draw(currHp);
-	currHp.move(Vector2f(-2, -2));
-	currHp.setColor(Color::White);
+	currHp.move(sf::Vector2f(-2, -2));
+	currHp.setColor(sf::Color::White);
 	window.draw(currHp);
-	maximHp.move(Vector2f(2, 2));
-	maximHp.setColor(Color::Black);
+	maximHp.move(sf::Vector2f(2, 2));
+	maximHp.setColor(sf::Color::Black);
 	window.draw(maximHp);
-	maximHp.move(Vector2f(-2, -2));
-	maximHp.setColor(Color::White);
+	maximHp.move(sf::Vector2f(-2, -2));
+	maximHp.setColor(sf::Color::White);
 	window.draw(maximHp);
-	experience.move(Vector2f(2, 2));
-	experience.setColor(Color::Black);
+	experience.move(sf::Vector2f(2, 2));
+	experience.setColor(sf::Color::Black);
 	window.draw(experience);
-	experience.move(Vector2f(-2, -2));
-	experience.setColor(Color::White);
+	experience.move(sf::Vector2f(-2, -2));
+	experience.setColor(sf::Color::White);
 	window.draw(experience);
-	potions.move(Vector2f(2, 2));
-	potions.setColor(Color::Black);
+	potions.move(sf::Vector2f(2, 2));
+	potions.setColor(sf::Color::Black);
 	window.draw(potions);
-	potions.move(Vector2f(-2, -2));
-	potions.setColor(Color::White);
+	potions.move(sf::Vector2f(-2, -2));
+	potions.setColor(sf::Color::White);
 	window.draw(potions);
 }
 
-void Gui::drawPauseMenu(RenderWindow &window)
+void Gui::drawPauseMenu(sf::RenderWindow &window)
 {
-	pauseMenu.setPosition(window.mapPixelToCoords(Vector2i(465, 135)));
-	resumeButton.setPosition(window.mapPixelToCoords(Vector2i(480, 172)));
-	saveButton.setPosition(window.mapPixelToCoords(Vector2i(480, 310)));
-	quitButton.setPosition(window.mapPixelToCoords(Vector2i(480, 447)));
+	pauseMenu.setPosition(window.mapPixelToCoords(sf::Vector2i(465, 135)));
+	resumeButton.setPosition(window.mapPixelToCoords(sf::Vector2i(480, 172)));
+	saveButton.setPosition(window.mapPixelToCoords(sf::Vector2i(480, 310)));
+	quitButton.setPosition(window.mapPixelToCoords(sf::Vector2i(480, 447)));
 
-	resume.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - resume.getGlobalBounds().width / 2), 145)));
-	save.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - save.getGlobalBounds().width / 2), 283)));
-	quit.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - quit.getGlobalBounds().width / 2), 420)));
+	resume.setPosition(window.mapPixelToCoords(sf::Vector2i(static_cast<int>(window.getSize().x / 2 - resume.getGlobalBounds().width / 2), 145)));
+	save.setPosition(window.mapPixelToCoords(sf::Vector2i(static_cast<int>(window.getSize().x / 2 - save.getGlobalBounds().width / 2), 283)));
+	quit.setPosition(window.mapPixelToCoords(sf::Vector2i(static_cast<int>(window.getSize().x / 2 - quit.getGlobalBounds().width / 2), 420)));
 	
 	window.draw(pauseMenu);
 	window.draw(resumeButton);
@@ -311,38 +313,38 @@ void Gui::drawPauseMenu(RenderWindow &window)
 	window.draw(quit);
 }
 
-void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
+void Gui::drawEquipment(sf::RenderWindow &window, Player* player, short position)
 {
-	vector<Item*> backpack;
+	std::vector<Item*> backpack;
 	Weapon* activeWeapon;
 	Armor* activeArmor;
 	
-	backpackBackground.setPosition(window.mapPixelToCoords(Vector2i(120, 398)));
-	activeEquipment.setPosition(window.mapPixelToCoords(Vector2i(860, 254)));
-	characterInfo.setPosition(window.mapPixelToCoords(Vector2i(120, 26)));
-	itemInfo.setPosition(window.mapPixelToCoords(Vector2i(860, 26)));
+	backpackBackground.setPosition(window.mapPixelToCoords(sf::Vector2i(120, 398)));
+	activeEquipment.setPosition(window.mapPixelToCoords(sf::Vector2i(860, 254)));
+	characterInfo.setPosition(window.mapPixelToCoords(sf::Vector2i(120, 26)));
+	itemInfo.setPosition(window.mapPixelToCoords(sf::Vector2i(860, 26)));
 
-	activeEquipmentHeader.setPosition(window.mapPixelToCoords(Vector2i(870, 214)));
-	characterInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(130, -14)));
-	itemInfoHeader.setPosition(window.mapPixelToCoords(Vector2i(870, -14)));
+	activeEquipmentHeader.setPosition(window.mapPixelToCoords(sf::Vector2i(870, 214)));
+	characterInfoHeader.setPosition(window.mapPixelToCoords(sf::Vector2i(130, -14)));
+	itemInfoHeader.setPosition(window.mapPixelToCoords(sf::Vector2i(870, -14)));
 
-	playerStats.setString("Name: " + player->getName() + "\nClass: " + player->getClassName() + "\nLevel: " + to_string(player->getLvl())
-		+ "\nExperience: " + to_string(player->getExp()) + "\nExperience to level up: " + to_string(player->getExpForNextLevel())
-		+ "\nStrength: " + to_string(player->getStr()) + "\nIntelligence: " + to_string(player->getInt()) + "\nAgility: "
-		+ to_string(player->getAgi()) + "\nAvailable points to spend: " + to_string(player->getPointsToSpend()));
-	playerStats.setPosition(window.mapPixelToCoords(Vector2i(130, 40)));
+	playerStats.setString("Name: " + player->getName() + "\nClass: " + player->getClassName() + "\nLevel: " + std::to_string(player->getLvl())
+		+ "\nExperience: " + std::to_string(player->getExp()) + "\nExperience to level up: " + std::to_string(player->getExpForNextLevel())
+		+ "\nStrength: " + std::to_string(player->getStr()) + "\nIntelligence: " + std::to_string(player->getInt()) + "\nAgility: "
+		+ std::to_string(player->getAgi()) + "\nAvailable points to spend: " + std::to_string(player->getPointsToSpend()));
+	playerStats.setPosition(window.mapPixelToCoords(sf::Vector2i(130, 40)));
 	
-	backpack = player->getEquipment().getBackpack();
-	activeArmor = player->getEquipment().getActiveArmor();
-	activeWeapon = player->getEquipment().getActiveWeapon();
+	backpack = player->getEquipment()->getBackpack();
+	activeArmor = player->getEquipment()->getActiveArmor();
+	activeWeapon = player->getEquipment()->getActiveWeapon();
 
 	if (position == -1) itemStats.setString("");
 	else if ((position == -2) && (activeWeapon != NULL))
 	{
-		if (activeWeapon->isRanged()) itemStats.setString(activeWeapon->getName() + "\nAttack: " + to_string(activeWeapon->getAttackValue()) + "\nRange: Ranged");
-		else itemStats.setString(activeWeapon->getName() + "\nAttack: " + to_string(activeWeapon->getAttackValue()) + "\nRange: Melee");
+		if (activeWeapon->isRanged()) itemStats.setString(activeWeapon->getName() + "\nAttack: " + std::to_string(activeWeapon->getAttackValue()) + "\nRange: Ranged");
+		else itemStats.setString(activeWeapon->getName() + "\nAttack: " + std::to_string(activeWeapon->getAttackValue()) + "\nRange: Melee");
 	}
-	else if ((position == -3) && (activeArmor != NULL)) itemStats.setString(activeArmor->getName() + "\nArmor: " + to_string(activeArmor->getArmorValue()));
+	else if ((position == -3) && (activeArmor != NULL)) itemStats.setString(activeArmor->getName() + "\nArmor: " + std::to_string(activeArmor->getArmorValue()));
 	else
 	{
 		if (position < backpack.size())
@@ -351,14 +353,14 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 			Armor* temp2;
 			if (temp1 = dynamic_cast<Weapon*>(backpack[position]))
 			{				
-				if (temp1->isRanged()) itemStats.setString(backpack[position]->getName() + "\nAttack: " + to_string(temp1->getAttackValue()) + "\nRange: Ranged");
-				else itemStats.setString(backpack[position]->getName() + "\nAttack: " + to_string(temp1->getAttackValue()) + "\nRange: Melee");
+				if (temp1->isRanged()) itemStats.setString(backpack[position]->getName() + "\nAttack: " + std::to_string(temp1->getAttackValue()) + "\nRange: Ranged");
+				else itemStats.setString(backpack[position]->getName() + "\nAttack: " + std::to_string(temp1->getAttackValue()) + "\nRange: Melee");
 			}
 			else if (temp2 = dynamic_cast<Armor*>(backpack[position]))
-				itemStats.setString(backpack[position]->getName() + "\nArmor: " + to_string(temp2->getArmorValue()));
+				itemStats.setString(backpack[position]->getName() + "\nArmor: " + std::to_string(temp2->getArmorValue()));
 		}
 	}
-	itemStats.setPosition(window.mapPixelToCoords(Vector2i(870, 40)));
+	itemStats.setPosition(window.mapPixelToCoords(sf::Vector2i(870, 40)));
 
 	window.draw(backpackBackground);
 	window.draw(activeEquipment);
@@ -371,11 +373,11 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	window.draw(itemStats);
 	if (player->getPointsToSpend() > 0)
 	{
-		plus.setPosition(window.mapPixelToCoords(Vector2i(340, 235)));
+		plus.setPosition(window.mapPixelToCoords(sf::Vector2i(340, 235)));
 		window.draw(plus);
-		plus.setPosition(window.mapPixelToCoords(Vector2i(340, 265)));
+		plus.setPosition(window.mapPixelToCoords(sf::Vector2i(340, 265)));
 		window.draw(plus);
-		plus.setPosition(window.mapPixelToCoords(Vector2i(340, 295)));
+		plus.setPosition(window.mapPixelToCoords(sf::Vector2i(340, 295)));
 		window.draw(plus);
 	}
 
@@ -383,18 +385,18 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 	{
 		for (short j = 0; j < 5; ++j)
 		{
-			backpackSlot.setPosition(window.mapPixelToCoords(Vector2i(140 + j * 128, 418 + i * 128)));
+			backpackSlot.setPosition(window.mapPixelToCoords(sf::Vector2i(140 + j * 128, 418 + i * 128)));
 			window.draw(backpackSlot);
 		}
 	}
 	activeEquipmentInfo.setString("Weapon");
-	activeEquipmentInfo.setPosition(window.mapPixelToCoords(Vector2i(960, 264)));
-	backpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 340)));
+	activeEquipmentInfo.setPosition(window.mapPixelToCoords(sf::Vector2i(960, 264)));
+	backpackSlot.setPosition(window.mapPixelToCoords(sf::Vector2i(946, 340)));
 	window.draw(backpackSlot);
 	window.draw(activeEquipmentInfo);
 	activeEquipmentInfo.setString("Armor");
-	activeEquipmentInfo.setPosition(window.mapPixelToCoords(Vector2i(970, 446)));
-	backpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 520)));
+	activeEquipmentInfo.setPosition(window.mapPixelToCoords(sf::Vector2i(970, 446)));
+	backpackSlot.setPosition(window.mapPixelToCoords(sf::Vector2i(946, 520)));
 	window.draw(backpackSlot);
 	window.draw(activeEquipmentInfo);
 	if (position >= 0 && position < backpack.size())
@@ -402,66 +404,66 @@ void Gui::drawEquipment(RenderWindow &window, Player* player, short position)
 		short i, j;
 		i = position / 5;
 		j = position - i;
-		activeBackpackSlot.setPosition(window.mapPixelToCoords(Vector2i(140 + j * 128, 418 + i * 128)));
+		activeBackpackSlot.setPosition(window.mapPixelToCoords(sf::Vector2i(140 + j * 128, 418 + i * 128)));
 	}
-	else if (position == -2 && activeWeapon != NULL) activeBackpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 340)));
-	else if (position == -3 && activeArmor != NULL) activeBackpackSlot.setPosition(window.mapPixelToCoords(Vector2i(946, 520)));
+	else if (position == -2 && activeWeapon != NULL) activeBackpackSlot.setPosition(window.mapPixelToCoords(sf::Vector2i(946, 340)));
+	else if (position == -3 && activeArmor != NULL) activeBackpackSlot.setPosition(window.mapPixelToCoords(sf::Vector2i(946, 520)));
 	if (position != -1) window.draw(activeBackpackSlot);
 	
 	for (size_t i = 0, j = 0; i < backpack.size(); ++i)
 	{
 		if (i == 5) ++j;
-		backpack[i]->setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(140 + i * 128 - 5 * j * 128), static_cast<int>(418 + j * 128))));
+		backpack[i]->setPosition(window.mapPixelToCoords(sf::Vector2i(static_cast<int>(140 + i * 128 - 5 * j * 128), static_cast<int>(418 + j * 128))));
 		window.draw(*backpack[i]);
 	}
 
 	if (activeWeapon != NULL)
 	{
-		activeWeapon->setPosition(window.mapPixelToCoords(Vector2i(946, 340)));
+		activeWeapon->setPosition(window.mapPixelToCoords(sf::Vector2i(946, 340)));
 		window.draw(*activeWeapon);
 	}
 	if (activeArmor != NULL)
 	{
-		activeArmor->setPosition(window.mapPixelToCoords(Vector2i(946, 520)));
+		activeArmor->setPosition(window.mapPixelToCoords(sf::Vector2i(946, 520)));
 		window.draw(*activeArmor);
 	}	
 }
 
-void Gui::drawDeathScreen(RenderWindow& window)
+void Gui::drawDeathScreen(sf::RenderWindow& window)
 {
-	Text info1("You are dead!", font, 200);
-	Text info2("Press ENTER to return to the menu", font, 90);
+	sf::Text info1("You are dead!", font, 200);
+	sf::Text info2("Press ENTER to return to the menu", font, 90);
 
-	info1.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - info1.getGlobalBounds().width / 2), 120)));
-	info2.setPosition(window.mapPixelToCoords(Vector2i(static_cast<int>(window.getSize().x / 2 - info2.getGlobalBounds().width / 2), 400)));
+	info1.setPosition(window.mapPixelToCoords(sf::Vector2i(static_cast<int>(window.getSize().x / 2 - info1.getGlobalBounds().width / 2), 120)));
+	info2.setPosition(window.mapPixelToCoords(sf::Vector2i(static_cast<int>(window.getSize().x / 2 - info2.getGlobalBounds().width / 2), 400)));
 
-	info1.setColor(Color::Black);
-	info1.move(Vector2f(4, 4));
+	info1.setColor(sf::Color::Black);
+	info1.move(sf::Vector2f(4, 4));
 	window.draw(info1);
-	info1.setColor(Color::White);
-	info1.move(Vector2f(-4, -4));
+	info1.setColor(sf::Color::White);
+	info1.move(sf::Vector2f(-4, -4));
 	window.draw(info1);
 
-	info2.setColor(Color::Black);
-	info2.move(Vector2f(4, 4));
+	info2.setColor(sf::Color::Black);
+	info2.move(sf::Vector2f(4, 4));
 	window.draw(info2);
-	info2.setColor(Color::White);
-	info2.move(Vector2f(-4, -4));
+	info2.setColor(sf::Color::White);
+	info2.move(sf::Vector2f(-4, -4));
 	window.draw(info2);
 }
 
-void Gui::drawLevelMenu(RenderWindow &window)
+void Gui::drawLevelMenu(sf::RenderWindow &window)
 {
-	pauseMenu.setPosition(window.mapPixelToCoords(Vector2i(465, 85)));
+	pauseMenu.setPosition(window.mapPixelToCoords(sf::Vector2i(465, 85)));
 	window.draw(pauseMenu);
 	for (size_t i = 0; i < levelOptions.size(); ++i)
 	{
-		levelOptions[i].setPosition(window.mapPixelToCoords(Vector2i(480, 60 + static_cast<int>(i) * 45)));
+		levelOptions[i].setPosition(window.mapPixelToCoords(sf::Vector2i(480, 60 + static_cast<int>(i) * 45)));
 		window.draw(levelOptions[i]);
 	}	
 }
 
-void Gui::draw(RenderTarget &target, RenderStates states) const
+void Gui::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	target.draw(hpGauge);
@@ -471,37 +473,37 @@ void Gui::draw(RenderTarget &target, RenderStates states) const
 	target.draw(skill3);
 }
 
-RectangleShape Gui::getResumeButton()
+sf::RectangleShape Gui::getResumeButton()
 {
 	return resumeButton;
 }
 
-RectangleShape Gui::getSaveButton()
+sf::RectangleShape Gui::getSaveButton()
 {
 	return saveButton;
 }
 
-RectangleShape Gui::getQuitButton()
+sf::RectangleShape Gui::getQuitButton()
 {
 	return quitButton;
 }
 
 void Gui::setResumeHighlight(short swtch)
 {
-	if (swtch == 0) resumeButton.setTextureRect(IntRect(0, 384, 320, 100));
-	else resumeButton.setTextureRect(IntRect(320, 384, 320, 100));
+	if (swtch == 0) resumeButton.setTextureRect(sf::IntRect(0, 384, 320, 100));
+	else resumeButton.setTextureRect(sf::IntRect(320, 384, 320, 100));
 }
 
 void Gui::setSaveHighlight(short swtch)
 {
-	if (swtch == 0) saveButton.setTextureRect(IntRect(0, 384, 320, 100));
-	else saveButton.setTextureRect(IntRect(320, 384, 320, 100));
+	if (swtch == 0) saveButton.setTextureRect(sf::IntRect(0, 384, 320, 100));
+	else saveButton.setTextureRect(sf::IntRect(320, 384, 320, 100));
 }
 
 void Gui::setQuitHighlight(short swtch)
 {
-	if (swtch == 0) quitButton.setTextureRect(IntRect(0, 384, 320, 100));
-	else quitButton.setTextureRect(IntRect(320, 384, 320, 100));
+	if (swtch == 0) quitButton.setTextureRect(sf::IntRect(0, 384, 320, 100));
+	else quitButton.setTextureRect(sf::IntRect(320, 384, 320, 100));
 }
 
 void Gui::pushDamageInfo(TextDamage* newText)
@@ -519,11 +521,11 @@ void Gui::pushHpInfo(HpBar* newHpInfo)
 	hpInfo.push_back(newHpInfo);
 }
 
-void Gui::updateHpInfo(size_t i, Vector2f position, short currentHp, short maximumHp)
+void Gui::updateHpInfo(size_t i, sf::Vector2f position, short currentHp, short maximumHp)
 {
 	hpInfo[i]->characterPosition = position;
-	hpInfo[i]->currentHp.setSize(Vector2f((static_cast<float>(currentHp) / static_cast<float>(maximumHp)) * 64.f, 6));
-	hpInfo[i]->missingHp.setSize(Vector2f(64.f - (static_cast<float>(currentHp) / static_cast<float>(maximumHp)) * 64.f, 6));
+	hpInfo[i]->currentHp.setSize(sf::Vector2f((static_cast<float>(currentHp) / static_cast<float>(maximumHp)) * 64.f, 6));
+	hpInfo[i]->missingHp.setSize(sf::Vector2f(64.f - (static_cast<float>(currentHp) / static_cast<float>(maximumHp)) * 64.f, 6));
 }
 
 void Gui::eraseHpInfo(size_t i)
@@ -542,16 +544,13 @@ void Gui::clearHpInfo()
 	hpInfo.clear();
 }
 
-void Gui::updateSkillCooldowns(RenderWindow &window, float ratioSkill1, float ratioSkill2, float ratioSkill3)
+void Gui::updateSkillCooldowns(sf::RenderWindow &window, float ratioSkill1, float ratioSkill2, float ratioSkill3)
 {
-	IntRect temp;
+	sf::IntRect temp;
 	
-	fadedSkill1.setSize(Vector2f(64.f, truncf(ratioSkill1 * 64.f)));
-	fadedSkill2.setSize(Vector2f(64.f, truncf(ratioSkill2 * 64.f)));
-	fadedSkill3.setSize(Vector2f(64.f, truncf(ratioSkill3 * 64.f)));
-	/*skill1.setSize(Vector2f(64.f, truncf((1.f - ratioSkill1) * 64.f)));
-	skill2.setSize(Vector2f(64.f, truncf((1.f - ratioSkill2) * 64.f)));
-	skill3.setSize(Vector2f(64.f, truncf((1.f - ratioSkill3) * 64.f)));*/
+	fadedSkill1.setSize(sf::Vector2f(64.f, truncf(ratioSkill1 * 64.f)));
+	fadedSkill2.setSize(sf::Vector2f(64.f, truncf(ratioSkill2 * 64.f)));
+	fadedSkill3.setSize(sf::Vector2f(64.f, truncf(ratioSkill3 * 64.f)));
 	temp = fadedSkill1.getTextureRect();
 	temp.height = fadedSkill1.getSize().y;
 	fadedSkill1.setTextureRect(temp);
@@ -561,23 +560,10 @@ void Gui::updateSkillCooldowns(RenderWindow &window, float ratioSkill1, float ra
 	temp = fadedSkill3.getTextureRect();
 	temp.height = fadedSkill3.getSize().y;
 	fadedSkill3.setTextureRect(temp);
-	//skill1.setTextureRect(skill1.getTextureRect());
-	/*temp = skill1.getTextureRect();
-	temp.height = skill1.getSize().y;
-	skill1.setTextureRect(temp);
-	temp = skill2.getTextureRect();
-	temp.height = skill2.getSize().y;
-	skill2.setTextureRect(temp);
-	temp = skill2.getTextureRect();
-	temp.height = skill2.getSize().y;
-	skill2.setTextureRect(temp);*/
-	fadedSkill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
-	fadedSkill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
-	fadedSkill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
-	/*skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636 + static_cast<int>(fadedSkill1.getSize().y))));
-	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636 + static_cast<int>(fadedSkill2.getSize().y))));
-	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636 + static_cast<int>(fadedSkill3.getSize().y))));*/
-	skill1.setPosition(window.mapPixelToCoords(Vector2i(482, 636)));
-	skill2.setPosition(window.mapPixelToCoords(Vector2i(608, 636)));
-	skill3.setPosition(window.mapPixelToCoords(Vector2i(734, 636)));
+	fadedSkill1.setPosition(window.mapPixelToCoords(sf::Vector2i(482, 636)));
+	fadedSkill2.setPosition(window.mapPixelToCoords(sf::Vector2i(608, 636)));
+	fadedSkill3.setPosition(window.mapPixelToCoords(sf::Vector2i(734, 636)));
+	skill1.setPosition(window.mapPixelToCoords(sf::Vector2i(482, 636)));
+	skill2.setPosition(window.mapPixelToCoords(sf::Vector2i(608, 636)));
+	skill3.setPosition(window.mapPixelToCoords(sf::Vector2i(734, 636)));
 }

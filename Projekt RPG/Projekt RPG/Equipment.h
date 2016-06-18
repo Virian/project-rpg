@@ -2,20 +2,18 @@
 #include "Item.h"
 #include <vector>
 
-using namespace std;
-
 class Equipment
 {
 private:
 	Weapon* activeWeapon;
 	Armor* activeArmor;
-	vector<Item*> backpack;
+	std::vector<Item*> backpack;
 	short potionCount;
 public:
 	static const int backpackSize = 10;
 	Equipment();
 	~Equipment();
-	vector<Item*> getBackpack();
+	std::vector<Item*> getBackpack();
 	Weapon* getActiveWeapon();
 	Armor* getActiveArmor();
 	void addItem(Item*);

@@ -2,21 +2,19 @@
 #include <SFML/Graphics.hpp>
 #include "Level.h"
 
-using namespace sf;
-
-class Npc : public Drawable, public Transformable
+class Npc : public sf::Drawable, public sf::Transformable
 {
 public:
 	Npc(Tile::Coord);
 	virtual ~Npc();
-	FloatRect getBoundingBox();
-	Vector2f getPosition();
+	sf::FloatRect getBoundingBox();
+	sf::Vector2f getPosition();
 	void setPosition(Tile::Coord);
 protected:
-	Sprite sprite;
-	Texture texture;
+	sf::Sprite sprite;
+	sf::Texture texture;
 	Tile::Coord spawnCoord;
-	virtual void draw(RenderTarget&, RenderStates) const;
+	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 };
 
 class Neutral : public Npc
@@ -33,8 +31,8 @@ public:
 	~Enemy();
 	enum Status { STOP, WALK, ENGAGED, ATTACK };
 	Status getStatus();
-	void update(Level*, Vector2f);
-	Vector2f getMove();
+	void update(Level*, sf::Vector2f);
+	sf::Vector2f getMove();
 	void stop(bool);
 	void engage();
 	void attack();
@@ -49,7 +47,7 @@ public:
 	bool isAlive();
 	bool isEngaged();
 	bool isAttacking();
-	Clock getAttackInterval();
+	sf::Clock getAttackInterval();
 	void restartAttackInterval();
 	unsigned getExperienceGiven();
 	bool hasCursor();
@@ -62,9 +60,9 @@ protected:
 	unsigned walkFrameCount;
 	unsigned attackFrame;
 	unsigned attackFrameCount;
-	Clock walkAnimationClock;
-	Clock attackAnimationClock;
-	Clock time;
+	sf::Clock walkAnimationClock;
+	sf::Clock attackAnimationClock;
+	sf::Clock time;
 	float rot;
 	int idleT;
 	int walkT;
@@ -79,7 +77,7 @@ protected:
 	unsigned short armorValue;
 	bool ranged;
 	bool alive;
-	Clock attackInterval;
+	sf::Clock attackInterval;
 };
 
 class Gunner : public Enemy

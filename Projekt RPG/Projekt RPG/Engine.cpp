@@ -4,7 +4,7 @@
 void Engine::updateMap()
 {
 	// wyliczamy pozycjê minimalnych granic kamery
-	Vector2f min = Vector2f(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
+	sf::Vector2f min = sf::Vector2f(view.getCenter().x - view.getSize().x / 2, view.getCenter().y - view.getSize().y / 2);
 
 	// ustawienie kamery w poziomie
 	float leftBorder = min.x / 64;
@@ -86,7 +86,7 @@ void Engine::updateMap()
 	}
 }
 
-void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
+void Engine::setMap(sf::RenderWindow &window, std::string filePath, unsigned short _id)
 {
 	level.clearMap();
 	level.load(filePath);
@@ -117,8 +117,8 @@ void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 		{
 			Gui::HpBar* hpInfo = new Gui::HpBar();
 			hpInfo->characterPosition = temp->getPosition();
-			hpInfo->currentHp.setSize(Vector2f((temp->getHp() / temp->getMaxHp()) * 64.f,6));
-			hpInfo->missingHp.setSize(Vector2f(64.f - (temp->getHp() / temp->getMaxHp()) * 64.f,6));
+			hpInfo->currentHp.setSize(sf::Vector2f((temp->getHp() / temp->getMaxHp()) * 64.f,6));
+			hpInfo->missingHp.setSize(sf::Vector2f(64.f - (temp->getHp() / temp->getMaxHp()) * 64.f,6));
 			gui.pushHpInfo(hpInfo);
 		}
 	}
@@ -131,17 +131,17 @@ void Engine::setMap(RenderWindow &window, string filePath, unsigned short _id)
 	window.setView(view);
 }
 
-Engine::Engine(RenderWindow &_window, Sprite& cursor, string characterName, int classCode)
+Engine::Engine(sf::RenderWindow &_window, sf::Sprite& cursor, std::string characterName, int classCode)
 {
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
 	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
 	{
-		tileTextures[i].loadFromFile("images/tilesheet.png", IntRect(i * 64, 512, 64, 64));
+		tileTextures[i].loadFromFile("images/tilesheet.png", sf::IntRect(i * 64, 512, 64, 64));
 	}
 	tileCountHeight = (_window.getSize().y / 64) + 3;
 	tileCountWidth = (_window.getSize().x / 64) + 3;
-	Sprite standard(tileTextures[0]);
+	sf::Sprite standard(tileTextures[0]);
 	tileSprites.resize(tileCountHeight);
 	for (unsigned short y = 0; y < tileCountHeight; y++)
 	{
@@ -164,26 +164,26 @@ Engine::Engine(RenderWindow &_window, Sprite& cursor, string characterName, int 
 	startEngine(_window, cursor);	
 }
 
-Engine::Engine(RenderWindow &_window, Sprite& cursor, fstream &file)
+Engine::Engine(sf::RenderWindow &_window, sf::Sprite& cursor, std::fstream &file)
 {
 	view.setSize(1280, 720);
 	view.setCenter(1280 / 2, 720 / 2);
 	for (unsigned short i = 0; i < Tile::COUNT; i++) /*zalozenie ze wszystkie kafle sa w jednej linii*/
 	{
-		tileTextures[i].loadFromFile("images/tilesheet.png", IntRect(i * 64, 512, 64, 64));
+		tileTextures[i].loadFromFile("images/tilesheet.png", sf::IntRect(i * 64, 512, 64, 64));
 	}
 	tileCountHeight = (_window.getSize().y / 64) + 3;
 	tileCountWidth = (_window.getSize().x / 64) + 3;
-	Sprite standard(tileTextures[0]);
+	sf::Sprite standard(tileTextures[0]);
 	tileSprites.resize(tileCountHeight);
 	for (unsigned short y = 0; y < tileCountHeight; y++)
 	{
 		tileSprites[y].resize(tileCountWidth, standard);
 	}
 	/*wczytanie wszystkiego z pliku*/
-	string characterName;
-	string className;
-	string levelPath;
+	std::string characterName;
+	std::string className;
+	std::string levelPath;
 	unsigned short saveId;
 	file >> className;
 	getline(file, characterName);
@@ -206,7 +206,7 @@ Engine::~Engine()
 	{
 		delete npcs[i];
 	}
-
+	npcs.clear();
 }
 
 void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
@@ -221,7 +221,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 	switch (attacker)
 	{
 	case PLAYER:
-		if (player->getEquipment().getActiveWeapon()->isRanged())
+		if (player->getEquipment()->getActiveWeapon()->isRanged())
 		{
 			double interval;
 			if (player->isActiveSkill1() && player->getClassName() == "Soldier") interval = 0.3;
@@ -240,11 +240,11 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 
 		if (hitChance > dodgeChance)
 		{
-			if (player->getEquipment().getActiveWeapon()->isRanged())
-				damage = player->getEquipment().getActiveWeapon()->getAttackValue();
+			if (player->getEquipment()->getActiveWeapon()->isRanged())
+				damage = player->getEquipment()->getActiveWeapon()->getAttackValue();
 			else
 			{
-				damage = player->getEquipment().getActiveWeapon()->getAttackValue() + player->getStr() / 15;
+				damage = player->getEquipment()->getActiveWeapon()->getAttackValue() + player->getStr() / 15;
 				if (player->isActiveSkill2() && player->getClassName() == "Juggernaut")
 				{
 					damage += damage / 2;
@@ -254,19 +254,19 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 
 			enemy->takeDamage(damage);
 			damageInfo->text.setString(std::to_string(damage));
-			damageInfo->text.setColor(Color::Red);
-			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
+			damageInfo->text.setColor(sf::Color::Red);
+			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - sf::Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
 		else
 		{
 			damageInfo->text.setString("MISS");
-			damageInfo->text.setColor(Color::Red);
-			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
+			damageInfo->text.setColor(sf::Color::Red);
+			damageInfo->text.setPosition(npcs[enemyIndex]->getPosition() - sf::Vector2f(0.0, npcs[enemyIndex]->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
 		player->restartAttackInterval();
-		if (player->getEquipment().getActiveWeapon()->isRanged()) audio.playGunSound();
+		if (player->getEquipment()->getActiveWeapon()->isRanged()) audio.playGunSound();
 		else audio.playMeleeSound();
 		break;
 	case NPC:
@@ -281,7 +281,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 			hitChance = rand() % 20 + 1 + enemy->getStr() + 3;
 		}
 
-		dodgeChance = 10 + player->getAgi() + player->getEquipment().getActiveArmor()->getArmorValue();
+		dodgeChance = 10 + player->getAgi() + player->getEquipment()->getActiveArmor()->getArmorValue();
 		if (player->isActiveSkill1() && player->getClassName() == "Juggernaut") dodgeChance += 10000;
 
 		if (hitChance > dodgeChance)
@@ -297,8 +297,8 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 		else
 		{
 			damageInfo->text.setString("MISS");
-			damageInfo->text.setColor(Color::Red);
-			damageInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
+			damageInfo->text.setColor(sf::Color::Red);
+			damageInfo->text.setPosition(player->getPosition() - sf::Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
 			gui.pushDamageInfo(damageInfo);
 		}
 		enemy->restartAttackInterval();
@@ -309,7 +309,7 @@ void Engine::fight(size_t enemyIndex, Engine::Attacker attacker)
 	
 }
 
-void Engine::draw(RenderWindow &window, Sprite& cursor, bool pause, bool equipment, bool dead, bool levelMenu, short position)
+void Engine::draw(sf::RenderWindow &window, sf::Sprite& cursor, bool pause, bool equipment, bool dead, bool levelMenu, short position)
 {
 	window.clear();
 	gui.updateSkillCooldowns(window, player->getRatioSkill1(), player->getRatioSkill2(), player->getRatioSkill3());
@@ -342,51 +342,51 @@ void Engine::draw(RenderWindow &window, Sprite& cursor, bool pause, bool equipme
 	{
 		gui.drawLevelMenu(window);
 	}
-	if (checkCursor()) cursor.setTextureRect(IntRect(26, 0, 26, 32));
-	else cursor.setTextureRect(IntRect(0, 0, 26, 32));
+	if (checkCursor()) cursor.setTextureRect(sf::IntRect(26, 0, 26, 32));
+	else cursor.setTextureRect(sf::IntRect(0, 0, 26, 32));
 	window.draw(cursor);
 	window.display();
 }
 
 void Engine::saveGame(unsigned short id)
 {
-	fstream file;
+	std::fstream file;
 
-	file.open("save/SavedGame.sav", fstream::in | fstream::out | fstream::trunc);
-	file << player->getClassName() << " " << player->getName() << endl;
-	file << level.getLevelPath() << endl;
-	file << id << endl;
-	file << player->getLvl() << " " << player->getExp() << " " << player->getExpForNextLevel() << endl;
-	file << player->getHp() << " " << player->getMaxHp() << endl;
-	file << player->getStr() << " " << player->getInt() << " " << player->getAgi() << " " << player->getPointsToSpend() << endl;
-	file << player->getEquipment().getPotionCount() << endl;
+	file.open("save/SavedGame.sav", std::fstream::in | std::fstream::out | std::fstream::trunc);
+	file << player->getClassName() << " " << player->getName() << std::endl;
+	file << level.getLevelPath() << std::endl;
+	file << id << std::endl;
+	file << player->getLvl() << " " << player->getExp() << " " << player->getExpForNextLevel() << std::endl;
+	file << player->getHp() << " " << player->getMaxHp() << std::endl;
+	file << player->getStr() << " " << player->getInt() << " " << player->getAgi() << " " << player->getPointsToSpend() << std::endl;
+	file << player->getEquipment()->getPotionCount() << std::endl;
 	file << "[ACTIVEWEAPON] ";
-	if (player->getEquipment().getActiveWeapon() == NULL) file << "[NULL]" << endl;
+	if (player->getEquipment()->getActiveWeapon() == NULL) file << "[NULL]" << std::endl;
 	else
 	{
-		if (player->getEquipment().getActiveWeapon()->isRanged()) file << "[RANGED] ";
+		if (player->getEquipment()->getActiveWeapon()->isRanged()) file << "[RANGED] ";
 		else file << "[MELEE] ";
-		file << player->getEquipment().getActiveWeapon()->getAttackValue() << " " << player->getEquipment().getActiveWeapon()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveWeapon()->getName() << endl;
+		file << player->getEquipment()->getActiveWeapon()->getAttackValue() << " " << player->getEquipment()->getActiveWeapon()->getTextureRect().left / 128 << " " << player->getEquipment()->getActiveWeapon()->getName() << std::endl;
 	}
 	file << "[ACTIVEARMOR] ";
-	if (player->getEquipment().getActiveArmor() == NULL) file << "[NULL]";
+	if (player->getEquipment()->getActiveArmor() == NULL) file << "[NULL]";
 	else
 	{
-		file << player->getEquipment().getActiveArmor()->getArmorValue() << " " << player->getEquipment().getActiveArmor()->getTextureRect().left / 128 << " " << player->getEquipment().getActiveArmor()->getName();
+		file << player->getEquipment()->getActiveArmor()->getArmorValue() << " " << player->getEquipment()->getActiveArmor()->getTextureRect().left / 128 << " " << player->getEquipment()->getActiveArmor()->getName();
 	}
-	for (size_t i = 0; i < player->getEquipment().getBackpack().size(); ++i)
+	for (size_t i = 0; i < player->getEquipment()->getBackpack().size(); ++i)
 	{
 		Armor* tempArmor;
 		Weapon* tempWeapon;
 
-		if (tempArmor = dynamic_cast<Armor*>(player->getEquipment().getBackpack()[i]))
+		if (tempArmor = dynamic_cast<Armor*>(player->getEquipment()->getBackpack()[i]))
 		{
-			file << endl << "[ARMOR] " << tempArmor->getArmorValue() << " " << tempArmor->getTextureRect().left / 128 << " " << tempArmor->getName();
+			file << std::endl << "[ARMOR] " << tempArmor->getArmorValue() << " " << tempArmor->getTextureRect().left / 128 << " " << tempArmor->getName();
 		}
-		else if (tempWeapon = dynamic_cast<Weapon*>(player->getEquipment().getBackpack()[i]))
+		else if (tempWeapon = dynamic_cast<Weapon*>(player->getEquipment()->getBackpack()[i]))
 		{
-			if (tempWeapon->isRanged()) file << endl << "[WEAPON] [RANGED] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName();
-			else file << endl << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName();
+			if (tempWeapon->isRanged()) file << std::endl << "[WEAPON] [RANGED] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName();
+			else file << std::endl << "[WEAPON] [MELEE] " << tempWeapon->getAttackValue() << " " << tempWeapon->getTextureRect().left / 128 << " " << tempWeapon->getName();
 		}
 	}
 	file.close();
@@ -405,7 +405,7 @@ bool Engine::checkCursor()
 	return false;
 }
 
-void Engine::startEngine(RenderWindow &window, Sprite& cursor)
+void Engine::startEngine(sf::RenderWindow &window, sf::Sprite& cursor)
 {
 	bool quit = false;
 	bool pause = false;
@@ -420,9 +420,9 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 	draw(window, cursor, pause, equipment, dead, levelMenu, position);
 	while (!quit)
 	{
-		Event event;
-		Vector2f mouse(Mouse::getPosition(window));
-		Vector2f worldPos = window.mapPixelToCoords((Vector2i)mouse);
+		sf::Event event;
+		sf::Vector2f mouse(sf::Mouse::getPosition(window));
+		sf::Vector2f worldPos = window.mapPixelToCoords((sf::Vector2i)mouse);
 
 		cursor.setPosition(worldPos);
 
@@ -434,7 +434,7 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 				while (window.pollEvent(event))
 				{
 					bool attacked = false;
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::L))
+					if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::L))
 					{
 						Save* temp;
 						if (temp = dynamic_cast<Save*>(level.getMap()[static_cast<unsigned __int64>(player->getPosition().y / 64)][static_cast<unsigned __int64>(player->getPosition().x / 64)]))
@@ -444,34 +444,34 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 						}
 						else MessageBox(NULL, "You can only change your level while standing on save tile!", "UNABLE TO CHANGE LEVEL", NULL);						
 					}
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+					if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Escape))
 					{
 						pause = true;
 						player->pauseTimers();
 					}
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::I))
+					if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::I))
 					{
 						equipment = true;
 						player->pauseTimers();
 					}
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1))
+					if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num1))
 					{
 						player->useSkill1();
 					}
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num2))
+					if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num2))
 					{
 						player->useSkill2();
 					}
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num3))
+					if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num3))
 					{
 						player->useSkill3();
 					}
 					for (size_t i = 0; i < npcs.size(); ++i)
 					{
 						Enemy* enemy;
-						if ((enemy = dynamic_cast<Enemy*>(npcs[i])) && (player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+						if ((enemy = dynamic_cast<Enemy*>(npcs[i])) && (player->getStatus() == Player::STOP) && (npcs[i]->getBoundingBox().contains(worldPos)) && (sf::Mouse::isButtonPressed(sf::Mouse::Right)))
 						{
-							Vertex line[2];
+							sf::Vertex line[2];
 							float distance;
 							float sinus;
 							float cosinus;
@@ -488,7 +488,7 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 									break;
 								}
 								distance = sqrt(pow(line[0].position.x - line[1].position.x, 2) + pow(line[0].position.y - line[1].position.y, 2));
-								if ((!player->getEquipment().getActiveWeapon()->isRanged()) && (distance > 70))
+								if ((!player->getEquipment()->getActiveWeapon()->isRanged()) && (distance > 70))
 								{
 									attacked = false;
 									player->stop();
@@ -502,15 +502,15 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 							} while (distance > 1);
 						}
 					}
-					if ((!attacked) && (event.type == Event::MouseButtonPressed) && (event.mouseButton.button == Mouse::Right))
+					if ((!attacked) && (event.type == sf::Event::MouseButtonPressed) && (event.mouseButton.button == sf::Mouse::Right))
 					{
 						player->walk();
 					}
-					else if ((!attacked) && (event.type == Event::MouseButtonReleased))
+					else if ((!attacked) && (event.type == sf::Event::MouseButtonReleased))
 					{
-						if (event.mouseButton.button == Mouse::Right) player->stop();
+						if (event.mouseButton.button == sf::Mouse::Right) player->stop();
 					}
-					if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Space))
+					if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Space))
 					{
 						player->usePotion();
 					}
@@ -522,7 +522,7 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 					Enemy* enemy;
 					if (enemy = dynamic_cast<Enemy*>(npcs[i]))
 					{
-						Vertex line[2];
+						sf::Vertex line[2];
 						float distance, distanceTemp;
 						float sinus;
 						float cosinus;
@@ -559,7 +559,7 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 								line[0].position.y = cosinus * distanceTemp + line[1].position.y;
 							} while (distanceTemp > 1);
 						}
-						if ((player->getStatus() == Player::ATTACK) && (npcs[i]->getBoundingBox().contains(worldPos)) && (Mouse::isButtonPressed(Mouse::Right)))
+						if ((player->getStatus() == Player::ATTACK) && (npcs[i]->getBoundingBox().contains(worldPos)) && (sf::Mouse::isButtonPressed(sf::Mouse::Right)))
 						{
 							fight(i, PLAYER);
 							if (enemy->getStatus() != Enemy::ATTACK) enemy->engage();
@@ -607,9 +607,9 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 					Gui::TextDamage* hpInfo = new Gui::TextDamage();
 
 					hpInfo->text.setString(std::to_string(abs(player->getHp() - tempHp)));
-					if (player->getHp() > tempHp) hpInfo->text.setColor(Color::Green);
-					else hpInfo->text.setColor(Color::Red);
-					hpInfo->text.setPosition(player->getPosition() - Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
+					if (player->getHp() > tempHp) hpInfo->text.setColor(sf::Color::Green);
+					else hpInfo->text.setColor(sf::Color::Red);
+					hpInfo->text.setPosition(player->getPosition() - sf::Vector2f(0.0, player->getBoundingBox().height / 2 + 20.0f));
 					gui.pushDamageInfo(hpInfo);
 				}
 			}
@@ -622,24 +622,24 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 		{
 			while (window.pollEvent(event))
 			{
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Escape))
 				{
 					pause = false;
 					player->unpauseTimers();
 				}
-				if ((gui.getQuitButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((gui.getQuitButton().getGlobalBounds().contains(worldPos)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					view.setCenter(1280 / 2, 720 / 2);
 					window.setView(view);
 					quit = true;
 					pause = false;
 				}
-				if ((gui.getResumeButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((gui.getResumeButton().getGlobalBounds().contains(worldPos)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					pause = false;
 					player->unpauseTimers();
 				}
-				if ((gui.getSaveButton().getGlobalBounds().contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((gui.getSaveButton().getGlobalBounds().contains(worldPos)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					Save* temp;
 					if (temp = dynamic_cast<Save*>(level.getMap()[static_cast<unsigned __int64>(player->getPosition().y / 64)][static_cast<unsigned __int64>(player->getPosition().x / 64)]))
@@ -661,7 +661,7 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 		{
 			while (window.pollEvent(event))
 			{
-				if ((event.type == Event::KeyReleased) && ((event.key.code == Keyboard::I) || (event.key.code == Keyboard::Escape)))
+				if ((event.type == sf::Event::KeyReleased) && ((event.key.code == sf::Keyboard::I) || (event.key.code == sf::Keyboard::Escape)))
 				{
 					equipment = false;
 					position = -1;
@@ -669,8 +669,8 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 				}
 				for (short i = 0; i < 3; ++i)
 				{
-					Vector2f plusPosition = window.mapPixelToCoords(Vector2i(340, 235 + i * 30));
-					if ((FloatRect(plusPosition, Vector2f(20, 20)).contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left) && (player->getPointsToSpend() > 0))
+					sf::Vector2f plusPosition = window.mapPixelToCoords(sf::Vector2i(340, 235 + i * 30));
+					if ((sf::FloatRect(plusPosition, sf::Vector2f(20, 20)).contains(worldPos)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left) && (player->getPointsToSpend() > 0))
 					{
 						switch (i)
 						{
@@ -690,47 +690,47 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 				{
 					for (short j = 0; j < 5; ++j)
 					{
-						Vector2f slotPosition = window.mapPixelToCoords(Vector2i(140 + j * 128, 418 + i * 128));
-						if ((FloatRect(slotPosition, Vector2f(128, 128)).contains(worldPos)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+						sf::Vector2f slotPosition = window.mapPixelToCoords(sf::Vector2i(140 + j * 128, 418 + i * 128));
+						if ((sf::FloatRect(slotPosition, sf::Vector2f(128, 128)).contains(worldPos)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 						{
 							position = 5 * i + j;
 						}
-						if ((FloatRect(slotPosition, Vector2f(128, 128)).contains(worldPos)) && (Keyboard::isKeyPressed(Keyboard::LShift)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+						if ((sf::FloatRect(slotPosition, sf::Vector2f(128, 128)).contains(worldPos)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 						{
 							player->deleteItem(5 * i + j);
 							position = -1;
 						}
-						if ((FloatRect(slotPosition, Vector2f(128, 128)).contains(worldPos)) && (Keyboard::isKeyPressed(Keyboard::LControl)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+						if ((sf::FloatRect(slotPosition, sf::Vector2f(128, 128)).contains(worldPos)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 						{
 							player->swapActiveItem(5 * i + j);
 							position = -1;
 						}
 					}
 				}
-				if ((FloatRect(946, 340, 128, 128).contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((sf::FloatRect(946, 340, 128, 128).contains(mouse)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					position = -2;
 				}
-				if ((FloatRect(946, 520, 128, 128).contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((sf::FloatRect(946, 520, 128, 128).contains(mouse)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					position = -3;
 				}
-				if ((FloatRect(946, 340, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LShift)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((sf::FloatRect(946, 340, 128, 128).contains(mouse)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					player->deleteItem(-1);
 					position = -1;
 				}
-				if ((FloatRect(946, 520, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LShift)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((sf::FloatRect(946, 520, 128, 128).contains(mouse)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					player->deleteItem(-2);
 					position = -1;
 				}
-				if ((FloatRect(946, 340, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LControl)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((sf::FloatRect(946, 340, 128, 128).contains(mouse)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					player->swapActiveItem(-1);
 					position = -1;
 				}
-				if ((FloatRect(946, 520, 128, 128).contains(mouse)) && (Keyboard::isKeyPressed(Keyboard::LControl)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left))
+				if ((sf::FloatRect(946, 520, 128, 128).contains(mouse)) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left))
 				{
 					player->swapActiveItem(-2);
 					position = -1;
@@ -741,7 +741,7 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 		{
 			while (window.pollEvent(event))
 			{
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Return))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Return))
 				{
 					view.setCenter(1280 / 2, 720 / 2);
 					window.setView(view);
@@ -754,32 +754,32 @@ void Engine::startEngine(RenderWindow &window, Sprite& cursor)
 		{
 			while (window.pollEvent(event))
 			{
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Escape))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Escape))
 				{
 					levelMenu = false;
 					player->unpauseTimers();
 				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num1))
 				{
 					player->resetTimers();
 					levelMenu = false;
 					setMap(window, "levels/level1.level", 0);					
 				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num2))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num2))
 				{
 					player->resetTimers();
 					levelMenu = false;
 					setMap(window, "levels/level2.level", 0);
 				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num3))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num3))
 				{
 					MessageBox(NULL, "This level is yet to be designed!", "ERROR", NULL);
 				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num4))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num4))
 				{
 					MessageBox(NULL, "This level is yet to be designed!", "ERROR", NULL);
 				}
-				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num5))
+				if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Num5))
 				{
 					MessageBox(NULL, "This level is yet to be designed!", "ERROR", NULL);
 				}

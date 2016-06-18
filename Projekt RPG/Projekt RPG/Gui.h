@@ -2,78 +2,76 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 
-using namespace sf;
-
-class Gui : public Drawable, Transformable
+class Gui : public sf::Drawable, sf::Transformable
 {
 public:
 	struct TextDamage {
-		Text text;
-		Clock lifeTime;
-		Clock tick;
+		sf::Text text;
+		sf::Clock lifeTime;
+		sf::Clock tick;
 	};
 	struct HpBar {
-		Vector2f characterPosition;
-		RectangleShape currentHp;
-		RectangleShape missingHp;
+		sf::Vector2f characterPosition;
+		sf::RectangleShape currentHp;
+		sf::RectangleShape missingHp;
 		HpBar();
 	};
 	Gui();
 	~Gui();
-	void setSkillPictures(string);
-	void drawScreen(RenderWindow&, Player*);
-	void drawPauseMenu(RenderWindow&);
-	void drawEquipment(RenderWindow&, Player*, short);
-	void drawDeathScreen(RenderWindow&);
-	void drawLevelMenu(RenderWindow&);
-	RectangleShape getResumeButton();
-	RectangleShape getSaveButton();
-	RectangleShape getQuitButton();
+	void setSkillPictures(std::string);
+	void drawScreen(sf::RenderWindow&, Player*);
+	void drawPauseMenu(sf::RenderWindow&);
+	void drawEquipment(sf::RenderWindow&, Player*, short);
+	void drawDeathScreen(sf::RenderWindow&);
+	void drawLevelMenu(sf::RenderWindow&);
+	sf::RectangleShape getResumeButton();
+	sf::RectangleShape getSaveButton();
+	sf::RectangleShape getQuitButton();
 	void setResumeHighlight(short);
 	void setSaveHighlight(short);
 	void setQuitHighlight(short);
 	void pushDamageInfo(TextDamage*);
 	void pushHpInfo(HpBar*);
-	void updateHpInfo(size_t, Vector2f, short, short);
+	void updateHpInfo(size_t, sf::Vector2f, short, short);
 	void eraseHpInfo(size_t);
 	size_t getHpInfoSize();
 	void clearHpInfo();
-	void updateSkillCooldowns(RenderWindow&, float, float, float);
+	void updateSkillCooldowns(sf::RenderWindow&, float, float, float);
 private:
-	virtual void draw(RenderTarget&, RenderStates) const;
-	Texture texture;
-	Font font;
+	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
+	sf::Texture texture;
+	sf::Font font;
 	/*hud*/
-	Sprite hpGauge;
-	Sprite expGauge;
-	Text currHp, maximHp;
-	Text experience;
-	Text potions;
-	RectangleShape skill1, fadedSkill1;
-	RectangleShape skill2, fadedSkill2;
-	RectangleShape skill3, fadedSkill3;
-	Clock flash; /*miganie hp gdy jest niskie*/
-	vector<TextDamage*> damageInfo;
-	vector<HpBar*> hpInfo;
+	sf::Sprite hpGauge;
+	sf::Sprite expGauge;
+	sf::Text currHp, maximHp;
+	sf::Text experience;
+	sf::Text potions;
+	sf::RectangleShape skill1, fadedSkill1;
+	sf::RectangleShape skill2, fadedSkill2;
+	sf::RectangleShape skill3, fadedSkill3;
+	sf::Clock flash; /*miganie hp gdy jest niskie*/
+	std::vector<TextDamage*> damageInfo;
+	std::vector<HpBar*> hpInfo;
 	/*pauza*/
-	RectangleShape pauseMenu;
-	RectangleShape resumeButton;
-	RectangleShape saveButton;
-	RectangleShape quitButton;
-	Text resume, save, quit;
+	sf::RectangleShape pauseMenu;
+	sf::RectangleShape resumeButton;
+	sf::RectangleShape saveButton;
+	sf::RectangleShape quitButton;
+	sf::Text resume, save, quit;
 	/*ekwipunek*/
-	RectangleShape backpackBackground;
-	RectangleShape activeEquipment;
-	RectangleShape characterInfo;
-	RectangleShape itemInfo;
-	RectangleShape plus;
-	Sprite backpackSlot;
-	Sprite activeBackpackSlot;
-	Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
-	Text playerStats;
-	Text itemStats;
-	Text activeEquipmentInfo;
+	sf::RectangleShape backpackBackground;
+	sf::RectangleShape activeEquipment;
+	sf::RectangleShape characterInfo;
+	sf::RectangleShape itemInfo;
+	sf::RectangleShape plus;
+	sf::Sprite backpackSlot;
+	sf::Sprite activeBackpackSlot;
+	sf::Text characterInfoHeader, activeEquipmentHeader, itemInfoHeader;
+	sf::Text playerStats;
+	sf::Text itemStats;
+	sf::Text activeEquipmentInfo;
 	/*zmiana poziomu*/
-	RectangleShape levelMenu;
-	vector<Text> levelOptions;
+	sf::RectangleShape levelMenu;
+	std::vector<sf::Text> levelOptions;
 };

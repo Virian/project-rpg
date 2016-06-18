@@ -14,10 +14,13 @@ Equipment::Equipment()
 
 Equipment::~Equipment()
 {
-	
+	if (activeWeapon) delete activeWeapon;
+	if (activeArmor) delete activeArmor;
+	for (size_t i = 0; i < backpack.size(); ++i) delete backpack[i];
+	backpack.clear();
 }
 
-vector<Item*> Equipment::getBackpack()
+std::vector<Item*> Equipment::getBackpack()
 {
 	return backpack;
 }

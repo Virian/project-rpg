@@ -75,9 +75,9 @@ Tile* Level::getTile(short tileCode)
 	return tile;
 }
 
-bool Level::load(string filePath)
+bool Level::load(std::string filePath)
 {
-	fstream file;
+	std::fstream file;
 
 	file.open(filePath);
 	if (!file.is_open()) return false;
@@ -103,7 +103,7 @@ bool Level::load(string filePath)
 	}
 	while (!file.eof())
 	{
-		string name;
+		std::string name;
 		unsigned short x, y;
 
 		file >> name;
@@ -166,12 +166,12 @@ Tile::Coord Level::getPlayerSpawnCoords()
 	return playerSpawn;
 }
 
-vector<Level::CoordAndType> Level::getNpcCoordsAndTypes()
+std::vector<Level::CoordAndType> Level::getNpcCoordsAndTypes()
 {
 	return npcsCoordsAndTypes;
 }
 
-vector<vector<Tile*>> Level::getMap()
+std::vector<std::vector<Tile*>> Level::getMap()
 {
 	return map;
 }
@@ -196,7 +196,7 @@ void Level::deleteLootChest(sf::Vector2f chestPosition)
 	map[y][x] = tileUnder;
 }
 
-string Level::getLevelPath()
+std::string Level::getLevelPath()
 {
 	return levelPath;
 }

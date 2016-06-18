@@ -22,9 +22,9 @@ Game::Game()
 		return;
 	}
 	cursor.setTexture(cursorTexture);
-	cursor.setTextureRect(IntRect(0, 0, 26, 32));
+	cursor.setTextureRect(sf::IntRect(0, 0, 26, 32));
 	state = MENU;
-	window.create(VideoMode(1280, 720), "Galaxy Guardian Alpha 1.04", Style::Titlebar);
+	window.create(sf::VideoMode(1280, 720), "Galaxy Guardian Alpha 1.04", sf::Style::Titlebar);
 	window.setMouseCursorVisible(false);
 }
 
@@ -35,13 +35,13 @@ Game::~Game()
 
 void Game::menu()
 {
-	Text title("Galaxy Guardian", font, 150);
+	sf::Text title("Galaxy Guardian", font, 150);
 	const short numberOfOptions = 3; /*ilosc opcji do klikniecia w menu*/
-	string options[] = { "New game", "Load game", "Quit" };
-	Text text[numberOfOptions];
-	background.setSize(Vector2f(1280, 720));
+	std::string options[] = { "New game", "Load game", "Quit" };
+	sf::Text text[numberOfOptions];
+	background.setSize(sf::Vector2f(1280, 720));
 	background.setTexture(&texture);
-	title.setStyle(Text::Bold);
+	title.setStyle(sf::Text::Bold);
 	title.setPosition(1280 / 2 - title.getGlobalBounds().width / 2, 40);
 
 	for (short i = 0; i < numberOfOptions; i++) /*ustawienie poszczegolnych tekstow*/
@@ -54,36 +54,36 @@ void Game::menu()
 
 	while (state == MENU)
 	{
-		Vector2f mouse(Mouse::getPosition(window)); /*window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu*/
-		Event event;
+		sf::Vector2f mouse(sf::Mouse::getPosition(window)); /*window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu*/
+		sf::Event event;
 
 		while (window.pollEvent(event))
 		{
 			/*klikniecie new game*/
-			if ((text[0].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = NEW_GAME;
+			if ((text[0].getGlobalBounds().contains(mouse)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left)) state = NEW_GAME;
 			/*klikniecie load game*/
-			else if ((text[1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = LOAD_GAME;
+			else if ((text[1].getGlobalBounds().contains(mouse)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left)) state = LOAD_GAME;
 			/*klikniecie quit*/
-			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) state = END;
+			else if ((text[numberOfOptions - 1].getGlobalBounds().contains(mouse)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left)) state = END;
 		}
 
 		cursor.setPosition(mouse);
 		window.clear();
 		window.draw(background);
-		title.move(Vector2f(4, 4));
-		title.setColor(Color::Black);
+		title.move(sf::Vector2f(4, 4));
+		title.setColor(sf::Color::Black);
 		window.draw(title);				/*cien rzucany przez tytul*/
-		title.move(Vector2f(-4, -4));
-		title.setColor(Color::White);
+		title.move(sf::Vector2f(-4, -4));
+		title.setColor(sf::Color::White);
 		window.draw(title);				/*tytul*/
 		for (short i = 0; i < numberOfOptions; i++)
 		{
-			text[i].move(Vector2f(3, 3));
-			text[i].setColor(Color::Black);
+			text[i].move(sf::Vector2f(3, 3));
+			text[i].setColor(sf::Color::Black);
 			window.draw(text[i]);
-			text[i].move(Vector2f(-3, -3));
-			if (text[i].getGlobalBounds().contains(mouse)) text[i].setColor(Color::Green);
-			else text[i].setColor(Color::White);
+			text[i].move(sf::Vector2f(-3, -3));
+			if (text[i].getGlobalBounds().contains(mouse)) text[i].setColor(sf::Color::Green);
+			else text[i].setColor(sf::Color::White);
 			window.draw(text[i]);
 		}
 		window.draw(cursor);
@@ -93,21 +93,21 @@ void Game::menu()
 
 void Game::newGame()
 {
-	Text header("Create your character", font, 120);
-	Text ok("OK", font, 120);
-	Text select("Select your class", font, 90);
-	Text enterName("Enter your name", font, 90);
+	sf::Text header("Create your character", font, 120);
+	sf::Text ok("OK", font, 120);
+	sf::Text select("Select your class", font, 90);
+	sf::Text enterName("Enter your name", font, 90);
 	const short numberOfClasses = 3;
-	string classesNames[] = { "Soldier", "Sentinel", "Juggernaut" };
-	Text classes[numberOfClasses];
-	string characterName;
-	Text name;
+	std::string classesNames[] = { "Soldier", "Sentinel", "Juggernaut" };
+	sf::Text classes[numberOfClasses];
+	std::string characterName;
+	sf::Text name;
 	short checked = 0;
 	bool created = false;
 
-	header.setStyle(Text::Bold);
+	header.setStyle(sf::Text::Bold);
 	header.setPosition(1280 / 2 - header.getGlobalBounds().width / 2, 0.f);
-	ok.setStyle(Text::Bold);
+	ok.setStyle(sf::Text::Bold);
 	ok.setPosition(1280 / 2 - ok.getGlobalBounds().width / 2, 570.f);
 	select.setPosition(1280 / 2 - select.getGlobalBounds().width / 2, 150.f);
 	enterName.setPosition(1280 / 2 - enterName.getGlobalBounds().width / 2, 370.f);
@@ -123,68 +123,68 @@ void Game::newGame()
 
 	while (!created)
 	{
-		Vector2f mouse(Mouse::getPosition(window)); /*window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu*/
-		Event event;
+		sf::Vector2f mouse(sf::Mouse::getPosition(window)); /*window jest potrzebny jako argument zeby pozycja byla liczona wzgledem okna, a nie pulpitu*/
+		sf::Event event;
 
 		while (window.pollEvent(event))
 		{
-			if (((ok.getGlobalBounds().contains(mouse)) && (event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left)) || ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Return)))
+			if (((ok.getGlobalBounds().contains(mouse)) && (event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left)) || ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Return)))
 			{				
 				if (checked == 0) MessageBox(NULL, "Select a class for your character!", "ERROR", NULL);
 				else if (characterName.size() == 0) MessageBox(NULL, "Enter a name for your character!", "ERROR", NULL);
 				else created = true;
 			}
-			else if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::BackSpace) && (characterName.size() > 0)) characterName.pop_back();
-			else if ((event.type == Event::TextEntered) && (characterName.size() < 20) && ((event.text.unicode > 96) && (event.text.unicode < 123)) || ((event.text.unicode > 64) && (event.text.unicode < 91)) || (event.text.unicode == 32)) characterName.push_back(event.text.unicode);
+			else if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::BackSpace) && (characterName.size() > 0)) characterName.pop_back();
+			else if ((event.type == sf::Event::TextEntered) && (characterName.size() < 20) && ((event.text.unicode > 96) && (event.text.unicode < 123)) || ((event.text.unicode > 64) && (event.text.unicode < 91)) || (event.text.unicode == 32)) characterName.push_back(event.text.unicode);
 			for (short i = 0; i < numberOfClasses; ++i)
 			{
-				if ((event.type == Event::MouseButtonReleased) && (event.key.code == Mouse::Left) && (classes[i].getGlobalBounds().contains(mouse))) checked = i + 1;
+				if ((event.type == sf::Event::MouseButtonReleased) && (event.key.code == sf::Mouse::Left) && (classes[i].getGlobalBounds().contains(mouse))) checked = i + 1;
 			}
 		}
 		cursor.setPosition(mouse);
 		window.clear();
 		window.draw(background);
-		header.move(Vector2f(4, 4));
-		header.setColor(Color::Black);
+		header.move(sf::Vector2f(4, 4));
+		header.setColor(sf::Color::Black);
 		window.draw(header);
-		header.move(Vector2f(-4, -4));
-		header.setColor(Color::White);
+		header.move(sf::Vector2f(-4, -4));
+		header.setColor(sf::Color::White);
 		window.draw(header);
-		select.move(Vector2f(4, 4));
-		select.setColor(Color::Black);
+		select.move(sf::Vector2f(4, 4));
+		select.setColor(sf::Color::Black);
 		window.draw(select);
-		select.move(Vector2f(-4, -4));
-		select.setColor(Color::White);
+		select.move(sf::Vector2f(-4, -4));
+		select.setColor(sf::Color::White);
 		window.draw(select);
-		enterName.move(Vector2f(4, 4));
-		enterName.setColor(Color::Black);
+		enterName.move(sf::Vector2f(4, 4));
+		enterName.setColor(sf::Color::Black);
 		window.draw(enterName);
-		enterName.move(Vector2f(-4, -4));
-		enterName.setColor(Color::White);
+		enterName.move(sf::Vector2f(-4, -4));
+		enterName.setColor(sf::Color::White);
 		window.draw(enterName);
-		ok.move(Vector2f(4, 4));
-		ok.setColor(Color::Black);
+		ok.move(sf::Vector2f(4, 4));
+		ok.setColor(sf::Color::Black);
 		window.draw(ok);
-		ok.move(Vector2f(-4, -4));
-		if (ok.getGlobalBounds().contains(mouse)) ok.setColor(Color::Green);
-		else ok.setColor(Color::White);
+		ok.move(sf::Vector2f(-4, -4));
+		if (ok.getGlobalBounds().contains(mouse)) ok.setColor(sf::Color::Green);
+		else ok.setColor(sf::Color::White);
 		window.draw(ok);
 		name.setString(characterName);
 		name.setPosition(1280 / 2 - name.getGlobalBounds().width / 2, 460.f);
-		name.move(Vector2f(4, 4));
-		name.setColor(Color::Black);
+		name.move(sf::Vector2f(4, 4));
+		name.setColor(sf::Color::Black);
 		window.draw(name);
-		name.move(Vector2f(-4, -4));
-		name.setColor(Color::White);
+		name.move(sf::Vector2f(-4, -4));
+		name.setColor(sf::Color::White);
 		window.draw(name);
 		for (short i = 0; i < numberOfClasses; i++)
 		{
-			classes[i].move(Vector2f(3, 3));
-			classes[i].setColor(Color::Black);
+			classes[i].move(sf::Vector2f(3, 3));
+			classes[i].setColor(sf::Color::Black);
 			window.draw(classes[i]);
-			classes[i].move(Vector2f(-3, -3));
-			if (checked == i + 1) classes[i].setColor(Color::Green);
-			else classes[i].setColor(Color::White);
+			classes[i].move(sf::Vector2f(-3, -3));
+			if (checked == i + 1) classes[i].setColor(sf::Color::Green);
+			else classes[i].setColor(sf::Color::White);
 			window.draw(classes[i]);
 		}
 		window.draw(cursor);
@@ -198,7 +198,7 @@ void Game::newGame()
 
 void Game::loadGame()
 {
-	fstream file("save/SavedGame.sav");
+	std::fstream file("save/SavedGame.sav");
 	
 	if (!file.is_open())
 	{
@@ -213,11 +213,11 @@ void Game::loadGame()
 
 bool Game::checkFiles()
 {
-	Texture tempTexture;
-	Font tempFont;
-	Music tempMusic;
-	SoundBuffer tempSoundBuffer;
-	fstream tempFile;
+	sf::Texture tempTexture;
+	sf::Font tempFont;
+	sf::Music tempMusic;
+	sf::SoundBuffer tempSoundBuffer;
+	std::fstream tempFile;
 
 	if (!tempTexture.loadFromFile("images/tilesheet.png")) return false;
 	if (!tempFont.loadFromFile("fonts/game_over.ttf")) return false;

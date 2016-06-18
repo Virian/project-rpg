@@ -2,18 +2,15 @@
 #include <SFML/Graphics.hpp>
 #include "Engine.h"
 
-using namespace sf;
-using namespace std;
-
 class Game
 {
 private:
-	RenderWindow window;
-	Font font;
-	RectangleShape background;
-	Texture texture;
-	Texture cursorTexture;
-	Sprite cursor;
+	sf::RenderWindow window;
+	sf::Font font;
+	sf::RectangleShape background;
+	sf::Texture texture;
+	sf::Texture cursorTexture;
+	sf::Sprite cursor;
 	void menu();
 	void newGame();
 	void loadGame();

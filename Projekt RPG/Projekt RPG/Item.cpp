@@ -11,13 +11,13 @@ Item::~Item()
 
 }
 
-void Item::draw(RenderTarget &target, RenderStates states) const
+void Item::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	target.draw(sprite);
 }
 
-void Item::setPosition(Vector2f position)
+void Item::setPosition(sf::Vector2f position)
 {
 	sprite.setPosition(position);
 }
@@ -27,7 +27,7 @@ std::string Item::getName()
 	return name;
 }
 
-IntRect Item::getTextureRect()
+sf::IntRect Item::getTextureRect()
 {
 	return sprite.getTextureRect();
 }
@@ -71,7 +71,7 @@ Weapon::Weapon(bool _ranged, unsigned short playerLvl) : ranged(_ranged)
 	if (_ranged)
 	{
 		which = rand() % 6;
-		sprite.setTextureRect(IntRect(0 + which * 128, 128, 128, 128));
+		sprite.setTextureRect(sf::IntRect(0 + which * 128, 128, 128, 128));
 		if (which < 2) name += "Rifle";
 		else if (which < 4) name += "Shotgun";
 		else name += "Pistol";
@@ -79,7 +79,7 @@ Weapon::Weapon(bool _ranged, unsigned short playerLvl) : ranged(_ranged)
 	else
 	{
 		which = rand() % 4;
-		sprite.setTextureRect(IntRect(0 + which * 128, 0, 128, 128));
+		sprite.setTextureRect(sf::IntRect(0 + which * 128, 0, 128, 128));
 		if (which < 3) name += "Sword";
 		else name += "Axe";
 	}
@@ -88,8 +88,8 @@ Weapon::Weapon(bool _ranged, unsigned short playerLvl) : ranged(_ranged)
 
 Weapon::Weapon(std::string _name, unsigned short _attackValue, bool _ranged, short which) : attackValue(_attackValue), ranged(_ranged)
 {
-	if (_ranged) sprite.setTextureRect(IntRect(0 + which * 128, 128, 128, 128));
-	else sprite.setTextureRect(IntRect(0 + which * 128, 0, 128, 128));
+	if (_ranged) sprite.setTextureRect(sf::IntRect(0 + which * 128, 128, 128, 128));
+	else sprite.setTextureRect(sf::IntRect(0 + which * 128, 0, 128, 128));
 	name = _name;
 }
 
@@ -113,7 +113,7 @@ Armor::Armor(unsigned short playerLvl)
 	short which;
 
 	which = rand() % 5;
-	sprite.setTextureRect(IntRect(0 + which * 128, 256, 128, 128));
+	sprite.setTextureRect(sf::IntRect(0 + which * 128, 256, 128, 128));
 	armorValue = rand() % static_cast<int>(4 + playerLvl / 4.0) + 4 + playerLvl;
 	short nameRand = rand() % 5;
 	switch (nameRand)
@@ -152,7 +152,7 @@ Armor::Armor(unsigned short playerLvl)
 
 Armor::Armor(std::string _name, unsigned short _armorValue, short which) : armorValue(_armorValue)
 {
-	sprite.setTextureRect(IntRect(0 + which * 128, 256, 128, 128));
+	sprite.setTextureRect(sf::IntRect(0 + which * 128, 256, 128, 128));
 	name = _name;
 }
 

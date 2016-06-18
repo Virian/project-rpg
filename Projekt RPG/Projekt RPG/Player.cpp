@@ -3,11 +3,11 @@
 #include <Windows.h>
 #include <cmath>
 
-Player::Player(string _name) : name(_name)
+Player::Player(std::string _name) : name(_name)
 {
 	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(0, 640, 64, 64));
+	sprite.setTextureRect(sf::IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
 
 	speed = 5.5f;
@@ -27,11 +27,11 @@ Player::Player(string _name) : name(_name)
 	attackInterval.restart();
 }
 
-Player::Player(string _name, fstream &file) : name(_name)
+Player::Player(std::string _name, std::fstream &file) : name(_name)
 {
 	texture.loadFromFile("images/tilesheet.png");
 	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(0, 640, 64, 64));
+	sprite.setTextureRect(sf::IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
 
 	speed = 5.5f;
@@ -45,7 +45,7 @@ Player::Player(string _name, fstream &file) : name(_name)
 	activeSkill2 = false;
 	activeSkill3 = false;
 
-	string text, name;
+	std::string text, name;
 	short value, which;
 	file >> parLvl >> parExp >> parExpForNextLevel;
 	file >> parHp >> parMaxHp;
@@ -121,12 +121,12 @@ Player::~Player()
 	equipment.clearBackpack();
 }
 
-short Player::update(Vector2f mouse, Level *level) 
+short Player::update(sf::Vector2f mouse, Level *level)
 {
 	short result = 0;
 	TrapFountain* temp1;
 	LootChest* temp2;
-	Vector2f norm = mouse - sprite.getPosition();
+	sf::Vector2f norm = mouse - sprite.getPosition();
 	float rot = atan2(norm.y, norm.x); /*gdy przod playera jest na gorze tekstury, gdyby byl na dole to zamienic x z y*/
 	rot = rot * 180.f / static_cast<float>(M_PI);
 	rot += 90;
@@ -143,13 +143,13 @@ short Player::update(Vector2f mouse, Level *level)
 	
 	if (status == WALK)
 	{
-		if (walkAnimationClock.getElapsedTime() > seconds(0.04f))
+		if (walkAnimationClock.getElapsedTime() > sf::seconds(0.04f))
 		{
 			if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
 				walkFrame++;
 			else
 				walkFrame = 0; /*animacja sie zapetla*/
-			sprite.setTextureRect(IntRect(walkFrame * 64, 640, 64, 64));
+			sprite.setTextureRect(sf::IntRect(walkFrame * 64, 640, 64, 64));
 			sprite.move(getMove());
 			/*wszystkie +15 i -15 sa tolerancja boundingboxa w przypadku kolizji*/
 			if (sprite.getGlobalBounds().left + 15 < 0) /*lewa krawedz poziomu*/
@@ -190,7 +190,7 @@ short Player::update(Vector2f mouse, Level *level)
 							}
 							equipment.addItem(item);
 						}
-						level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + 15, getPosition().y));
+						level->deleteLootChest(sf::Vector2f(sprite.getGlobalBounds().left + 15, getPosition().y));
 						result = 1;
 					}
 				}
@@ -215,7 +215,7 @@ short Player::update(Vector2f mouse, Level *level)
 							}
 							equipment.addItem(item);
 						}
-						level->deleteLootChest(Vector2f(sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15, getPosition().y));
+						level->deleteLootChest(sf::Vector2f(sprite.getGlobalBounds().left + sprite.getGlobalBounds().width - 15, getPosition().y));
 						result = 1;
 					}
 				}
@@ -240,7 +240,7 @@ short Player::update(Vector2f mouse, Level *level)
 							}
 							equipment.addItem(item);
 						}
-						level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + 15));
+						level->deleteLootChest(sf::Vector2f(getPosition().x, sprite.getGlobalBounds().top + 15));
 						result = 1;
 					}
 				}
@@ -265,7 +265,7 @@ short Player::update(Vector2f mouse, Level *level)
 							}
 							equipment.addItem(item);
 						}
-						level->deleteLootChest(Vector2f(getPosition().x, sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15));
+						level->deleteLootChest(sf::Vector2f(getPosition().x, sprite.getGlobalBounds().top + sprite.getGlobalBounds().height - 15));
 						result = 1;
 					}
 				}
@@ -277,9 +277,9 @@ short Player::update(Vector2f mouse, Level *level)
 	}
 	else if (status == ATTACK)
 	{
-		if ((attackFrameCount > 0) && (attackAnimationClock.getElapsedTime() > seconds(1.f)))
+		if ((attackFrameCount > 0) && (attackAnimationClock.getElapsedTime() > sf::seconds(1.f)))
 		{
-			IntRect tmpRect;
+			sf::IntRect tmpRect;
 			if (attackFrame < attackFrameCount) /*liczba klatek animacji - 1*/
 				++attackFrame;
 			else
@@ -303,7 +303,7 @@ void Player::stop()
 	status = STOP;
 	walkFrame = 0;
 	attackFrame = 0;
-	sprite.setTextureRect(IntRect(walkFrame * 64, 640, 64, 64));
+	sprite.setTextureRect(sf::IntRect(walkFrame * 64, 640, 64, 64));
 	walkAnimationClock.restart();
 }
 
@@ -312,7 +312,7 @@ void Player::attack()
 	status = ATTACK;
 }
 
-void Player::draw(RenderTarget &target, RenderStates states) const
+void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	target.draw(sprite);
@@ -323,22 +323,22 @@ Player::Status Player::getStatus()
 	return status;
 }
 
-FloatRect Player::getBoundingBox()
+sf::FloatRect Player::getBoundingBox()
 {
-	FloatRect box(sprite.getGlobalBounds());
+	sf::FloatRect box(sprite.getGlobalBounds());
 	return box;
 }
 
-Vector2f Player::getMove()
+sf::Vector2f Player::getMove()
 {
 	float rotation = sprite.getRotation();
 	float vx = sin((rotation * static_cast<float>(M_PI)) / 180.0f);
 	float vy = -cos((rotation * static_cast<float>(M_PI)) / 180.0f);
 
-	return Vector2f(vx * speed, vy * speed);
+	return sf::Vector2f(vx * speed, vy * speed);
 }
 
-Vector2f Player::getPosition()
+sf::Vector2f Player::getPosition()
 {
 	return sprite.getPosition();
 }
@@ -353,9 +353,9 @@ std::string Player::getName()
 	return name;
 }
 
-Equipment Player::getEquipment()
+Equipment* Player::getEquipment()
 {
-	return equipment;
+	return &equipment;
 }
 
 short Player::getHp()
@@ -465,7 +465,7 @@ void Player::takeDamage(unsigned damage)
 	parHp -= damage;
 }
 
-Clock Player::getAttackInterval()
+sf::Clock Player::getAttackInterval()
 {
 	return attackInterval;
 }
@@ -497,12 +497,12 @@ void Player::unpauseTimers()
 
 void Player::resetTimers()
 {
-	cooldownSkill1.restart(microseconds(1));
-	cooldownSkill2.restart(microseconds(1));
-	cooldownSkill3.restart(microseconds(1));
-	effectSkill1.restart(microseconds(1));
-	effectSkill2.restart(microseconds(1));
-	effectSkill3.restart(microseconds(1));
+	cooldownSkill1.restart(sf::microseconds(1));
+	cooldownSkill2.restart(sf::microseconds(1));
+	cooldownSkill3.restart(sf::microseconds(1));
+	effectSkill1.restart(sf::microseconds(1));
+	effectSkill2.restart(sf::microseconds(1));
+	effectSkill3.restart(sf::microseconds(1));
 }
 
 bool Player::isActiveSkill1()
@@ -520,18 +520,18 @@ bool Player::isActiveSkill3()
 	return activeSkill3;
 }
 
-Juggernaut::Juggernaut(string _name) : Player(_name)
+Juggernaut::Juggernaut(std::string _name) : Player(_name)
 {
-	sprite.setColor(Color(255, 140, 140));
+	sprite.setColor(sf::Color(255, 140, 140));
 	parStr = 18;
 	parAgi = 6;
 	parInt = 6;
 	parHp = parMaxHp = 100 + parStr;
 }
 
-Juggernaut::Juggernaut(string _name, fstream &file) : Player(_name, file)
+Juggernaut::Juggernaut(std::string _name, std::fstream &file) : Player(_name, file)
 {
-	sprite.setColor(Color(255, 140, 140));
+	sprite.setColor(sf::Color(255, 140, 140));
 }
 
 Juggernaut::~Juggernaut()
@@ -548,8 +548,8 @@ void Juggernaut::useSkill1() /*nietykalnosc*/
 {
 	if (cooldownSkill1.isExpired())
 	{
-		cooldownSkill1.restart(seconds(120.f));
-		effectSkill1.restart(seconds(1.7f + parInt / 100.f)); /*+0.1s za kazde 10 int*/
+		cooldownSkill1.restart(sf::seconds(120.f));
+		effectSkill1.restart(sf::seconds(1.7f + parInt / 100.f)); /*+0.1s za kazde 10 int*/
 		activeSkill1 = true;
 	}
 }
@@ -558,8 +558,8 @@ void Juggernaut::useSkill2() /*mocniejszy atak o 50%*/
 {
 	if (cooldownSkill2.isExpired())
 	{
-		cooldownSkill2.restart(seconds(10.f - parInt / 50.f)); /*-0.1s za kazde 5 int*/
-		effectSkill2.restart(seconds(3.f));
+		cooldownSkill2.restart(sf::seconds(10.f - parInt / 50.f)); /*-0.1s za kazde 5 int*/
+		effectSkill2.restart(sf::seconds(3.f));
 		activeSkill2 = true;
 	}
 }
@@ -570,8 +570,8 @@ void Juggernaut::useSkill3()
 	if (cooldownSkill3.isExpired())
 	{
 		parMaxHp += static_cast<short>(0.2 * parMaxHp);
-		cooldownSkill3.restart(seconds(35.f));
-		effectSkill3.restart(seconds(5.f + parInt / 50.f));
+		cooldownSkill3.restart(sf::seconds(35.f));
+		effectSkill3.restart(sf::seconds(5.f + parInt / 50.f));
 		activeSkill3 = true;
 	}
 }
@@ -607,18 +607,18 @@ float Juggernaut::getRatioSkill3()
 	return cooldownSkill3.getRemainingTime().asSeconds() / 35.f;
 }
 
-Soldier::Soldier(string _name) : Player(_name)
+Soldier::Soldier(std::string _name) : Player(_name)
 {
-	sprite.setColor(Color::Yellow);
+	sprite.setColor(sf::Color::Yellow);
 	parAgi = 16;
 	parStr = 6;
 	parInt = 8;
 	parHp = parMaxHp = 100 + parStr;
 }
 
-Soldier::Soldier(string _name, fstream &file) : Player(_name, file)
+Soldier::Soldier(std::string _name, std::fstream &file) : Player(_name, file)
 {
-	sprite.setColor(Color::Yellow);
+	sprite.setColor(sf::Color::Yellow);
 }
 
 Soldier::~Soldier()
@@ -635,8 +635,8 @@ void Soldier::useSkill1() /*szybsze strzelanie*/
 {
 	if (cooldownSkill1.isExpired())
 	{
-		cooldownSkill1.restart(seconds(40.f));
-		effectSkill1.restart(seconds(1.f + parInt / 100.f));
+		cooldownSkill1.restart(sf::seconds(40.f));
+		effectSkill1.restart(sf::seconds(1.f + parInt / 100.f));
 		activeSkill1 = true;
 	}
 }
@@ -647,8 +647,8 @@ void Soldier::useSkill2() /*przyspieszenie*/
 	{
 		/*przyspiesza o stala wartosc + 0.1 za kazde 10 int*/
 		speed += 3.f + parInt / 100.f;
-		cooldownSkill2.restart(seconds(24.f));
-		effectSkill2.restart(seconds(3.5f));
+		cooldownSkill2.restart(sf::seconds(24.f));
+		effectSkill2.restart(sf::seconds(3.5f));
 		activeSkill2 = true;
 	}
 }
@@ -658,11 +658,11 @@ void Soldier::useSkill3()
 	if (cooldownSkill3.isExpired())
 	{
 		/*niewidzialnosc*/
-		Color color = sprite.getColor();
+		sf::Color color = sprite.getColor();
 		color.a -= 130;
 		sprite.setColor(color);
-		cooldownSkill3.restart(seconds(60.f));
-		effectSkill3.restart(seconds(20.f)); /*Reminder - do zmiany, tylko dla testow*/
+		cooldownSkill3.restart(sf::seconds(60.f));
+		effectSkill3.restart(sf::seconds(20.f)); /*Reminder - do zmiany, tylko dla testow*/
 		activeSkill3 = true;
 	}
 }
@@ -680,7 +680,7 @@ void Soldier::clearEffectSkill2()
 
 void Soldier::clearEffectSkill3()
 {
-	Color color = sprite.getColor();
+	sf::Color color = sprite.getColor();
 	color.a += 130;
 	sprite.setColor(color);
 	activeSkill3 = false;
@@ -701,18 +701,18 @@ float Soldier::getRatioSkill3()
 	return cooldownSkill3.getRemainingTime().asSeconds() / 60.f;
 }
 
-Sentinel::Sentinel(string _name) : Player(_name)
+Sentinel::Sentinel(std::string _name) : Player(_name)
 {
-	sprite.setColor(Color(140, 140, 255));
+	sprite.setColor(sf::Color(140, 140, 255));
 	parInt = 19;
 	parStr = 5;
 	parAgi = 6;
 	parHp = parMaxHp = 100 + parStr;
 }
 
-Sentinel::Sentinel(string _name, fstream &file) : Player(_name, file)
+Sentinel::Sentinel(std::string _name, std::fstream &file) : Player(_name, file)
 {
-	sprite.setColor(Color(140, 140, 255));
+	sprite.setColor(sf::Color(140, 140, 255));
 }
 
 Sentinel::~Sentinel()
@@ -731,7 +731,7 @@ void Sentinel::useSkill1() /*heal*/
 	if (cooldownSkill1.isExpired())
 	{
 		parHp += static_cast<short>(((30.0 + parInt / 10.0) / 100.0) * parMaxHp);
-		cooldownSkill1.restart(seconds(40.f));
+		cooldownSkill1.restart(sf::seconds(40.f));
 	}
 }
 
@@ -740,8 +740,8 @@ void Sentinel::useSkill2() /*zwiekszenie szansy na dodge*/
 	if (cooldownSkill2.isExpired())
 	{
 		parAgi += static_cast<unsigned short>((0.33f + parInt / 100.f) * parAgi);
-		cooldownSkill2.restart(seconds(35.f));
-		effectSkill2.restart(seconds(7.f));
+		cooldownSkill2.restart(sf::seconds(35.f));
+		effectSkill2.restart(sf::seconds(7.f));
 		activeSkill2 = true;
 	}
 }
@@ -751,8 +751,8 @@ void Sentinel::useSkill3()
 	/*zwiekszenie celnosci*/
 	if (cooldownSkill3.isExpired())
 	{
-		cooldownSkill3.restart(seconds(25.f));
-		effectSkill3.restart(seconds(1.f + parInt / 100.f));
+		cooldownSkill3.restart(sf::seconds(25.f));
+		effectSkill3.restart(sf::seconds(1.f + parInt / 100.f));
 		activeSkill3 = true;
 	}
 }

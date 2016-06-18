@@ -3,8 +3,6 @@
 #include <cstdlib>
 #include <Windows.h>
 
-/*Reminder - usunac using namespace z plikow .h*/
-
 int main()
 {
 	Game game;

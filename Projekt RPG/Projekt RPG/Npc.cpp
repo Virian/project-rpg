@@ -15,19 +15,19 @@ Npc::~Npc()
 
 }
 
-void Npc::draw(RenderTarget &target, RenderStates states) const
+void Npc::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	target.draw(sprite);
 }
 
-FloatRect Npc::getBoundingBox()
+sf::FloatRect Npc::getBoundingBox()
 {
-	FloatRect box(sprite.getGlobalBounds());
+	sf::FloatRect box(sprite.getGlobalBounds());
 	return box;
 }
 
-Vector2f Npc::getPosition()
+sf::Vector2f Npc::getPosition()
 {
 	return sprite.getPosition();
 }
@@ -40,7 +40,7 @@ void Npc::setPosition(Tile::Coord coord)
 Neutral::Neutral(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
 	short npcLook = rand() % 2; /*losowy wyglad npc, obecnie dostepne sa 2*/
-	sprite.setTextureRect(IntRect(0 + npcLook * 64, 1344, 64, 64));
+	sprite.setTextureRect(sf::IntRect(0 + npcLook * 64, 1344, 64, 64));
 	sprite.setOrigin(32, 32);
 	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 }
@@ -78,10 +78,10 @@ Enemy::Status Enemy::getStatus()
 	return status;
 }
 
-void Enemy::update(Level* level, Vector2f playerPosition)
+void Enemy::update(Level* level, sf::Vector2f playerPosition)
 {	
 	bool collision = false;
-	IntRect tmpRect;
+	sf::IntRect tmpRect;
 	/*ma przestawac atakowac, moze podazac*/
 	if (status == ENGAGED)
 	{
@@ -90,7 +90,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 		rot += 90;
 		sprite.setRotation(rot);
 		collision = false;
-		if (walkAnimationClock.getElapsedTime() > seconds(0.04f))
+		if (walkAnimationClock.getElapsedTime() > sf::seconds(0.04f))
 		{
 			if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
 				walkFrame++;
@@ -158,7 +158,7 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 		rot = rot * 180.f / static_cast<float>(M_PI);
 		rot += 90;
 		sprite.setRotation(rot);
-		if (((attackFrameCount > 0)) && (attackAnimationClock.getElapsedTime() > seconds(0.1f)))
+		if (((attackFrameCount > 0)) && (attackAnimationClock.getElapsedTime() > sf::seconds(0.1f)))
 		{
 			if (attackFrame < attackFrameCount) /*liczba klatek animacji - 1*/
 				++attackFrame;
@@ -170,14 +170,14 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 			attackAnimationClock.restart();
 		}
 	}
-	else if (time.getElapsedTime() > milliseconds(idleT))
+	else if (time.getElapsedTime() > sf::milliseconds(idleT))
 	{		
 		sprite.setRotation(rot);
-		if (time.getElapsedTime() < milliseconds(idleT) + milliseconds(walkT))
+		if (time.getElapsedTime() < sf::milliseconds(idleT) + sf::milliseconds(walkT))
 		{
 			status = WALK;
 			collision = false;
-			if (walkAnimationClock.getElapsedTime() > seconds(0.04f))
+			if (walkAnimationClock.getElapsedTime() > sf::seconds(0.04f))
 			{
 				if (walkFrame < walkFrameCount) /*liczba klatek animacji - 1*/
 					walkFrame++;
@@ -246,18 +246,18 @@ void Enemy::update(Level* level, Vector2f playerPosition)
 	}
 }
 
-Vector2f Enemy::getMove()
+sf::Vector2f Enemy::getMove()
 {
 	float rotation = sprite.getRotation();
 	float vx = sin((rotation * static_cast<float>(M_PI)) / 180.0f);
 	float vy = -cos((rotation * static_cast<float>(M_PI)) / 180.0f);
 
-	return Vector2f(vx * speed, vy * speed);
+	return sf::Vector2f(vx * speed, vy * speed);
 }
 
 void Enemy::stop(bool collision)
 {
-	IntRect tmpRect;
+	sf::IntRect tmpRect;
 	
 	status = STOP;
 	walkFrame = 0;
@@ -341,7 +341,7 @@ bool Enemy::isAttacking()
 	else return false;
 }
 
-Clock Enemy::getAttackInterval()
+sf::Clock Enemy::getAttackInterval()
 {
 	return attackInterval;
 }
@@ -373,7 +373,7 @@ void Enemy::loseCursor()
 
 Gunner::Gunner(Tile::Coord spawnCoord) : Enemy(spawnCoord)
 {
-	sprite.setTextureRect(IntRect(0, 640, 64, 64));
+	sprite.setTextureRect(sf::IntRect(0, 640, 64, 64));
 	sprite.setOrigin(32, 32);
 	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 	walkFrameCount = 7;
@@ -395,7 +395,7 @@ Gunner::~Gunner()
 
 Alien::Alien(Tile::Coord spawnCoord) : Enemy(spawnCoord)
 {
-	sprite.setTextureRect(IntRect(0, 704, 64, 64));
+	sprite.setTextureRect(sf::IntRect(0, 704, 64, 64));
 	sprite.setOrigin(32, 32);
 	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 	walkFrameCount = 7;
@@ -417,7 +417,7 @@ Alien::~Alien()
 
 Cannon::Cannon(Tile::Coord spawnCoord) : Enemy(spawnCoord)
 {
-	sprite.setTextureRect(IntRect(0, 576, 64, 64));
+	sprite.setTextureRect(sf::IntRect(0, 576, 64, 64));
 	sprite.setOrigin(32, 52);
 	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
 	walkFrameCount = 0;

@@ -6,27 +6,25 @@
 #include "Equipment.h"
 #include "Time.h"
 
-using namespace sf;
-
-class Player : public Drawable, Transformable
+class Player : public sf::Drawable, sf::Transformable
 {
 public:
-	Player(string);
-	Player(string, fstream&);
+	Player(std::string);
+	Player(std::string, std::fstream&);
 	virtual ~Player();
-	short update(Vector2f, Level*);
+	short update(sf::Vector2f, Level*);
 	void walk();
 	void stop();
 	void attack();
 	enum Status { STOP, WALK, ATTACK };
 	Status getStatus();
-	FloatRect getBoundingBox();
-	Vector2f getMove();
-	Vector2f getPosition();
+	sf::FloatRect getBoundingBox();
+	sf::Vector2f getMove();
+	sf::Vector2f getPosition();
 	void setPosition(Tile::Coord);
 	std::string getName();
 	virtual std::string getClassName() = 0;
-	Equipment getEquipment();
+	Equipment* getEquipment();
 	short getHp();
 	short getMaxHp();
 	unsigned short getPointsToSpend();
@@ -45,7 +43,7 @@ public:
 	void swapActiveItem(short);
 	void usePotion();
 	void takeDamage(unsigned);
-	Clock getAttackInterval();
+	sf::Clock getAttackInterval();
 	void restartAttackInterval();
 	void increaseExperience(unsigned);
 	void pauseTimers();
@@ -65,17 +63,17 @@ public:
 	virtual float getRatioSkill2() = 0;
 	virtual float getRatioSkill3() = 0;	
 protected:
-	Sprite sprite;
-	Texture texture;
+	sf::Sprite sprite;
+	sf::Texture texture;
 	Status status;
 	float speed;
 	unsigned walkFrame;
 	unsigned attackFrame;
 	unsigned walkFrameCount;
 	unsigned attackFrameCount;
-	Clock walkAnimationClock;
-	Clock attackAnimationClock;
-	virtual void draw(RenderTarget&, RenderStates) const;
+	sf::Clock walkAnimationClock;
+	sf::Clock attackAnimationClock;
+	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 	//Statystyki
 	std::string name;
 	Equipment equipment;
@@ -88,7 +86,7 @@ protected:
 	unsigned short parAgi;
 	unsigned short parInt;
 	unsigned short parPointsToSpend;
-	Clock attackInterval;
+	sf::Clock attackInterval;
 	bool activeSkill1;
 	bool activeSkill2;
 	bool activeSkill3;
@@ -103,8 +101,8 @@ protected:
 class Juggernaut : public Player
 {
 public:	
-	Juggernaut(string);
-	Juggernaut(string, fstream&);
+	Juggernaut(std::string);
+	Juggernaut(std::string, std::fstream&);
 	~Juggernaut();
 	std::string getClassName();
 	void useSkill1();
@@ -121,8 +119,8 @@ public:
 class Soldier : public Player
 {
 public:	
-	Soldier(string);
-	Soldier(string, fstream&);
+	Soldier(std::string);
+	Soldier(std::string, std::fstream&);
 	~Soldier();
 	std::string getClassName();
 	void useSkill1();
@@ -139,8 +137,8 @@ public:
 class Sentinel : public Player
 {
 public:	
-	Sentinel(string);
-	Sentinel(string, fstream&);
+	Sentinel(std::string);
+	Sentinel(std::string, std::fstream&);
 	~Sentinel();
 	std::string getClassName();
 	void useSkill1();

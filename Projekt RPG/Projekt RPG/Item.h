@@ -2,21 +2,19 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-using namespace sf;
-
-class Item : public Drawable, public Transformable
+class Item : public sf::Drawable, public sf::Transformable
 {
 protected:
-	Sprite sprite;
-	Texture texture;
+	sf::Sprite sprite;
+	sf::Texture texture;
 	std::string name;
-	virtual void draw(RenderTarget&, RenderStates) const;
+	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 public:
 	Item();
 	virtual ~Item();
-	void setPosition(Vector2f);
+	void setPosition(sf::Vector2f);
 	std::string getName();
-	IntRect getTextureRect();
+	sf::IntRect getTextureRect();
 };
 
 class Weapon : public Item
