@@ -40,9 +40,11 @@ void Npc::setPosition(Tile::Coord coord)
 Neutral::Neutral(Tile::Coord spawnCoord) : Npc(spawnCoord)
 {
 	short npcLook = rand() % 2; /*losowy wyglad npc, obecnie dostepne sa 2*/
+	short rot = rand() % 360;
 	sprite.setTextureRect(sf::IntRect(0 + npcLook * 64, 1344, 64, 64));
 	sprite.setOrigin(32, 32);
 	sprite.setPosition(64.f * spawnCoord.x + 32.f, 64.f * spawnCoord.y + 32.f);
+	sprite.setRotation(static_cast<float>(rot));
 }
 
 Neutral::~Neutral()

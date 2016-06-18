@@ -662,7 +662,7 @@ void Soldier::useSkill3()
 		color.a -= 130;
 		sprite.setColor(color);
 		cooldownSkill3.restart(sf::seconds(60.f));
-		effectSkill3.restart(sf::seconds(20.f)); /*Reminder - do zmiany, tylko dla testow*/
+		effectSkill3.restart(sf::seconds(4.f));
 		activeSkill3 = true;
 	}
 }

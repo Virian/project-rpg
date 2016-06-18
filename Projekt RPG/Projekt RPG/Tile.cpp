@@ -84,7 +84,7 @@ LootChest::LootChest(short tileCode, bool _wall, Tile* _tileUnder) : Tile(tileCo
 
 LootChest::~LootChest()
 {
-	/*Reminder - gdy wychodzimy z gry gdy chest stoi to pewnie bedzie wyciek pamieci*/
+	
 }
 
 Tile* LootChest::getTileUnder()
