@@ -20,7 +20,7 @@ public:
 	void clearBackpack();					/*czysci plecak oraz aktywny ekwipunek*/
 	void deleteItem(short);					/*usuwa konkretny przedmiot z ekwipunku*/
 	void swapActiveItem(short);				/*zamienia przedmiot z plecaka z aktywnym przedmiotem lub zdejmuje aktywny przedmiot do plecaka*/
-	unsigned short usePotion();				/*dekrementuje licznik mikstur, zwraca 0 jesli udalo sie uzyc mikstury (wczesniej byla przynajmniej 1) lub 1 jesli nie udalo sie jej uzyc (Wczesniej bylo 0)*/
+	unsigned short usePotion();				/*dekrementuje licznik mikstur, zwraca 0 jesli udalo sie uzyc mikstury (wczesniej byla przynajmniej 1) lub 1 jesli nie udalo sie jej uzyc (wczesniej bylo 0)*/
 	short getPotionCount();					/*zwraca licznik mikstur*/
 	void setPotionCount(short);				/*ustawia licznik mikstur na zadana wartosc*/
 	void addPotion();						/*inkrementuje licznik mikstur*/

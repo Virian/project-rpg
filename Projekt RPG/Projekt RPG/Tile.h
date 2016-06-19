@@ -57,5 +57,5 @@ public:
 	unsigned short getId();				/*zwraca id miejsca do zapisu*/
 	static unsigned short saveCount;	/*ilosc miejsc do zapisu na danym poziomie*/
 private:
-	unsigned short id;					/*id konkretnego miejsca do zapisu - musze byc rozroznialne miedzy soba*/
+	unsigned short id;					/*id konkretnego miejsca do zapisu - musza byc rozroznialne miedzy soba*/
 };

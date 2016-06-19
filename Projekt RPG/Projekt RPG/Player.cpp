@@ -80,6 +80,7 @@ Player::Player(std::string _name, std::fstream &file) : name(_name)
 			equipment.swapActiveItem(0); /*ustawienie jako aktywnej*/
 			equipment.deleteItem(0); /*usuniecie domyslnie tworzonej losowej broni*/
 		}
+		else equipment.deleteItem(-1); /*usuniecie domyslnie tworzonej losowej broni*/
 	}
 	/*wczytanie aktywnej zbroi*/
 	file >> text;
@@ -96,8 +97,9 @@ Player::Player(std::string _name, std::fstream &file) : name(_name)
 			tmp = new Armor(name, stoi(text), which); /*stworzenie zbroi*/
 			equipment.addItem(tmp); /*dodanie jej do ekwipunku*/
 			equipment.swapActiveItem(0); /*ustawienie jako aktywnej*/
-			equipment.deleteItem(0); /*usuniecie domyslnie tworzonej losowej broni*/
+			equipment.deleteItem(0); /*usuniecie domyslnie tworzonej losowej zbroi*/
 		}
+		else equipment.deleteItem(-2); /*usuniecie domyslnie tworzonej losowej zbroi*/
 	}
 	while (!file.eof()) /*wczytywanie reszty przedmiotow*/
 	{

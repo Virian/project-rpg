@@ -43,8 +43,16 @@ void Equipment::addItem(Item* newItem)
 
 void Equipment::clearBackpack()
 {
-	if (activeWeapon) delete activeWeapon;
-	if (activeArmor) delete activeArmor;
+	if (activeWeapon)
+	{
+		delete activeWeapon;
+		activeWeapon = NULL;
+	}
+	if (activeArmor)
+	{
+		delete activeArmor;
+		activeArmor = NULL;
+	}
 	for (size_t i = 0; i < backpack.size(); ++i)
 	{
 		delete backpack[i];
